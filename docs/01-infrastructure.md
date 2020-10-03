@@ -34,7 +34,7 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 * You want other things to work out like sudo and auto-login
  
 #### Step 1: stop user pi from running before the change.
-* Boot you Pi, go to RPI configurations and
+* Boot your Pi, go to RPI configurations and
     * allow SSH,
     * disallow auto-login
     * hit ok
