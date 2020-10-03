@@ -26,7 +26,7 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 
 
 ## Changing the default user from "Pi" (Optional) 
-(props to DrBeco for posting the original)
+(props to DrBeco for posting the original) [here](https://raspberrypi.stackexchange.com/questions/12827/change-default-username)
 #### Assumptions:
 * A brand new raspberry pi
 * You want to change the default username ```pi``` to ```kubeadmin``` (or someother name to your liking)
