@@ -44,7 +44,7 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
     * Find and comment (#) the line
         * ``` #ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM ```
         you can uncomment it later if you want console autologin, but then don't forget to change the user ```pi``` to your new username ```kubeadmin```
-    * Create a new root password with passwd. **(DON'T FORGET IT)**
+    * Create a new root password with ```passwd```. **(DON'T FORGET IT)**
     * Type ```reboot```
 #### Step 2: make the user change
 * If you see the graphical login prompt, you are good. Do not login. Instead, press ALT+F1 
