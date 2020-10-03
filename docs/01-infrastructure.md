@@ -107,7 +107,7 @@ reboot the server and test to see if it works
 sudo show
 ## Hostnames to IP Addresses
 
-In my exprience, connectivity between each server would be highly improved if connected directly to LAN network instead of Wi-Fi.
+In my experience, whether you use a direct connection versus Wi-Fi really depends on connection speed. The one thing that **IS CRITICAL** is that you assign IP Addresses to each server. for my machines is set up DHCP reservations.  (Yes. even home WI-FI routers allow you to set up DHCP reservations in their configuration) 
 
 ```
 sudo sh -c "cat >>/etc/hosts <<EOF
