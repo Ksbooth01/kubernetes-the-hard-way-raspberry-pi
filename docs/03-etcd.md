@@ -2,9 +2,9 @@
 
 In this lab you will bootstrap a 3 node etcd cluster. The following machines will be used:
 
-* controller0
-* controller1
-* controller2
+* control0
+* control1
+
 
 ## Why
 
@@ -18,7 +18,7 @@ following reasons:
 
 ## Provision the etcd Cluster
 
-Run the following commands on `controller0`, `controller1`, `controller2`:
+Run the following commands on `control0`, `control1``:
 
 ### TLS Certificates
 
