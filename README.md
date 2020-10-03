@@ -25,8 +25,8 @@ The target audience for this tutorial is someone who wants to get some hands on 
 
 ## Cluster Details
 
-* Kubernetes 1.4.6 (ARM)
-* Docker 1.12.3 (ARM)
+* Kubernetes 1.19.2 (ARM)
+* Docker 1.18.3 (ARM)
 * etcd 3.1.0-rc.1 (Built from source for ARM)
 * [CNI Based Networking](https://github.com/containernetworking/cni)
 * Secure communication between all components (etcd, control plane, workers)
@@ -39,15 +39,15 @@ The resulting cluster will be missing the following items:
 
 * [Cluster add-ons](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
 * [Logging](http://kubernetes.io/docs/user-guide/logging)
-* [No Cloud Provider Integration](http://kubernetes.io/docs/getting-started-guides/)
+* [No Cloud Provider Integration]q(http://kubernetes.io/docs/getting-started-guides/)
 * Setup Kubernetes API Server Frontend Load Balancer
 
 ## Hardware and OS version
 
 This tutorial assumes you have access to one of the following:
 
-* 5 Raspberry Pi 2/3 Model B
-* 2016-09-23-raspbian-jessie-lite or newer
+* 5 Raspberry Pi 3/4 Model B
+* 2020-08-20-raspbian-buster or newer
 
 ## Labs
 
