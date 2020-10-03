@@ -40,7 +40,7 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
     * hit ok
 * Press ALT+F1 to go to the first tty
 * Escalate to root with ```sudo su -```
-* Edit ```$vim /etc/systemd/system/autologin@.service```
+* Edit ```$nano /etc/systemd/system/autologin@.service```
     * Find and comment (#) the line
         * ``` #ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM ```
         you can uncomment it later if you want console autologin, but then don't forget to change the user ```pi``` to your new username ```kubeadmin```
