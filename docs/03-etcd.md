@@ -86,7 +86,7 @@ ExecStart=/usr/bin/etcd --name ETCD_NAME \
   --listen-client-urls https://INTERNAL_IP:2379,http://127.0.0.1:2379 \
   --advertise-client-urls https://INTERNAL_IP:2379 \
   --initial-cluster-token etcd-cluster-0 \
-  --initial-cluster controller0=https://10.0.1.94:2380,controller1=https://10.0.1.95:2380,controller2=https://10.0.1.96:2380 \
+  --initial-cluster control0=https://192.168.1.20:2380,control=https://192.168.1.40:2380 \
   --initial-cluster-state new \
   --data-dir=/var/lib/etcd
 Restart=on-failure
@@ -111,9 +111,11 @@ Each etcd member must have a unique name within an etcd cluster. Set the etcd na
 ETCD_NAME=$(hostname)
 
 INTERNAL_IP=$(echo "$(ifconfig eth0 | awk '/\<inet addr\>/ { print substr( $2, 6)}')")
+ - OR - 
+INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
 
 ```
-Notice that I'm using **eth0** or LAN connection to find the IP Address to replace in the Unit file. If you are using a Wi-Fi connection, you will probably need to change this to **wlan0**
+Notice that I'm using **eth0** or LAN connection to find the IP Address to replace in the Unit file. If you are using a Wi-Fi connection, you will probably need to change this to **wlan0** and use the **SECOND** INTERNAL_IP option
 The following command will display the interfaces with their IP Addresses:
 
 ```
@@ -155,25 +157,24 @@ sudo systemctl start etcd
 sudo systemctl status etcd --no-pager
 ```
 
-> Remember to run these steps on `controller0`, `controller1`, and `controller2`
+> Remember to run these steps on `control0`, `control1`
 
 ## Verification
 
-Once all 3 etcd nodes have been bootstrapped verify the etcd cluster is healthy:
+Once both etcd nodes have been bootstrapped verify the etcd cluster is healthy:
 
 * On one of the controller nodes run the following command:
 
 ```
 etcdctl --ca-file=/etc/etcd/ca.pem cluster-health
 ```
+*warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated*  Need to see if there's a way to clean this up.
 
 At first all cluster members were reporting unhealthy for some reason. It took a while (10+ minutes) for them to become healthy.
 In any event, I was able to continue with the installation of Kubernetes just fine.
 
-
 ```
-member 4df25a7f2ac49e88 is healthy: got healthy result from https://10.0.1.94:2379
-member 94230559abaa2df2 is healthy: got healthy result from https://10.0.1.95:2379
-member f6ae1308cea6198a is healthy: got healthy result from https://10.0.1.96:2379
+member 68326dea8aa5233d is healthy: got healthy result from https://192.168.1.40:2379
+member db49ef42428b90ee is healthy: got healthy result from https://192.168.1.20:2379
 cluster is healthy
 ```
