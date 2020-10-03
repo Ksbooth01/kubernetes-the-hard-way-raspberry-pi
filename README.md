@@ -6,8 +6,8 @@ This tutorial is inspired by the [Kelsey Hightower's Kubernetes The Hard Way](ht
 
 This tutorial is optimized for learning, which means taking the long route to help people understand each task required to bootstrap a Kubernetes cluster. This tutorial can be completed on the following platforms:
 
-* [Raspberry Pi 2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b/)
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+* [Raspberry Pi 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
 
 > The results of this tutorial should not be viewed as production ready, and may receive limited support from the community, but don't let that prevent you from learning!
 
