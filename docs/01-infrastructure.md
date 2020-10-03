@@ -11,26 +11,82 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 # OS Configuration
 
-The OS for each Raspberry Pi is [RASPBIAN BUSTER 2020-08-20](https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-03-03/2017-03-02-raspbian-jessie-lite.zip) This is a small image with a nice size OS perfect for small servers.
+The OS for each Raspberry Pi is [RASPBIAN BUSTER 2020-02-14](https://downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip) It's the desktop version. You can go with the LITE edition, but it was easier for me to just go with imaging the card.
 
 A total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
 
-| Hostname   | IP address    |              | Hostname   | IP address    |
-|:----------:|:-------------:|              |:----------:|:-------------:| 
-| control0   | 192.168.1.20  |              | node1      | 192.168.1.21  |
-| control1   | 192.168.1.40  |              | node2      | 192.168.1.22  |
+| Hostname    | IP address    |             
+|:-----------:|:-------------:|              
+| control0    | 192.168.1.20  |             
+| control1    | 192.168.1.40  |
+|             |               |
+| node1       | 192.168.1.21  |
+| node2       | 192.168.1.22  |
+| loadbalancer| 192.168.1.30  |
 
-| controller2   | 10.0.1.92     |
 
+## Changing the default user from "Pi" (Optional) 
 
-## Memory and Swap
+##### Assuming:
+* A brand new raspberry pi
+* You want to change the default username pi to mypie
+* You want to adapt also the main group from pi to mypie
+* You want other things to work out like sudo and auto-login
+Proceed to:
+Step 1: stop user pi from running before the change.
+Boot it, go to RPI configurations and
+allow SSH,
+disallow auto-login
+hit ok
+Press ALT+F1 to go to the first tty
+Escalate to root with sudo su -
+Edit $vim /etc/systemd/system/autologin@.service
 
-This GPU configuration has worked well for previous server setups I've done.
+Find and comment (#) the line
 
-```
-sudo sh -c 'echo "gpu_mem=16" >> /boot/config.txt'
-```
+#ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM
+you can uncomment it later if you want console autologin, but then don't forget to change the user pi to your new username mypi
 
+Create a new root password with passwd. (DON'T FORGET IT)
+Type reboot
+Step 2: make the user change
+If you see the graphical login prompt, you are good. Do not login. Instead, press ALT+F1 (* if you want to do it via ssh, see the apendix)
+After ALT+F1, you should see a login question (and not an autologin).
+Login as root with your root password. Now you are alone in the system, and changes to pi will not be met with usermod: user pi is currently used by process 2104. Check with ps -u pi to see an empty list.
+Very carefully, key by key, type usermod -l mypie pi . This will change your username, from /etc/passwd file, but things are not ready yet. Anyway, check with tail /etc/passwd and see the last line mypie:1000:... The 1000 is the UID and it is now yours.
+Try su mypie just to be sure. Do nothing. Just exit again to root. It should work. Now you need to adjust the group and a $HOME folder.
+Step 3: make the group change
+Type, again carefully, groupmod -n mypie pi . This will change the pi group name. Check it with tail /etc/group and you will see the last line the new name associated with GID 1000.
+Just to clarify, type ls -la /home/pi and you will see that the pi HOME now belongs to you, mypie.
+Step 4: lets adopt the new home.
+I see in the answers above the creation of a new folder, copying everything. No need. Lets just use the same.
+First move to cd /home to make it easier. Type ls -la and see pi, onwer mypie group mypie
+Type carefully: mv pi mypie . You now need to associate this change with your new user.
+Type carefully: usermod -d /home/mypie mypie . This will change your home directory. Check it with tail /etc/passwd and look at the sixth field (separated by :).
+Step 5: some adjusts after the fact.
+Reboot with reboot
+Login as your new user mypie in the graphical interface.
+Open a terminal.
+Change your password
+Type passwd to change the password of mypie to something else than raspberry
+Type sudo su - and you will be asked your password.
+auto-login again if you will (I don't recommend, but well)
+If you want to autologin your new account, edit the file:
+$vim etc/lightdm/lightdm.conf
+find the line with #autologin-user=, change it to autologin-user=mypie (no comment #)
+If you want back the ALT+F1 autologin, find and edit the file:
+$vim /etc/systemd/system/autologin@.service and change the line
+#ExecStart=-/sbin/agetty --autologin mypie --noclear %I $TERM
+Make your sudo passwordless again (I don't recommend as well)
+Move yourself (root) to cd /etc/sudoers.d
+Rename the file 010_pi-nopasswd to 010_mypie_nopasswd
+Open it vim 010_mypie_nopasswd and change the line pi ALL=(ALL) NOPASSWD: ALL to, obviously mypie ALL=(ALL) NOPASSWD: ALL. It is read-only, so save it forcing with :x!
+While you are into it, change your hostname
+Edit $vim /etc/hosts and change 127.0.1.1   raspberry to something more appropriate like 127.0.1.1    myoven.
+Edit $vim /etc/hostname and let a single line with myoven.
+Done
+Step 6: reboot
+Type, carefully, reboot
 ### SWAP (optional):
 I add 1GB of swap space.
 Some people seem concerned that frequent writes to the MicroSD card will make it fail quickly. I therefore decided to set the swappiness such that it only uses the swap as a last resort.
