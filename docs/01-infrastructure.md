@@ -41,7 +41,7 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 * Press ALT+F1 to go to the first tty
 * Escalate to root with ```sudo su -```
 * Edit ```$nano /etc/systemd/system/autologin@.service```
-    * Find and comment (#) the line
+    * Find and *comment* (#) the line
         * ``` #ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM ```
         you can uncomment it later if you want console autologin, but then don't forget to change the user ```pi``` to your new username ```kubeadmin```
     * Create a new root password with ```passwd```. **(DON'T FORGET IT)**
@@ -49,33 +49,31 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 #### Step 2: make the user change
 * If you see the graphical login prompt, you are good. Do not login. Instead, press ALT+F1 
 * After ALT+F1, you should see a ```login``` question (and not an autologin).
-* Login as ```root``` with your root password. Now you are alone in the system, and changes to ```pi``` will not be met with ```usermod: user pi is currently used by process 2104.``` Check with ```ps -u pi``` to see an empty list.
+* Login as ```root``` with your root password. You are now alone in the system, and changes to ```pi``` will not be met with ```usermod: user pi is currently used by process 2104.``` Check with $ ```ps -u pi``` to see an empty list.
 * Very carefully, key by key, type ```usermod -l kubeadmin pi``` . This will change your username, from ```/etc/passwd``` file, but things are not ready yet. Anyway, check with ```tail /etc/passwd``` and see the last line ```kubeadmin:1000:...``` The 1000 is the UID and it is now yours.
 * Try ```su kubeadmin``` just to be sure. Do nothing. Just ```exit``` again to root. It should work. Now you need to adjust the group and a ```$HOME``` folder.
 #### Step 3: make the group change
-* Type, again carefully, groupmod -n mypie pi . This will change the pi group name. Check it with tail /etc/group and you will see the last line the new name associated with GID 1000.
+* Type ```groupmod -n kubeadmin pi``` . This will change the pi group name. Check it with $ ```tail /etc/group``` and you will see the last line the new name associated with GID 1000.
 * Just to clarify, type ls -la /home/pi and you will see that the pi HOME now belongs to you, mypie.
 #### Step 4: lets adopt the new home.
-* Move to ```cd /home``` to make it easier. Type ```ls -la``` and see ```pi```, onwer ```kubeadmin``` group ```kubeadmin```
-* Type carefully: ```mv pi kubeadmin```. You now need to associate this change with your new user.
-* Type carefully: ```usermod -d /home/kubeadmin kubeadmin```. This will change your home directory. To confirm ```tail /etc/passwd``` and look at the sixth field (separated by ```:```).
+* Move to ```cd /home``` to make it easier. Type $ ```ls -la``` and see ```pi```, onwer ```kubeadmin``` group ```kubeadmin```
+* Carefully type $ ```mv pi kubeadmin```. You now need to associate this change with your new user.
+* Carefully type $ ```usermod -d /home/kubeadmin kubeadmin```. This will change your home directory. To confirm ```tail /etc/passwd``` and look at the sixth field (separated by ```:```).
 * Reboot with ```reboot```
 #### Step 5: some adjusts after the fact.
 * Login as your new user ```kubeadmin``` in the graphical interface.
 * Open a terminal.
 *Change your password*
   * Type passwd to change the password of ```kubeadmin``` to something other than *raspberry*
-  * Type ```sudo su - ``` and you will be asked your password.
+  * Type $ ```sudo su - ``` and you will be asked your password.
 
 * If you want back the ALT+F1 autologin, find and edit the file:
-    * $ ```sudo nano /etc/systemd/system/autologin@.service and change the line```
+    * $ ```sudo nano /etc/systemd/system/autologin@.service``` and change the line
     * ```#ExecStart=-/sbin/agetty --autologin kubeadmin --noclear %I $TERM```
 
 *While we're now's a good time the chage the hostname*
-  * ```sudo raspi-config``` pick 2 Network Options, then pick ```N1 Hostname``` Enter the name of the host you are configuring then ```Ok```
-
-#### Step 6: reboot
-* Type, carefully, ```reboot```
+  * ```sudo raspi-config``` pick 2 Network Options, then pick ```N1 Hostname``` Enter the name of the host you are configuring then ```Ok``` and ```Finish```
+* Once eerything has been completed  $ ```sudo reboot```
 
 
 ### SWAP (optional):
