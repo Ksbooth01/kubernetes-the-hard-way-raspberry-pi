@@ -11,7 +11,7 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 # OS Configuration
 
-The OS for each Raspberry Pi is [RASPBIAN BUSTER 2020-02-14](https://downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip) It's the desktop version. You can go with the LITE edition, but it was easier for me to just go with imaging the card.
+The OS for each Raspberry Pi is [RASPBIAN BUSTER 2020-02-14](https://downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip) It's the desktop version. You can go with the LITE edition, but it was easier for me to just go with imaging the card with the desktop version.
 
 A total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
 
@@ -27,19 +27,19 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 
 ## Changing the default user from "Pi" (Optional) 
 (props to DrBeco for posting the original)
-#### Assuming:
+#### Assumptions:
 * A brand new raspberry pi
-* You want to change the default username pi to mypie
-* You want to adapt also the main group from pi to mypie
+* You want to change the default username pi to kubeadmin (or someother name to your liking)
+* You want to adapt also the main group from pi to kubeadmin
 * You want other things to work out like sudo and auto-login
  
 #### Step 1: stop user pi from running before the change.
-* Boot it, go to RPI configurations and
+* Boot you Pi, go to RPI configurations and
     * allow SSH,
     * disallow auto-login
     * hit ok
 * Press ALT+F1 to go to the first tty
-* Escalate to root with sudo su -
+* Escalate to root with ```sudo su -```
 * Edit ```$vim /etc/systemd/system/autologin@.service```
     * Find and comment (#) the line
         * ``` #ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM ```
@@ -56,28 +56,24 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 * Type, again carefully, groupmod -n mypie pi . This will change the pi group name. Check it with tail /etc/group and you will see the last line the new name associated with GID 1000.
 * Just to clarify, type ls -la /home/pi and you will see that the pi HOME now belongs to you, mypie.
 #### Step 4: lets adopt the new home.
-I see in the answers above the creation of a new folder, copying everything. No need. Lets just use the same.
-First move to cd /home to make it easier. Type ls -la and see pi, onwer mypie group mypie
-Type carefully: mv pi mypie . You now need to associate this change with your new user.
-Type carefully: usermod -d /home/mypie mypie . This will change your home directory. Check it with tail /etc/passwd and look at the sixth field (separated by :).
+* Move to ```cd /home``` to make it easier. Type ```ls -la``` and see ```pi```, onwer ```kubeadmin``` group ```kubeadmin```
+* Type carefully: ```mv pi kubeadmin```. You now need to associate this change with your new user.
+* Type carefully: ```usermod -d /home/kubeadmin kubeadmin```. This will change your home directory. To confirm ```tail /etc/passwd``` and look at the sixth field (separated by ```:```).
+* Reboot with ```reboot```
 #### Step 5: some adjusts after the fact.
-Reboot with reboot
-Login as your new user mypie in the graphical interface.
-Open a terminal.
-Change your password
-Type passwd to change the password of mypie to something else than raspberry
-Type sudo su - and you will be asked your password.
-auto-login again if you will (I don't recommend, but well)
-If you want to autologin your new account, edit the file:
-$vim etc/lightdm/lightdm.conf
-find the line with #autologin-user=, change it to autologin-user=mypie (no comment #)
+* Login as your new user ```kubeadmin``` in the graphical interface.
+* Open a terminal.
+*Change your password*
+  * Type passwd to change the password of ```kubeadmin``` to something other than *raspberry*
+  * Type ```sudo su - ``` and you will be asked your password.
+
 * If you want back the ALT+F1 autologin, find and edit the file:
     * $ ```sudo nano /etc/systemd/system/autologin@.service and change the line```
     * ```#ExecStart=-/sbin/agetty --autologin kubeadmin --noclear %I $TERM```
 
 *While we're now's a good time the chage the hostname*
-  * sudo ```raspi-config``` pick 2 Network Options, then pick '''N1 Hostname``` Enter the name of the host you are configuring then ```<ok>```
-Done
+  * ```sudo raspi-config``` pick 2 Network Options, then pick ```N1 Hostname``` Enter the name of the host you are configuring then ```Ok```
+
 #### Step 6: reboot
 * Type, carefully, ```reboot```
 
