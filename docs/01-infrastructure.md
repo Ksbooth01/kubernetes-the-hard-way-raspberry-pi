@@ -1,4 +1,4 @@
-# Infrastructure Provisioning
+# 01 - Infrastructure Provisioning
 
 Kubernetes can be installed just about anywhere Linux runs on. It could be either physical or virtual machines. In this lab we are going to focus on [RASPBIAN](https://www.raspberrypi.org/downloads/raspbian/).
 
