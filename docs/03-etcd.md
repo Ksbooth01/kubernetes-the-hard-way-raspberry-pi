@@ -41,7 +41,7 @@ At the time of this writing etcd for ARM was not supported and no downloads were
 To save you the time and trouble, I'm providing the version I built as part of the repository hosting this tutorial.
 
 ```
-wget https://raw.githubusercontent.com/robertojrojas/kubernetes-the-hard-way-raspberry-pi/master/etcd/etcd-3.1.5-arm.tar.gz
+wget https://raw.githubusercontent.com/ksbooth01/kubernetes-the-hard-way-raspberry-pi/master/etcd/etcd-3.1.5-arm.tar.gz
 ```
 
 Extract and install the `etcd` server binary and the `etcdctl` command line client: 
