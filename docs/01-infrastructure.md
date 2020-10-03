@@ -75,9 +75,8 @@ find the line with #autologin-user=, change it to autologin-user=mypie (no comme
     * $ ```sudo nano /etc/systemd/system/autologin@.service and change the line```
     * ```#ExecStart=-/sbin/agetty --autologin kubeadmin --noclear %I $TERM```
 
-*While you are into it, change your hostname*
-  * Edit $vim /etc/hosts and change 127.0.1.1   raspberry to something more appropriate like 127.0.1.1    myoven.
-Edit $vim /etc/hostname and let a single line with myoven.
+*While we're now's a good time the chage the hostname*
+  * sudo ```raspi-config``` pick 2 Network Options, then pick '''N1 Hostname``` Enter the name of the host you are configuring then ```<ok>```
 Done
 #### Step 6: reboot
 * Type, carefully, ```reboot```
