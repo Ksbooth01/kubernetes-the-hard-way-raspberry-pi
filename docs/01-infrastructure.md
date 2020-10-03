@@ -71,9 +71,9 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
     * $ ```sudo nano /etc/systemd/system/autologin@.service``` and change the line
     * ```#ExecStart=-/sbin/agetty --autologin kubeadmin --noclear %I $TERM```
 
-*While we're now's a good time the chage the hostname*
-  * ```sudo raspi-config``` pick 2 Network Options, then pick ```N1 Hostname``` Enter the name of the host you are configuring then ```Ok``` and ```Finish```
-* Once eerything has been completed  $ ```sudo reboot```
+*While we're here now's a good time the chage the hostname*
+  *  $ ```sudo raspi-config``` pick ```2 Network Options```, then pick ```N1 Hostname``` Enter the name of the host you are configuring then ```Ok``` and ```Finish```
+* Once everything has been successfullly completed  $ ```sudo reboot```
 
 
 ### SWAP (optional):
