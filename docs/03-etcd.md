@@ -18,7 +18,7 @@ following reasons:
 
 ## Provision the etcd Cluster
 
-Run the following commands on `control0`, `control1``:
+Run the following commands on `control0`, `control1`:
 
 ### TLS Certificates
 
