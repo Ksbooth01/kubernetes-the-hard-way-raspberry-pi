@@ -29,8 +29,8 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 (props to DrBeco for posting the original)
 #### Assumptions:
 * A brand new raspberry pi
-* You want to change the default username pi to kubeadmin (or someother name to your liking)
-* You want to adapt also the main group from pi to kubeadmin
+* You want to change the default username ```pi``` to ```kubeadmin``` (or someother name to your liking)
+* You want to adapt also the main group from ```pi``` to ```kubeadmin```
 * You want other things to work out like sudo and auto-login
  
 #### Step 1: stop user pi from running before the change.
