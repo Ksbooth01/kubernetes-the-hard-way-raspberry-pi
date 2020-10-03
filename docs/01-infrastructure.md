@@ -32,20 +32,18 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 * You want to change the default username pi to mypie
 * You want to adapt also the main group from pi to mypie
 * You want other things to work out like sudo and auto-login
-Proceed to:
-Step 1: stop user pi from running before the change.
-Boot it, go to RPI configurations and
-allow SSH,
-disallow auto-login
-hit ok
-Press ALT+F1 to go to the first tty
-Escalate to root with sudo su -
-Edit $vim /etc/systemd/system/autologin@.service
-
-Find and comment (#) the line
-
-#ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM
-you can uncomment it later if you want console autologin, but then don't forget to change the user pi to your new username mypi
+ 
+##### Step 1: stop user pi from running before the change.
+* Boot it, go to RPI configurations and
+    * allow SSH,
+    * disallow auto-login
+    * hit ok
+* Press ALT+F1 to go to the first tty
+* Escalate to root with sudo su -
+* Edit ```$vim /etc/systemd/system/autologin@.service```
+    * Find and comment (#) the line
+        * ``` #ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM ```
+        you can uncomment it later if you want console autologin, but then don't forget to change the user ```pi``` to your new username ```kubeadmin```
 
 Create a new root password with passwd. (DON'T FORGET IT)
 Type reboot
