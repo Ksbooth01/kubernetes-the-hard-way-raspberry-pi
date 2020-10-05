@@ -2,8 +2,8 @@
 
 In this lab you will bootstrap a 3 node etcd cluster. The following machines will be used:
 
-* control0
-* control1
+* controller-0
+* controller-1
 
 
 ## Why
@@ -51,7 +51,7 @@ tar -xvf etcd-3.1.5-arm.tar.gz
 ```
 
 ```
-sudo mv etcd-3.1.5-arm/etcd* /usr/bin/
+sudo mv etcd-3.1.5-arm/etcd* /usr/local/bin/
 rm -rf etcd-3.1.5-arm*
 ```
 
@@ -86,7 +86,7 @@ ExecStart=/usr/bin/etcd --name ETCD_NAME \
   --listen-client-urls https://INTERNAL_IP:2379,http://127.0.0.1:2379 \
   --advertise-client-urls https://INTERNAL_IP:2379 \
   --initial-cluster-token etcd-cluster-0 \
-  --initial-cluster control0=https://192.168.1.20:2380,control=https://192.168.1.40:2380 \
+  --initial-cluster controller-0=https://192.168.1.20:2380,controller-1=https://192.168.1.40:2380 \
   --initial-cluster-state new \
   --data-dir=/var/lib/etcd
 Restart=on-failure
