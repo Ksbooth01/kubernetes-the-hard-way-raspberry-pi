@@ -66,7 +66,8 @@ echo '{
 
 ### Generate the CA certificate and private key
 
-Create the CA CSR:
+A certificate signing request (CSR) is one of the first steps towards getting your own SSL Certificate. Generated on the same server you plan to install the certificate on, the CSR contains information (e.g. common name, organization, country) the Certificate Authority (CA) will use to create your certificate. It also contains the public key that will be included in your certificate and is signed with the corresponding private key.
+To create the CA CSR:
 
 ```
 echo '{
