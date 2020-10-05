@@ -15,10 +15,10 @@ The steps can be followed on one of the Raspberry Pis, then the certificates can
 After completing this lab you should have the following TLS keys and certificates:
 
 ```
-ca-key.pem
-ca.pem
-kubernetes-key.pem
-kubernetes.pem
+ca-key.pem         (the private key for the CA)
+ca.pem             (the public key for the CA)
+kubernetes-key.pem (the private key )
+kubernetes.pem     (the public key 
 ```
 
 ## Working Directory
@@ -97,9 +97,9 @@ cfssl gencert -initca ca-csr.json | cfssljson -bare ca
 Results:
 
 ```
-ca-key.pem
+ca-key.pem   (the Private key for the CA)
 ca.csr
-ca.pem
+ca.pem       (the Public key for the CA)
 ```
 
 ### Verification
