@@ -173,6 +173,7 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+the 10.32.0.0 network is a service network that kubernetes API server uses to internally communicate with the other Kubernetes services. the Kubernetes API usually assigns itself the IP address of 10.32.01.1
 
 ```
 sed -i s/INTERNAL_IP/$INTERNAL_IP/g kube-apiserver.service
