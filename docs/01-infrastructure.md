@@ -51,7 +51,7 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 * After ALT+F1, you should see a ```login``` question (and not an autologin).
 * Login as ```root``` with your root password. You are now alone in the system, and changes to ```pi``` will not be met with ```usermod: user pi is currently used by process 2104.``` Check with $ ```ps -u pi``` to see an empty list.
 * Very carefully, key by key, type ```usermod -l kubeadmin pi``` . This will change your username, from ```/etc/passwd``` file, but things are not ready yet. Anyway, check with ```tail /etc/passwd``` and see the last line ```kubeadmin:1000:...``` The 1000 is the UID and it is now yours.
-* Try ` *su kubeadmin* ` just to be sure. Do nothing. Just ```exit``` again to root. It should work. Now you need to adjust the group and a ```$HOME``` folder.
+* Try **`su kubeadmin`** just to be sure. Do nothing. Just ```exit``` again to root. It should work. Now you need to adjust the group and a ```$HOME``` folder.
 #### Step 3: make the group change
 * Type ```groupmod -n kubeadmin pi``` . This will change the pi group name. Check it with $ ```tail /etc/group``` and you will see the last line the new name associated with GID 1000.
 * Just to clarify, type ls -la /home/pi and you will see that the pi HOME now belongs to you, mypie.
