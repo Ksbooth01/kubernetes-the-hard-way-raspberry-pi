@@ -17,8 +17,8 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 
 | Hostname    | IP address    |             
 |:-----------:|:-------------:|              
-| control0    | 192.168.1.20  |             
-| control1    | 192.168.1.40  |
+| controller-0| 192.168.1.20  |             
+| controller-1| 192.168.1.40  |
 |             |               |
 | node1       | 192.168.1.21  |
 | node2       | 192.168.1.22  |
