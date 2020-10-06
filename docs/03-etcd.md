@@ -2,15 +2,14 @@
 
 In this lab you will bootstrap a 3 node etcd cluster. The following machines will be used:
 
-* controller-0
-* controller-1
+`controller-0`  `controller-1`
 
 
 ## Why
 
-All Kubernetes components are stateless which greatly simplifies managing a Kubernetes cluster. All state is stored
-in etcd, which is a database and must be treated specially. To limit the number of compute resource to complete this lab etcd is being installed on the Kubernetes controller nodes. In production environments etcd should be run on a dedicated set of machines for the 
-following reasons:
+All Kubernetes components are stateless which greatly simplifies managing a Kubernetes cluster. All state is stored in etcd, which is a database
+and must be treated specially. To limit the number of compute resource to complete this lab etcd is being installed on the Kubernetes controller nodes. 
+In production environments etcd should be run on a dedicated set of machines for the following reasons:
 
 * The etcd lifecycle is not tied to Kubernetes. We should be able to upgrade etcd independently of Kubernetes.
 * Scaling out etcd is different than scaling out the Kubernetes Control Plane.
