@@ -140,10 +140,10 @@ cat > kubernetes-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Fawn Grove",
       "O": "Kubernetes",
       "OU": "Cluster",
-      "ST": "Oregon"
+      "ST": "Pennsylvania"
     }
   ]
 }
@@ -190,13 +190,13 @@ openssl x509 -in kubernetes.pem -text -noout
 Set the list of Kubernetes hosts where the certs should be copied to:
 
 ```
-KUBERNETES_HOSTS=(controller1 controller2 worker0 worker1)
+KUBERNETES_HOSTS=(controller-0 controller-1 node1 node2)
 ```
 
 ```
 for host in ${KUBERNETES_HOSTS[*]}; do
   ssh ${host} "mkdir -p ~/kubernetes"
-  scp ca.pem kubernetes-key.pem kubernetes.pem ${host}:~/dev/servers/kubernetes
+  scp ca.pem kubernetes-key.pem kubernetes.pem ${host}  ~/kubernetes
 done
 ```
 
