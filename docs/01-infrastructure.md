@@ -102,8 +102,13 @@ and finally...
 sudo systemctl disable dphys-swapfile.service
 ```
 reboot the server and test to see if it works
-
+```
 sudo swapon show
+```
+expected output...
+```
+swapon: cannot open show: No such file or directory
+```
 
 ## Hostnames to IP Addresses
 
