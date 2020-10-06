@@ -1,0 +1,207 @@
+
+
+Creating the Admin Client certificate:
+```
+{
+
+cat > admin-csr.json << EOF
+{
+  "CN": "admin",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Fawn Grove",
+      "O": "system:masters",
+      "OU": "Kubernetes The Hard Way - Pi edition",
+      "ST": "Pennsylvania"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  admin-csr.json | cfssljson -bare admin
+
+}
+```
+Next we'll be creating the Kubelet Client certificates. Be sure to enter YOUR actual cloud server values for all four of the variables at the top:
+```
+NODE1_HOST=<Public hostname of your first worker node cloud server>
+NODE1_IP=<Private IP of your first worker node cloud server>
+NODE2_HOST=<Public hostname of your second worker node cloud server>
+NODE2_IP=<Private IP of your second worker node cloud server>
+```
+
+````
+NODE1_HOST=node1
+NODE1_IP=192.168.1.21
+NODE2_HOST=node2
+NODE2_IP=192.168.1.22
+
+{
+cat > ${NODE1_HOST}-csr.json << EOF
+{
+  "CN": "system:node:${
+  NODE1_HOST}",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Fawn Grove",
+      "O": "system:nodes",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Pennsylvania"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=$(NODE1_IP},${NODE1_HOST} \
+  -profile=kubernetes \
+  ${NODE1_HOST}-csr.json | cfssljson -bare ${NODE1_HOST}
+
+cat > ${NODE2_HOST}-csr.json << EOF
+{
+  "CN": "system:node:${NODE2_HOST}",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Fawn Grove",
+      "O": "system:nodes",
+      "OU": "Kubernetes The Hard Way - Pi Edition",
+      "ST": "Pennsylvania"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=${NODE2_IP},${NODE2_HOST} \
+  -profile=kubernetes \
+  ${WORKER1_HOST}-csr.json | cfssljson -bare ${NODE2_HOST}
+
+}
+```
+
+Controller Manager Client certificate:
+
+```
+{
+
+cat > kube-controller-manager-csr.json << EOF
+{
+  "CN": "system:kube-controller-manager",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Fawn Grove",
+      "O": "system:kube-controller-manager",
+      "OU": "Kubernetes The Hard Way - Pi Edition",
+      "ST": "Pennsylvania"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+
+}
+```
+Kube Proxy Client certificate: these will be used on the worker nodes.
+```
+{
+
+cat > kube-proxy-csr.json << EOF
+{
+  "CN": "system:kube-proxy",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Fawn Grove",
+      "O": "system:node-proxy",
+      "OU": "Kubernetes The Hard Way - Pi Edition",
+      "ST": "Pennsylvania"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  kube-proxy-csr.json | cfssljson -bare kube-proxy
+
+}
+```
+
+The Kube Scheduler Client Certificate.  This will be ued on the Control Servers to authenticat the Kubernetes schedulte service.
+```
+{
+
+cat > kube-scheduler-csr.json << EOF
+{
+  "CN": "system:kube-scheduler",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Fawn Grove",
+      "O": "system:kube-scheduler",
+      "OU": "Kubernetes The Hard Way - Pi Edition",
+      "ST": "Pennsylvania"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+
+}
+```
+
+
