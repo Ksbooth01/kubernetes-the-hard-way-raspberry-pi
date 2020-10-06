@@ -1,5 +1,7 @@
 
 
+#### The following tasks are being completed on the server hosting fsSSL. 
+
 Creating the Admin Client certificate:
 ```
 {
@@ -203,5 +205,39 @@ cfssl gencert \
 
 }
 ```
+### The Kubernetes API Server Certificate
+This will create a server certificate for the Kubernetes API. The script will generate one, signed with all of the hostnames and IPs that may be used to access the Kubernetes API. Once completed you will have a Kubernetes API server certificate in the form of two files called ```kubernetes-key.pem``` and ```kubernetes.pem```.
 
+CERT_HOSTNAME=10.32.0.1,<controller node 1 Private IP>,<controller node 1 hostname>,<controller node 2 Private IP>,<controller node 2 hostname>,<API load balancer Private IP>,<API load balancer hostname>,127.0.0.1,localhost,kubernetes.default
+
+{
+
+cat > kubernetes-csr.json << EOF
+{
+  "CN": "kubernetes",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Fawn Grove",
+      "O": "Kubernetes",
+      "OU": "Kubernetes The Hard Way - Pi edition",
+      "ST": "Pennsylvania"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=${CERT_HOSTNAME} \
+  -profile=kubernetes \
+  kubernetes-csr.json | cfssljson -bare kubernetes
+
+}
 
