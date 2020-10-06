@@ -36,10 +36,10 @@ cfssl gencert \
 ```
 Next we'll be creating the Kubelet Client certificates. Be sure to enter YOUR actual cloud server values for all four of the variables at the top:
 ```
-NODE1_HOST=<Public hostname of your first worker node cloud server>
-NODE1_IP=<Private IP of your first worker node cloud server>
-NODE2_HOST=<Public hostname of your second worker node cloud server>
-NODE2_IP=<Private IP of your second worker node cloud server>
+NODE1_HOST=<hostname of your first worker node>
+NODE1_IP=<IP of your first worker node>
+NODE2_HOST=<hostname of your second worker node>
+NODE2_IP=<IP of your second worker node>
 ```
 
 ```
@@ -62,7 +62,7 @@ cat > ${NODE1_HOST}-csr.json << EOF
       "C": "US",
       "L": "Fawn Grove",
       "O": "system:nodes",
-      "OU": "Kubernetes The Hard Way",
+      "OU": "Kubernetes The Hard Way - Pi Edition",
       "ST": "Pennsylvania"
     }
   ]
