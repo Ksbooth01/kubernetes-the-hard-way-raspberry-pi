@@ -76,21 +76,22 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 * Once everything has been successfullly completed  $ ```sudo reboot```
 
 
-### SWAP (optional):
-I add 1GB of swap space.
-Some people seem concerned that frequent writes to the MicroSD card will make it fail quickly. I therefore decided to set the swappiness such that it only uses the swap as a last resort.
+### Disable the SWAP file :
+ Some people seem concerned that frequent writes to the MicroSD card will make it fail quickly. I find that if its turned on, things break. In a effort to reduce troubleshooting time, I turn it off.
 
+First turn off all existing swapfiles.
 ```
 sudo swapoff -a
 ```
+then comment out the swapfile components in the /etc/fstab file
 ```
-/etc/fstab
+nano /etc/fstab
 ```
 put a # sign in fron of the following line like so
 ```
 # use  dphys-swapfile swap[on|off]  for that
 ```
-
+disable swapfile from systemd 
 ```
 sudo dphys-swapfile swapoff && \
 sudo dphys-swapfile uninstall && \
@@ -102,7 +103,8 @@ sudo systemctl disable dphys-swapfile.service
 ```
 reboot the server and test to see if it works
 
-sudo show
+sudo swapon show
+
 ## Hostnames to IP Addresses
 
 In my experience, whether you use a direct connection versus Wi-Fi really depends on connection speed. The one thing that **IS CRITICAL** is that you assign IP Addresses to each server. for my machines is set up DHCP reservations.  (Yes. even home WI-FI routers allow you to set up DHCP reservations in their configuration) 
