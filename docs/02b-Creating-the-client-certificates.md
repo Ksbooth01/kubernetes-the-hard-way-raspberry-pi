@@ -244,15 +244,16 @@ cfssl gencert \
   kubernetes-csr.json | cfssljson -bare kubernetes
 
 }
-
-#### Outpuy
-<date><time> [INFO] generate received request
-<date><time> [INFO] received CSR
-<date><time> [INFO] generating key: rsa-2048
-<date><time> [INFO] encoded CSR
-<date><time> [INFO] signed certificate with serial number ################################################
-[WARNING] This certificate lacks a "hosts" field. This makes it unsuitable for websites. For more information see the Baseline Requirements 
-for the Issuance and Management of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
-specifically, section 10.2.3 ("Information Requirements").
 ```
+#### Output
+  ```
+  <date> <time> [INFO] generate received request
+  <date> <time> [INFO] received CSR 
+  <date> <time> [INFO] generating key: rsa-2048
+  <date> <time> [INFO] encoded CSR
+  <date> <time> [INFO] signed certificate with serial number ################################################
+  [WARNING] This certificate lacks a "hosts" field. This makes it unsuitable for websites. For more information see the Baseline Requirements 
+  for the Issuance and Management of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
+  specifically, section 10.2.3 ("Information Requirements").
+  ```
 
