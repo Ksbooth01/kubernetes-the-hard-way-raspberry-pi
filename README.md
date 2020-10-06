@@ -53,7 +53,7 @@ This tutorial assumes you have access to one of the following:
 
 * [Infrastructure Provisioning](docs/01-infrastructure.md)
 * [Setting up a CA and TLS Cert Generation](docs/02-certificate-authority.md)
-* [Creating Certificates for the Kubernetes Environment] (docs/02b-Creating the Client Certificates.md)
+* [Creating Certificates for the Kubernetes Environment] (docs/02b-Creating-the-Client-Certificates.md)
 * [Bootstrapping an H/A etcd cluster](docs/03-etcd.md)
 * [Bootstrapping an H/A Kubernetes Control Plane](docs/04-kubernetes-controller.md)
 * [Bootstrapping Kubernetes Workers](docs/05-kubernetes-worker.md)
