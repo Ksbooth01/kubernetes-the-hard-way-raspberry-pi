@@ -1,9 +1,8 @@
 # Bootstrapping a H/A etcd cluster
 
-In this lab you will bootstrap a 3 node etcd cluster. The following machines will be used:
+In this lab you will bootstrap an etcd cluster. The following machines will be used:
 
-`controller-0`  `controller-1`
-
+`controller-0`      `controller-1`
 
 ## Why
 
@@ -17,7 +16,7 @@ In production environments etcd should be run on a dedicated set of machines for
 
 ## Provision the etcd Cluster
 
-Run the following commands on `control0`, `control1`:
+Run the following commands on `controller-0`, `controller-1`:
 
 ### TLS Certificates
 
