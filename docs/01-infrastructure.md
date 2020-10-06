@@ -111,15 +111,15 @@ In my experience, whether you use a direct connection versus Wi-Fi really depend
 
 ```
 sudo sh -c "cat >>/etc/hosts <<EOF
-192.168.1.20       control0
-192.168.1.40       control1
+192.168.1.20       controller-0
+192.168.1.40       controller-1
 192.168.1.21       node1
 192.168.1.22       node2
 
 192.168.1.30       loadbalancer
 
 EOF
-"
+
 ```
 
 > Remember to run these steps on `control0`, `control1`, `node1`, `node2`, and `loadbalancer`
