@@ -35,7 +35,7 @@ sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
 
 ### Download and Install the etcd binaries
 
-At the time of this writing etcd for ARM was not supported and no downloads were available, so I had to build it from source on a Raspberry Pi.
+At the time of this writing etcd for ARM was not supported and downloads were not available, so it was built from the source files on a Raspberry Pi.
 To save you the time and trouble, I'm providing the version I built as part of the repository hosting this tutorial.
 
 ```
