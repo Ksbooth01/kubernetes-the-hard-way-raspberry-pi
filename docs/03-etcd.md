@@ -138,15 +138,11 @@ Once the etcd systemd unit file is ready, move it to the systemd system director
 sudo mv etcd.service /etc/systemd/system/
 ```
 
-Start the etcd server:
+Whenever you have made changes to a service file for a service that's part of systemd you need to reload, and restart the service. To restart the etcd server:
 
 ```
 sudo systemctl daemon-reload
-```
-```
 sudo systemctl enable etcd
-```
-```
 sudo systemctl start etcd
 ```
 
@@ -154,7 +150,7 @@ sudo systemctl start etcd
 ### Verification
 
 ```
-sudo systemctl status etcd --no-pager
+sudo systemctl status etcd --no-pager -l
 ```
 
 > Remember to run these steps on `control0`, `control1`
