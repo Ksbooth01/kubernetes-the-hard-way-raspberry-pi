@@ -42,7 +42,7 @@ NODE2_HOST=<Public hostname of your second worker node cloud server>
 NODE2_IP=<Private IP of your second worker node cloud server>
 ```
 
-````
+```
 NODE1_HOST=node1
 NODE1_IP=192.168.1.21
 NODE2_HOST=node2
