@@ -208,11 +208,12 @@ cfssl gencert \
 ### The Kubernetes API Server Certificate
 This will create a server certificate for the Kubernetes API. The script will generate one, signed with all of the hostnames and IPs that may be used to access the Kubernetes API. Once completed you will have a Kubernetes API server certificate in the form of two files called ```kubernetes-key.pem``` and ```kubernetes.pem```.
 
+
 CERT_HOSTNAME=10.32.0.1,<controller node 1 Private IP>,<controller node 1 hostname>,<controller node 2 Private IP>,<controller node 2 hostname>,<API load balancer Private IP>,<API load balancer hostname>,127.0.0.1,localhost,kubernetes.default
 
 ```
 CERT_HOSTNAME=10.32.0.1,192.168.1.20,controller-0,192.168.1.40,controller-1,192.168.1.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
-```
+
 {
 
 cat > kubernetes-csr.json << EOF
@@ -243,5 +244,15 @@ cfssl gencert \
   kubernetes-csr.json | cfssljson -bare kubernetes
 
 }
+
+#### Outpuy
+<date><time> [INFO] generate received request
+<date><time> [INFO] received CSR
+<date><time> [INFO] generating key: rsa-2048
+<date><time> [INFO] encoded CSR
+<date><time> [INFO] signed certificate with serial number ################################################
+[WARNING] This certificate lacks a "hosts" field. This makes it unsuitable for websites. For more information see the Baseline Requirements 
+for the Issuance and Management of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
+specifically, section 10.2.3 ("Information Requirements").
 ```
 
