@@ -210,6 +210,9 @@ This will create a server certificate for the Kubernetes API. The script will ge
 
 CERT_HOSTNAME=10.32.0.1,<controller node 1 Private IP>,<controller node 1 hostname>,<controller node 2 Private IP>,<controller node 2 hostname>,<API load balancer Private IP>,<API load balancer hostname>,127.0.0.1,localhost,kubernetes.default
 
+```
+CERT_HOSTNAME=10.32.0.1,192.168.1.20,controller-0,192.168.1.40,controller-1,192.168.1.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
+```
 {
 
 cat > kubernetes-csr.json << EOF
@@ -240,4 +243,5 @@ cfssl gencert \
   kubernetes-csr.json | cfssljson -bare kubernetes
 
 }
+```
 
