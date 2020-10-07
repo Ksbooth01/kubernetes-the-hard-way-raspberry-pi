@@ -50,11 +50,10 @@ NODE1_IP=192.168.1.21
 NODE2_HOST=node2
 NODE2_IP=192.168.1.22
 
-{
+
 cat > ${NODE1_HOST}-csr.json << EOF
 {
-  "CN": "system:node:${
-  NODE1_HOST}",
+  "CN": "system:node:${NODE1_HOST}",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -104,7 +103,7 @@ cfssl gencert \
   -config=ca-config.json \
   -hostname=${NODE2_IP},${NODE2_HOST} \
   -profile=kubernetes \
-  ${WORKER1_HOST}-csr.json | cfssljson -bare ${NODE2_HOST}
+  ${NODE2_HOST}-csr.json | cfssljson -bare ${NODE2_HOST}
 
 }
 ```
