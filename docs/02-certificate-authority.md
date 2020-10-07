@@ -38,12 +38,6 @@ chmod +x cfssl_linux-arm
 sudo mv cfssl_linux-arm /usr/local/bin/cfssl
 ```
 
-```
-wget https://pkg.cfssl.org/R1.2/cfssljson_linux-arm
-chmod +x cfssljson_linux-arm
-sudo mv cfssljson_linux-arm /usr/local/bin/cfssljson
-```
-
 ## Setting up a Certificate Authority
 
 ### Create the CA configuration file
