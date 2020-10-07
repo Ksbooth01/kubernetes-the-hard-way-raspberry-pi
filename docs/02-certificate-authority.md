@@ -408,19 +408,19 @@ cfssl gencert \
 }
 ```
 
-## Copy TLS Certs
+## Copy TLS Certs to their appropriate Servers
 
+##### Move certificate files to the worker nodes:
+
+```
+scp ca.pem ${NODE1_HOST}-key.pem ${NODE1_HOST}.pem kubeadmin@${NODE1_IP}:~/
+scp ca.pem ${NODE1_HOST}-key.pem ${NODE2_HOST}.pem kubeadmin@${NODE2_IP}:~/
+```
+##### Move certificate files to the controller nodes:
+
+```
+scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@<controller-0 IP>:~/
+scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@<controller-1 IP>:~/
 Set the list of Kubernetes hosts where the certs should be copied to:
-
-```
-KUBERNETES_HOSTS=(controller-0 controller-1 node1 node2)
-```
-
-```
-for host in ${KUBERNETES_HOSTS[*]}; do
-  ssh ${host} "mkdir -p ~/kubernetes"
-  scp ca.pem kubernetes-key.pem kubernetes.pem ${host}  ~/kubernetes
-done
-```
 
 
