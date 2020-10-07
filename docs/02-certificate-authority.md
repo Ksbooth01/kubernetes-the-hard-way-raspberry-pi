@@ -8,8 +8,6 @@ In this lab you will generate a single set of TLS certificates that can be used 
 * Kubernetes API Server
 * Kubernetes Kubelet
 
-> In production you should strongly consider generating individual TLS certificates for each component.
-
 The steps can be followed on one of the Raspberry Pis, then the certificates can be distributed to the others. I'm using **controller0** for the steps and then I copy the certificates to the rest of the cluster.
 
 After completing this lab you should have the following TLS keys and certificates:
