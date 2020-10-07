@@ -75,7 +75,7 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=$(NODE1_IP},${NODE1_HOST} \
+  -hostname=${NODE1_IP},${NODE1_HOST} \
   -profile=kubernetes \
   ${NODE1_HOST}-csr.json | cfssljson -bare ${NODE1_HOST}
 
