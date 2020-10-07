@@ -419,8 +419,14 @@ scp ca.pem ${NODE1_HOST}-key.pem ${NODE2_HOST}.pem kubeadmin@${NODE2_IP}:~/
 ##### Move certificate files to the controller nodes:
 
 ```
-scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@<controller-0 IP>:~/
-scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@<controller-1 IP>:~/
+CONTROLLER0_IP=<IP of your second worker node>
+CONTROLLER1_IP=<IP of your second worker node>
+
+CONTROLLER0_IP=192.168.1.20
+CONTROLLER1_IP=192.168.1.40
+
+scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@${CONTROLLER0_IP}:~/
+scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@${CONTROLLER1_IP}:~/
 Set the list of Kubernetes hosts where the certs should be copied to:
 
 
