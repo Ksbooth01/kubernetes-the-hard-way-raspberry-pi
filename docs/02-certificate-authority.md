@@ -377,8 +377,6 @@ cfssl gencert \
 Kubernetes provides the ability for service accounts to authenticate using tokens. It uses a key-pair to provide signatures for those tokens. We will generate a certificate that will be used as that key-pair. Upon completion, you will have a certificate ready to be used as a service account key-pair in the form of two files: `service-account-key.pem` and `service-account.pem`.
 
 ```
-cd ~/kthw
-
 {
 
 cat > service-account-csr.json << EOF
