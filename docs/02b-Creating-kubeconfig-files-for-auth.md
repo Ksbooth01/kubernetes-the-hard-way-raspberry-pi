@@ -30,10 +30,13 @@ If you haven't got them set from the last section set the following variables fo
 ```
 NODE1_HOST=<worker 1 hostname> 
 NODE2_HOST=<worker 2 hostname>
+${NODE1_HOST}=node1 
+${NODE2_HOST}=node2
+
 ```
 Now, generate a kubelet kubeconfig for each worker node:
-
-for instance in ${NODE1_HOST} ${NODE2_HOST} ; do
+```
+for instance in ${NODE1_HOST} ${NODE2_HOST}; do
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
@@ -53,3 +56,4 @@ for instance in ${NODE1_HOST} ${NODE2_HOST} ; do
 
   kubectl config use-context default --kubeconfig=${instance}.kubeconfig
 done
+```
