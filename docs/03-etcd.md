@@ -75,7 +75,7 @@ INITIAL_CLUSTER=controller-0=https://192.168.1.20:2380,controller-1=https://192.
 Make sure the IP addresses in the **--initial-cluster** match your environment.
 
 ```
-cat > etcd.service <<"EOF"
+cat << EOF | sudo tee /etc/systemd/system/etcd.service
 [Unit]
 Description=etcd
 Documentation=https://github.com/coreos
@@ -83,20 +83,20 @@ Documentation=https://github.com/coreos
 [Service]
 Environment=ETCD_UNSUPPORTED_ARCH=arm
 Type=notify
-ExecStart=/usr/bin/etcd --name ETCD_NAME \
-  --cert-file=/etc/etcd/kubernetes.pem \
-  --key-file=/etc/etcd/kubernetes-key.pem \
-  --peer-cert-file=/etc/etcd/kubernetes.pem \
-  --peer-key-file=/etc/etcd/kubernetes-key.pem \
-  --trusted-ca-file=/etc/etcd/ca.pem \
-  --peer-trusted-ca-file=/etc/etcd/ca.pem \
-  --initial-advertise-peer-urls https://INTERNAL_IP:2380 \
-  --listen-peer-urls https://INTERNAL_IP:2380 \
-  --listen-client-urls https://INTERNAL_IP:2379,http://127.0.0.1:2379 \
-  --advertise-client-urls https://INTERNAL_IP:2379 \
-  --initial-cluster-token etcd-cluster-0 \
-  --initial-cluster controller-0=https://192.168.1.20:2380,controller-1=https://192.168.1.40:2380 \
-  --initial-cluster-state new \
+ExecStart=/usr/bin/etcd --name ${ETCD_NAME} \\
+  --cert-file=/etc/etcd/kubernetes.pem \\
+  --key-file=/etc/etcd/kubernetes-key.pem \\
+  --peer-cert-file=/etc/etcd/kubernetes.pem \\
+  --peer-key-file=/etc/etcd/kubernetes-key.pem \\
+  --trusted-ca-file=/etc/etcd/ca.pem \\
+  --peer-trusted-ca-file=/etc/etcd/ca.pem \\
+  --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \\
+  --listen-peer-urls https://${INTERNAL_IP}:2380 \\
+  --listen-client-urls https://${INTERNAL_IP}:2379,http://127.0.0.1:2379 \\
+  --advertise-client-urls https://${INTERNAL_IP}:2379 \\
+  --initial-cluster-token etcd-cluster-0 \\
+  --initial-cluster ${INITIAL_CLUSTER} \\
+  --initial-cluster-state new \\
   --data-dir=/var/lib/etcd
 Restart=on-failure
 RestartSec=5
