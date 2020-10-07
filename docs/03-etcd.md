@@ -60,7 +60,7 @@ sudo mkdir -p /var/lib/etcd
 ```
 ### The etcd server will be started and managed by systemd. Create the etcd systemd unit file:
 
-Frist, et's Set up the following environment variables. Be sure you replace all of the <placeholder values> with their corresponding real values:
+First, let's Set up the following environment variables. Be sure you replace all of the <placeholder values> with their corresponding real values:
 ```
 ETCD_NAME=<cloud server hostname>
 INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
@@ -68,12 +68,29 @@ INITIAL_CLUSTER=<controller 1 hostname>=https://<controller 1 private ip>:2380,<
 ```
 **Example** 
 ```
-ETCD_NAME=$(echo ${HOSTNAME})
+ETCD_NAME=$(hostname)
+
+INTERNAL_IP=$(echo "$(ifconfig eth0 | awk '/\<inet addr\>/ { print substr( $2, 6)}')")
+ - OR - 
 INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
+
 INITIAL_CLUSTER=controller-0=https://192.168.1.20:2380,controller-1=https://192.168.1.40:2380
 ```
 Make sure the IP addresses in the **--initial-cluster** match your environment.
 
+### Set The Internal IP Address
+
+The internal IP address will be used by etcd to serve client requests and communicate with other etcd peers.
+Each etcd member must have a unique name within an etcd cluster. Set the etcd name:
+
+```
+
+
+```
+Notice that I'm using **eth0** or LAN connection to find the IP Address to replace in the Unit file. If you are using a Wi-Fi connection, you will probably need to change this to **wlan0** and use the **SECOND** INTERNAL_IP option
+The following command will display the interfaces with their IP Addresses:
+The ARM architecture is currently not supported, so we need to tell etcd that we want to use an unsupported architecture.
+This is done by providing the environment variable **ETCD_UNSUPPORTED_ARCH=arm**
 ```
 cat << EOF | sudo tee /etc/systemd/system/etcd.service
 [Unit]
@@ -105,48 +122,6 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
-
-The ARM architecture is currently not supported, so we need to tell etcd that we want to use an unsupported architecture.
-This is done by providing the environment variable **ETCD_UNSUPPORTED_ARCH=arm**
-
-
-### Set The Internal IP Address
-
-The internal IP address will be used by etcd to serve client requests and communicate with other etcd peers.
-
-Each etcd member must have a unique name within an etcd cluster. Set the etcd name:
-
-```
-ETCD_NAME=$(hostname)
-
-INTERNAL_IP=$(echo "$(ifconfig eth0 | awk '/\<inet addr\>/ { print substr( $2, 6)}')")
- - OR - 
-INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
-
-```
-Notice that I'm using **eth0** or LAN connection to find the IP Address to replace in the Unit file. If you are using a Wi-Fi connection, you will probably need to change this to **wlan0** and use the **SECOND** INTERNAL_IP option
-The following command will display the interfaces with their IP Addresses:
-
-```
-ip a
-```
-
-Substitute the etcd name and internal IP address:
-
-```
-sed -i s/INTERNAL_IP/${INTERNAL_IP}/g etcd.service
-```
-
-```
-sed -i s/ETCD_NAME/${ETCD_NAME}/g etcd.service
-```
-
-Once the etcd systemd unit file is ready, move it to the systemd system directory:
-
-```
-sudo mv etcd.service /etc/systemd/system/
-```
-
 Whenever you have made changes to a service file for a service that's part of systemd you need to reload, and restart the service. To restart the etcd server:
 
 ```
