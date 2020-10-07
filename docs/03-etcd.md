@@ -100,7 +100,7 @@ Documentation=https://github.com/coreos
 [Service]
 Environment=ETCD_UNSUPPORTED_ARCH=arm
 Type=notify
-ExecStart=/usr/bin/etcd --name ${ETCD_NAME} \\
+ExecStart=/usr/local/bin/etcd --name ${ETCD_NAME} \\
   --cert-file=/etc/etcd/kubernetes.pem \\
   --key-file=/etc/etcd/kubernetes-key.pem \\
   --peer-cert-file=/etc/etcd/kubernetes.pem \\
