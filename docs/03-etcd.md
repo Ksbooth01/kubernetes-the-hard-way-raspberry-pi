@@ -58,9 +58,20 @@ All etcd data is stored under the etcd data directory. In a production cluster t
 ```
 sudo mkdir -p /var/lib/etcd
 ```
+### The etcd server will be started and managed by systemd. Create the etcd systemd unit file:
 
-The etcd server will be started and managed by systemd. Create the etcd systemd unit file:
-
+Frist, et's Set up the following environment variables. Be sure you replace all of the <placeholder values> with their corresponding real values:
+```
+ETCD_NAME=<cloud server hostname>
+INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
+INITIAL_CLUSTER=<controller 1 hostname>=https://<controller 1 private ip>:2380,<controller 2 hostname>=https://<controller 2 private ip>:2380
+```
+**Example** 
+```
+ETCD_NAME=$(echo ${HOSTNAME})
+INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
+INITIAL_CLUSTER=controller-0=https://192.168.1.20:2380,controller-1=https://192.168.1.40:2380
+```
 Make sure the IP addresses in the **--initial-cluster** match your environment.
 
 ```
