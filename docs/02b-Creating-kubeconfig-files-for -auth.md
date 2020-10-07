@@ -4,7 +4,23 @@
 
 Next we will generate **kubeconfigs** which will be used by the various services that will make up the cluster. In this lesson, we will generate these kubeconfigs. Once compoete there will be a set of kubeconfigs which will be used later to configure the Kubernetes cluster.
  
-First, we'll create an environment variable to store the address of the Kubernetes API, and set it to the private IP of your load balancer cloud server:
+
+## Install Kubectl client tool
+In this step we will download **kubectl** client version 0.19.2:
+```
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/arm/kubectl
+
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+```
+
+
+(OPTIONAL) if you feeling adventuresome you can try the latest version:
+```
+(OPTONAL) curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm/kubectl
+```
+Now, we'll create an environment variable to store the address of the Kubernetes API, and set it to the private IP of your load balancer cloud server:
 ```
 KUBERNETES_ADDRESS=<load balancer private ip>
 
