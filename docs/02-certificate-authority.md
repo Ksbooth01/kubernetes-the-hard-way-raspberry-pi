@@ -35,6 +35,12 @@ wget https://pkg.cfssl.org/R1.2/cfssl_linux-arm
 chmod +x cfssl_linux-arm
 sudo mv cfssl_linux-arm /usr/local/bin/cfssl
 ```
+...and now the cfssljson binaries
+```
+wget https://pkg.cfssl.org/R1.2/cfssljson_linux-arm
+chmod +x cfssljson_linux-arm
+sudo mv cfssljson_linux-arm /usr/local/bin/cfssljson
+````
 
 ## Setting up a Certificate Authority
 
