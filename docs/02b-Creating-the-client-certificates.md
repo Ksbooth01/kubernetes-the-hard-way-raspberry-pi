@@ -22,8 +22,9 @@ cat > admin-csr.json << EOF
       "ST": "Pennsylvania"
     }
   ]
-}
+} 
 EOF
+
 
 cfssl gencert \
   -ca=ca.pem \
@@ -33,6 +34,7 @@ cfssl gencert \
   admin-csr.json | cfssljson -bare admin
 
 }
+
 ```
 Next we'll be creating the Kubelet Client certificates. Be sure to enter YOUR actual cloud server values for all four of the variables at the top:
 ```
