@@ -52,12 +52,12 @@ sudo mv cfssljson_linux-arm /usr/local/bin/cfssljson
 echo '{
   "signing": {
     "default": {
-      "expiry": "8760h"
+      "expiry": "87600h"
     },
     "profiles": {
       "kubernetes": {
         "usages": ["signing", "key encipherment", "server auth", "client auth"],
-        "expiry": "8760h"
+        "expiry": "87600h"
       }
     }
   }
@@ -79,10 +79,10 @@ echo '{
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Fawn Grove",
       "O": "Kubernetes",
-      "OU": "CA",
-      "ST": "Oregon"
+      "OU": "PA",
+      "ST": "Pennsylvania"
     }
   ]
 }' > ca-csr.json
@@ -106,83 +106,6 @@ ca.pem       (the Public key for the CA)
 
 ```
 openssl x509 -in ca.pem -text -noout
-```
-
-## Generate the single Kubernetes TLS Cert
-
-In this section we will generate a TLS certificate that will be valid for all Kubernetes components. This is being done for ease of use. In production you should strongly consider generating individual TLS certificates for each component. (But all replicas of a given component must share the same certificate.)
-
-**Before creating the `kubernetes-csr.json` make sure both the hostnames and IP addresses match your environment.**
-
-Create the `kubernetes-csr.json` file:
-
-```
-cat > kubernetes-csr.json <<EOF
-{
-  "CN": "kubernetes",
-  "hosts": [
-    "controller0",
-    "controller1",
-    "controller2",
-    "worker0",
-    "worker1",
-    "10.0.1.94",
-    "10.0.1.95",
-    "10.0.1.96",
-    "10.0.1.97",
-    "10.0.1.98",
-    "127.0.0.1"
-  ],
-  "key": {
-    "algo": "rsa",
-    "size": 2048
-  },
-  "names": [
-    {
-      "C": "US",
-      "L": "Fawn Grove",
-      "O": "Kubernetes",
-      "OU": "Cluster",
-      "ST": "Pennsylvania"
-    }
-  ]
-}
-EOF
-```
-
-Generate the Kubernetes certificate and private key:
-
-```
-cfssl gencert \
-  -ca=ca.pem \
-  -ca-key=ca-key.pem \
-  -config=ca-config.json \
-  -profile=kubernetes \
-  kubernetes-csr.json | cfssljson -bare kubernetes
-```
-
-Results:
-
-```
-kubernetes-key.pem
-kubernetes.csr
-kubernetes.pem
-```
-
-You may see the following warning, but in my case it didn't cause any problems.
- 
-```
-[WARNING] This certificate lacks a "hosts" field. This makes it unsuitable for
-websites. For more information see the Baseline Requirements for the Issuance and Management
-of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
-specifically, section 10.2.3 ("Information Requirements").
-```
-
-
-### Verification
-
-```
-openssl x509 -in kubernetes.pem -text -noout
 ```
 
 ## Copy TLS Certs
