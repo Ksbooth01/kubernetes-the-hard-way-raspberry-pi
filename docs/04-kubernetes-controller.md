@@ -336,12 +336,14 @@ sudo mv kube-controller-manager.service /etc/systemd/system/
 
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable kube-controller-manager
-sudo systemctl start kube-controller-manager
+sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
+sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
 ```
 
 ```
-sudo systemctl status kube-controller-manager --no-pager
+sudo systemctl status kube-apiserver --no-pager -l 
+sudo systemctl status kube-controller-manager --no-pager -l 
+sudo systemctl status kube-scheduler --no-pager -l 
 ```
 
 ### Kubernetes Scheduler
@@ -381,6 +383,9 @@ sudo systemctl start kube-scheduler
 
 ```
 sudo systemctl status kube-scheduler --no-pager
+sudo systemctl status kube-scheduler --no-pager
+sudo systemctl status kube-scheduler --no-pager
+
 ```
 
 
