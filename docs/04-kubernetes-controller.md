@@ -26,7 +26,7 @@ Each component is being run on the same machines for the following reasons:
 
 ## Provision the Kubernetes Controller Cluster
 
-Run the following commands on `controller0`, `controller1`, `controller2`:
+Run the following commands on `controller-0`, `controller-1`:
 
 ### TLS Certificates
 
