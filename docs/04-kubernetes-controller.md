@@ -33,7 +33,7 @@ wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linu
 wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kubectl
 ```
 
-Set the binary permissions to allow execute and Install the Kubernetes binaries to the working directory:
+Set the binary permissions to allow execute and Install the Kubernetes binaries in the working directory:
 ```
 chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
 ```
