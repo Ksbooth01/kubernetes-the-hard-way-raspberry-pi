@@ -1,14 +1,7 @@
 # Bootstrapping an H/A Kubernetes Control Plane
 
-In this lab you will bootstrap a 3 node Kubernetes controller cluster. The following virtual machines will be used:
-
-* controller-0
-* controller-1
-
-
-In this lab you will also create a frontend load balancer with a public IP address for remote access to the API servers and H/A.
-
-## Why
+## Provision the Kubernetes Controller Cluster
+Run the following commands on `controller-0`, `controller-1`:
 
 The Kubernetes components that make up the control plane include the following components:
 
@@ -18,23 +11,12 @@ The Kubernetes components that make up the control plane include the following c
 * **etcd** (already installed) a distributed datastore used by the cluster.  integeral, independent
 
 Each component is being run on the same machines for the following reasons:
-
 * The Scheduler and Controller Manager are tightly coupled with the API Server
 * Only one Scheduler and Controller Manager can be active at a given time, but it's ok to run multiple at the same time. Each component will elect a leader via the API Server.
 * Running multiple copies of each component is required for H/A
 * Running each component next to the API Server eases configuration.
 
-## Provision the Kubernetes Controller Cluster
-
-Run the following commands on `controller-0`, `controller-1`:
-
-### TLS Certificates
-
-The TLS certificates created in the [Setting up a CA and TLS Cert Generation](02-certificate-authority.md) lab will be used to secure communication between the Kubernetes API server and Kubernetes clients such as `kubectl` and the `kubelet` agent. The TLS certificates will also be used to authenticate the Kubernetes API server to etcd via TLC client auth.
-
 ### Download and install the Kubernetes controller binaries
-
-sudo mkdir -p /etc/kubernetes/config
 
 create a tempory directory for the binaries and set the environment variables for you to download : 
 ```
@@ -51,8 +33,7 @@ wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linu
 wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kubectl
 ```
 
-Set the binary permissions and Install the Kubernetes binaries::
-
+Set the binary permissions to allow execute and Install the Kubernetes binaries to the working directory:
 ```
 chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
 ```
@@ -60,37 +41,25 @@ chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
 sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
 ```
 
-### Kubernetes API Server
-
-#### Setup Authentication and Authorization
-
-##### Authentication
-
-[Token based authentication](http://kubernetes.io/docs/admin/authentication) will be used to limit access to the Kubernetes API. The authentication token is used by the following components:
-
-* kubelet (client)
-* Kubernetes API Server (server)
-
-The other components, mainly the `scheduler` and `controller manager`, access the Kubernetes API server locally over the insecure API port which does not require authentication. The insecure port is only enabled for local access.
-
-Download the example token file:
+### Setting up the Kubernetes API Server
+The Kubernetes API server provides the primary interface for the Kubernetes control plane and the cluster as a whole. When you interact with Kubernetes, you are nearly always doing it through the Kubernetes API server.
 
 ```
-wget https://raw.githubusercontent.com/robertojrojas/kubernetes-the-hard-way-raspberry-pi/master/token.csv
-```
+cd ~
+sudo mkdir -p /var/lib/kubernetes/
 
-Review the example token file and replace the default token.
-
+sudo cp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
+  service-account-key.pem service-account.pem \
+  encryption-config.yaml /var/lib/kubernetes/
+ ```
+Set environment variables needed to create the systemd unit file. **Note:** Make sure you replace the placeholders with their actual values:
 ```
-cat token.csv
+INTERNAL_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+CONTROLLER0_IP=192.168.1.20
+CONTROLLER1_IP=192.168.1.40
 ```
-
-Move the token file into the Kubernetes configuration directory so it can be read by the Kubernetes API server.
-
+**example**
 ```
-sudo mv token.csv /var/lib/kubernetes/
-```
-
 ##### Authorization
 
 Attribute-Based Access Control (ABAC) will be used to authorize access to the Kubernetes API. In this lab ABAC will be setup using the Kubernetes policy file backend as documented in the [Kubernetes authorization guide](http://kubernetes.io/docs/admin/authorization).
