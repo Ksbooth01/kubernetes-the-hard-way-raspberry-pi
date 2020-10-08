@@ -112,6 +112,105 @@ WantedBy=multi-user.target
 EOF
 ```
 
+**Notes:** 
+* --kubelet-preferred-address allows you to set prioritization of NIC resolution for your cluster.  So, if you have you  Raspberries dual homes to physical and wireless this will allow you to control which NIC get priority for kubernetes.
+* -service-cluster-ip-range=*10.32.0.0/24* 
+## Setting up the kube-controller-manager-service
+Next, we go through the process of configuring a systemd service for the Kubernetes Controller Manager. Once complete the kubeconfig and systemd unit file set up and ready to run the kube-controller-manager service on both of your control nodes.
+
+```
+sudo cp kube-controller-manager.kubeconfig /var/lib/kubernetes/
+```
+##### Create the kube-controller-manager systemd unit file:
+```
+cat << EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/usr/local/bin/kube-controller-manager \\
+  --address=0.0.0.0 \\
+  --cluster-cidr=10.200.0.0/16 \\
+  --cluster-name=kubernetes \\
+  --cluster-signing-cert-file=/var/lib/kubernetes/ca.pem \\
+  --cluster-signing-key-file=/var/lib/kubernetes/ca-key.pem \\
+  --kubeconfig=/var/lib/kubernetes/kube-controller-manager.kubeconfig \\
+  --leader-elect=true \\
+  --root-ca-file=/var/lib/kubernetes/ca.pem \\
+  --service-account-private-key-file=/var/lib/kubernetes/service-account-key.pem \\
+  --service-cluster-ip-range=10.32.0.0/24 \\
+  --use-service-account-credentials=true \\
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+**explanation** 
+  --cluster-cidr=10.200.0.0/16 \\
+  --service-cluster-ip-range=10.32.0.0/24 \\
+
+## Setting up the Kubernetes Scheduler
+
+```
+sudo cp kube-scheduler.kubeconfig /var/lib/kubernetes/
+```
+create the kube-scheduler yaml config file.
+```
+cat << EOF | sudo tee /etc/kubernetes/config/kube-scheduler.yaml
+apiVersion: componentconfig/v1alpha1
+kind: KubeSchedulerConfiguration
+clientConnection:
+  kubeconfig: "/var/lib/kubernetes/kube-scheduler.kubeconfig"
+leaderElection:
+  leaderElect: true
+EOF
+```
+Create the kube-scheduler systemd unit file:
+```
+cat << EOF | sudo tee /etc/systemd/system/kube-scheduler.service
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/usr/local/bin/kube-scheduler \\
+  --config=/etc/kubernetes/config/kube-scheduler.yaml \\
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+Start and enable all of the services:
+```
+sudo systemctl daemon-reload
+sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
+sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
+```
+Make sure all the services are active (running):
+```
+sudo systemctl status kube-apiserver kube-controller-manager kube-scheduler --no-page -l
+```
+Use kubectl to check componentstatuses:
+```
+kubectl get componentstatuses --kubeconfig admin.kubeconfig
+```
+You should get output that looks like this:
+```
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok
+scheduler            Healthy   ok
+etcd-0               Healthy   {"health": "true"}
+etcd-1               Healthy   {"health": "true"}
+```
+
 Attribute-Based Access Control (ABAC) will be used to authorize access to the Kubernetes API. In this lab ABAC will be setup using the Kubernetes policy file backend as documented in the [Kubernetes authorization guide](http://kubernetes.io/docs/admin/authorization).
 
 Download the example authorization policy file:
