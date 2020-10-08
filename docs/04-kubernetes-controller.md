@@ -56,7 +56,7 @@ Set the binary permissions and Install the Kubernetes binaries::
 ```
 chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
 ```
-
+```
 sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
 ```
 
