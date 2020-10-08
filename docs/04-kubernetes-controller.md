@@ -2,9 +2,9 @@
 
 In this lab you will bootstrap a 3 node Kubernetes controller cluster. The following virtual machines will be used:
 
-* controller0
-* controller1
-* controller2
+* controller-0
+* controller-1
+
 
 In this lab you will also create a frontend load balancer with a public IP address for remote access to the API servers and H/A.
 
@@ -12,9 +12,10 @@ In this lab you will also create a frontend load balancer with a public IP addre
 
 The Kubernetes components that make up the control plane include the following components:
 
-* Kubernetes API Server
-* Kubernetes Scheduler
-* Kubernetes Controller Manager
+* **Kubernetes API Server** - This server the Kubernetes API and allows users to interact with the cluster
+* **Kubernetes Scheduler** - Schedules pose on available worker nodes.
+* **Kubernetes Controller Manager** Manages a series of controllers the provide a wide range os functionality to the cluster
+* **etcd** (already installed) a distributed datastore used by the cluster.  integeral, independent
 
 Each component is being run on the same machines for the following reasons:
 
@@ -31,47 +32,32 @@ Run the following commands on `controller0`, `controller1`, `controller2`:
 
 The TLS certificates created in the [Setting up a CA and TLS Cert Generation](02-certificate-authority.md) lab will be used to secure communication between the Kubernetes API server and Kubernetes clients such as `kubectl` and the `kubelet` agent. The TLS certificates will also be used to authenticate the Kubernetes API server to etcd via TLC client auth.
 
-Copy the TLS certificates to the Kubernetes configuration directory:
-
-```
-cd $HOME/kubernetes
-sudo mkdir -p /var/lib/kubernetes
-```
-
-```
-sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
-```
-
 ### Download and install the Kubernetes controller binaries
 
-Download the official Kubernetes release binaries:
+sudo mkdir -p /etc/kubernetes/config
 
+create a tempory directory for the binaries and set the environment variables for you to download : 
 ```
-K8S_VER=v1.4.6
+mkdir -p $HOME/kubebits
+cd ~/kubebits
+K8S_VER=v1.19.2
 K8S_ARCH=arm
 ```
-
+Download the official Kubernetes release binaries:
 ```
 wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kube-apiserver
-```
-```
 wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kube-controller-manager
-```
-```
 wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kube-scheduler
-```
-```
 wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kubectl
 ```
 
-Install the Kubernetes binaries:
+Set the binary permissions and Install the Kubernetes binaries::
 
 ```
 chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
 ```
 
-```
-sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/bin/
+sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
 ```
 
 ### Kubernetes API Server
