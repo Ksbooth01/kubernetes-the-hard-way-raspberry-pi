@@ -1,6 +1,6 @@
 # 01 - Infrastructure Provisioning
 
-Kubernetes can be installed just about anywhere Linux runs on. It could be either physical or virtual machines. In this lab we are going to focus on [RASPBIAN](https://www.raspberrypi.org/downloads/raspbian/).
+Kubernetes can be installed just about anywhere Linux runs on. It could be either physical or virtual machines. In this lab we are going to focus on [Ubuntu on Raspberry Pi](https://ubuntu.com/download/raspberry-pi).
 
 This lab will walk you through provisioning the Raspberry Pi software required for running a H/A Kubernetes cluster. 
 
@@ -11,8 +11,9 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 # OS Configuration
 
-The OS for each Raspberry Pi is [RASPBIAN BUSTER 2020-02-14](https://downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip) It's the desktop version. You can go with the LITE edition, but it was easier for me to just go with imaging the card with the desktop version.
+The OS for each Raspberry Pi is [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) I wnet with the 64-bit option and not the 32-bit option.  Though it's possible you can get Kubernetes to run on 32-bit, I couldn't get any of the new editions to really run properly.  Also, it's not officially supported.
 
+download the image and install it on  
 A total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
 
 | Hostname    | IP address    |             
@@ -25,43 +26,69 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 | loadbalancer| 192.168.1.30  |
 
 
+## (Optional - Setting up WiFi)
+Hard wired is definately the better option for setting up a Kubernetes cluster, but MY Ethernet is not near my office, and I make enough changes to the physical that hard wired wasn't that great of an option, beside I have 5G it's not really that big a deal.
+
+```
+# This file is generated from information provided by
+# the datasource.  Changes to it will not persist across an instance.
+# To disable cloud-init's network configuration capabilities, write a file
+# /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
+# network: {config: disabled}
+network:
+    version: 2
+    ethernets:
+        eth0:
+            optional: true
+            dhcp4: true
+    # add wifi setup information here ...
+    wifis:
+        wlan0:
+            optional: true
+            access-points:
+                "YOUR-SSID-NAME":
+                    password: "YOUR-NETWORK-PASSWORD"
+            dhcp4: true
+```
+
+'s/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+
 ## Changing the default user from "Pi" (Optional) 
 (props to DrBeco for posting the original) [here](https://raspberrypi.stackexchange.com/questions/12827/change-default-username)
 #### Assumptions:
 * A brand new raspberry pi
-* You want to change the default username ```pi``` to ```kubeadmin``` (or someother name to your liking)
-* You want to adapt also the main group from ```pi``` to ```kubeadmin```
+* You want to change the default username ```ubuntu``` to ```kubeadmin``` (or someother name to your liking)
+* You want to adapt also the main group from ```ubuntu``` to ```kubeadmin```
 * You want other things to work out like sudo and auto-login
  
-#### Step 1: stop user pi from running before the change.
-* Boot your Pi, go to RPI configurations and
-    * allow SSH,
-    * disallow auto-login
-    * hit ok
-* Press ALT+F1 to go to the first tty
-* Escalate to root with ```sudo su -```
-* Edit ```$nano /etc/systemd/system/autologin@.service```
-    * Find and *comment* (#) the line
-        * ``` #ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM ```
-        you can uncomment it later if you want console autologin, but then don't forget to change the user ```pi``` to your new username ```kubeadmin```
-    * Create a new root password with ```passwd```. **(DON'T FORGET IT)**
-    * Type ```reboot```
+#### Step 1: set up root so they can have sole access
+* Escalate to root with `sudo su`
+* Create a new root password with `passwd`. **(DON'T FORGET IT)**
+* Edit $ **`nano //etc/ssh/sshd_config`**
+    * Find and *uncomment* (#) the line
+        * ` #PermitRootLogin prohibit-password`  and change prohibit-password yo yes
+        `PermitRootLogin yes` 
+        save the file using ^X Yes
+* Type `reboot`
+you should no be able to SSH into the server with root@<YOUR_IP_ADDRESS>
+
 #### Step 2: make the user change
 * If you see the graphical login prompt, you are good. Do not login. Instead, press ALT+F1 
 * After ALT+F1, you should see a ```login``` question (and not an autologin).
-* Login as ```root``` with your root password. You are now alone in the system, and changes to ```pi``` will not be met with ```usermod: user pi is currently used by process 2104.``` Check with $ ```ps -u pi``` to see an empty list.
-* Very carefully, key by key, type ```usermod -l kubeadmin pi``` . This will change your username, from ```/etc/passwd``` file, but things are not ready yet. Anyway, check with ```tail /etc/passwd``` and see the last line ```kubeadmin:1000:...``` The 1000 is the UID and it is now yours.
-* Try **`su kubeadmin`** just to be sure. Do nothing. Just ```exit``` again to root. It should work. Now you need to adjust the group and a ```$HOME``` folder.
+* Login as **`root`** with your root password. You are now alone in the system, and changes to `ubuntu` will not be met with `usermod: user pi is currently used by process 2104.``` Check with $ `ps -u ubuntu` to see an empty list.
+* Very carefully, key by key, type **`usermod -l kubeadmin ubuntu`** . This will change your username, from `/etc/passwd` file, but things are not ready yet. Anyway, check with **`tail /etc/passwd`** and see the last line `kubeadmin:1000:...` The 1000 is the UID and it is now yours.
+* Try **`su kubeadmin`** just to be sure. Do nothing. Just `exit` again to root. It should work. Now you need to adjust the group and a `$HOME` folder.
 #### Step 3: make the group change
-* Type ```groupmod -n kubeadmin pi``` . This will change the pi group name. Check it with $ ```tail /etc/group``` and you will see the last line the new name associated with GID 1000.
+* Type **`groupmod -n kubeadmin pi`** . This will change the pi group name. Check it with $ `tail /etc/group` and you will see the last line the new name associated with GID 1000.
 * Just to clarify, type ls -la /home/pi and you will see that the pi HOME now belongs to you, mypie.
 #### Step 4: lets adopt the new home.
-* Move to ```cd /home``` to make it easier. Type $ ```ls -la``` and see ```pi```, onwer ```kubeadmin``` group ```kubeadmin```
-* Carefully type $ ```mv pi kubeadmin```. You now need to associate this change with your new user.
-* Carefully type $ ```usermod -d /home/kubeadmin kubeadmin```. This will change your home directory. To confirm ```tail /etc/passwd``` and look at the sixth field (separated by ```:```).
+* Move to **`cd /home`** to make it easier. Type $ **`ls -la`** and see `ubuntu`, onwer `kubeadmin` group `kubeadmin`
+* Carefully type $ **`mv ubuntu kubeadmin`**. You now need to associate this change with your new user.
+* Carefully type $ **`usermod -d /home/kubeadmin kubeadmin`**. This will change your home directory. To confirm **`tail /etc/passwd`** and look at the sixth field (separated by `:`).
 * Reboot with ```reboot```
 #### Step 5: some adjusts after the fact.
-* Login as your new user ```kubeadmin``` in the graphical interface.
+* Login as your new user `kubeadmin` in the graphical interface.
 * Open a terminal.
 *Change your password*
   * Type passwd to change the password of ```kubeadmin``` to something other than *raspberry*
