@@ -54,8 +54,8 @@ network:
 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 
-## Changing the default user from "Pi" (Optional) 
-(props to DrBeco for posting the original) [here](https://raspberrypi.stackexchange.com/questions/12827/change-default-username)
+## Changing the default user from "Ubuntu" (Optional) 
+
 #### Assumptions:
 * A brand new raspberry pi
 * You want to change the default username ```ubuntu``` to ```kubeadmin``` (or someother name to your liking)
