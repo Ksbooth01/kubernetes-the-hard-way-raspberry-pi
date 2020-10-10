@@ -17,11 +17,11 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 
 | Hostname    | IP address    |             
 |:-----------:|:-------------:|              
-| controller-0| 192.168.1.20  |             
-| controller-1| 192.168.1.40  |
+| controller0 | 192.168.1.20  |             
+| controller1 | 192.168.1.40  |
 |             |               |
-| node1       | 192.168.1.21  |
-| node2       | 192.168.1.22  |
+| worker1     | 192.168.1.21  |
+| worker2     | 192.168.1.22  |
 | loadbalancer| 192.168.1.30  |
 
 
@@ -116,10 +116,10 @@ In my experience, whether you use a direct connection versus Wi-Fi really depend
 
 ```
 sudo sh -c "cat >>/etc/hosts <<EOF
-192.168.1.20       controller-0
-192.168.1.40       controller-1
-192.168.1.21       node1
-192.168.1.22       node2
+192.168.1.20       controller0
+192.168.1.40       controller1
+192.168.1.21       worker1
+192.168.1.22       worker2
 
 192.168.1.30       loadbalancer
 
