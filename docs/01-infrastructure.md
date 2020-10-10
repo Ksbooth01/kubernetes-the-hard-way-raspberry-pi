@@ -79,7 +79,7 @@ you should no be able to SSH into the server with root@<YOUR_IP_ADDRESS>
 * Try **`su kubeadmin`** just to be sure. Do nothing. Just `exit` again to root. It should work. Now you need to adjust the group and a `$HOME` folder.
 #### Step 3: make the group change
 * Type **`groupmod -n kubeadmin ubuntu`** . This will change the pi group name. Check it with $ **`tail /etc/group`** and you will see the last line the new name associated with GID 1000.
-* Just to clarify, **`type ls -la /home/ubuntu`** and you will see that the pi HOME now belongs to you, mypie.
+* Just to clarify, type **`ls -la /home/ubuntu`** and you will see that the pi HOME now belongs to you, mypie.
 #### Step 4: lets adopt the new home.
 * Move to **`cd /home`** to make it easier. Type $ **`ls -la`** and see `ubuntu`, onwer `kubeadmin` group `kubeadmin`
 * Carefully type $ **`mv ubuntu kubeadmin`**. You now need to associate this change with your new user.
