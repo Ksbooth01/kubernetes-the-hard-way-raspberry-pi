@@ -139,22 +139,22 @@ cfssl gencert \
 ```
 Next we'll be creating the Kubelet Client certificates. Be sure to enter YOUR actual cloud server values for all four of the variables at the top:
 ```
-NODE1_HOST=<hostname of your first worker node>
-NODE1_IP=<IP of your first worker node>
-NODE2_HOST=<hostname of your second worker node>
-NODE2_IP=<IP of your second worker node>
+WORKER1_HOST=<hostname of your first worker node>
+WORKER1_IP=<IP of your first worker node>
+WORKER2_HOST=<hostname of your second worker node>
+WORKER2_IP=<IP of your second worker node>
 ```
 
 ```
-NODE1_HOST=node1
-NODE1_IP=192.168.1.21
-NODE2_HOST=node2
-NODE2_IP=192.168.1.22
+WORKER1_HOST=worker1
+WORKER1_IP=192.168.1.21
+WORKER2_HOST=worker2
+WORKER2_IP=192.168.1.22
 
 
-cat > ${NODE1_HOST}-csr.json << EOF
+cat > ${WORKER1_HOST}-csr.json << EOF
 {
-  "CN": "system:node:${NODE1_HOST}",
+  "CN": "system:node:${WORKER1_HOST}",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -175,13 +175,13 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${NODE1_IP},${NODE1_HOST} \
+  -hostname=${WORKER1_IP},${WORKER1_HOST} \
   -profile=kubernetes \
-  ${NODE1_HOST}-csr.json | cfssljson -bare ${NODE1_HOST}
+  ${WORKER1_HOST}-csr.json | cfssljson -bare ${WORKER1_HOST}
 
-cat > ${NODE2_HOST}-csr.json << EOF
+cat > ${WORKER2_HOST}-csr.json << EOF
 {
-  "CN": "system:node:${NODE2_HOST}",
+  "CN": "system:node:${WORKER2_HOST}",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -202,9 +202,9 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${NODE2_IP},${NODE2_HOST} \
+  -hostname=${WORKER2_IP},${WORKER2_HOST} \
   -profile=kubernetes \
-  ${NODE2_HOST}-csr.json | cfssljson -bare ${NODE2_HOST}
+  ${WORKER2_HOST}-csr.json | cfssljson -bare ${WORKER2_HOST}
 
 }
 ```
