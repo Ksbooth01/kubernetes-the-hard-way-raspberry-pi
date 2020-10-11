@@ -26,10 +26,19 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 | loadbalancer| 192.168.1.30  |
 
 
-## (Optional - Setting up WiFi)
-Hard wired is definately the better option for setting up a Kubernetes cluster, but MY Ethernet is not near my office, and I make enough changes to the physical that hard wired wasn't that great of an option, beside I have 5G it's not really that big a deal.
+## Flashing the SD Micro
 
-```
+## Initial login 
+* On first boot you will be presented with the initial login prompt. use **`ubuntu`** for the login name and **`ubuntu`** as the password.
+* You will be asked to change the password on first login. Change it!
+**Setting the root password**
+* Type **`sudo su`**  then type **`passwd`**. Once the password for root has been changed enter **`exit`**
+### (Optional - Setting up WiFi)
+Hard wired is definately the better option for setting up a Kubernetes cluster, but MY Ethernet is not near my office, and I make enough changes to the physical that hard wired wasn't that great of an option, beside I have 5G it's not really that big a deal.
+The image does not hae wifi configured so this it was the file needs to look like to get it to work **Note:** spelling counts.
+**```
+sudoedit /etc/netplan/50-clout-init.yaml
+```**
 # This file is generated from information provided by
 # the datasource.  Changes to it will not persist across an instance.
 # To disable cloud-init's network configuration capabilities, write a file
@@ -50,7 +59,8 @@ network:
                     password: "YOUR-NETWORK-PASSWORD"
             dhcp4: true
 ```
-
+**YOUR-SSID-NAME**  is the neme of you wifi network (mine wouldn't work with the 5G so I had to use the regular one)
+systemctl start netplan
 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 
