@@ -328,7 +328,7 @@ CERT_HOSTNAME=10.32.0.1,<controller node 1 IP>,<controller node 1 hostname>,<con
 Make sure you include all of the information for all your servers.
 
 ```
-CERT_HOSTNAME=10.32.0.1,192.168.1.20,controller-0,192.168.1.40,controller-1,192.168.1.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
+CERT_HOSTNAME=10.32.0.1,192.168.1.20,controller0,192.168.1.40,controller1,192.168.1.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
 
 {
 
