@@ -11,7 +11,7 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 # OS Configuration
 
-The OS for each Raspberry Pi is [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) I wnet with the 64-bit option and not the 32-bit option.  Though it's possible you can get Kubernetes to run on 32-bit, I couldn't get any of the new editions to really run properly.  Also, it's not officially supported.
+The OS for each Raspberry Pi is [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) I went with the 64-bit option and not the 32-bit option.  Though it's possible you can get Kubernetes to run on 32-bit, I couldn't get any of the new editions to really run properly.  Also, it's not officially supported.
 
 download the image and install it on  
 A total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
