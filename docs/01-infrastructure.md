@@ -35,9 +35,15 @@ Next, you'll need to download imager software to load the SD Micro cards with th
 * You will be asked to change the password on first login. Change it!
 ### Setting the root password
 * Type **`sudo su`**  then type **`passwd`**. Once the password for root has been changed enter **`exit`**
-### (Optional - Setting up WiFi)
-Hard wired is definately the better option for setting up a Kubernetes cluster, but MY Ethernet is not near my office, and I make enough changes to the physical that hard wired wasn't that great of an option, beside I have 5G it's not really that big a deal.
-The image does not hae wifi configured so this it was the file needs to look like to get it to work **Note:** spelling counts.
+### (IP address setup - Public and Private)
+The IP address configuration for ubuntu is contained in a file called /etc/netplan/50-cloud-init.yaml.   
+There's a bit of typing required here. The ubuntu image does not have wifi preconfigured so this it what the file needs to look like to get it to work 
+**Notes:** 
+    * spelling counts.  spacing - spelling - all the syntax. 
+    * Your IPs need to be static.  
+    * On the wired (Eth0) network I had no DHCP, so I enter addresses 
+    * On the wifi (wlan0) network there is DHCP so I created reseverations. Everyone wifi is different so I'm not going into that.
+    * 172.16.0.10 is just my workstation address for SSHing in.
 
 **`
 sudoedit /etc/netplan/50-cloud-init.yaml
@@ -57,6 +63,7 @@ network:
             addresses:
                 - 172.16.0.##/24
             gateway4: 172.16.0.10
+            nameservers:
                 addresses: [8.8.8.8,1.1.1.1]
     # add wifi setup information here ...
     wifis:
@@ -67,9 +74,12 @@ network:
                     password: "YOUR-NETWORK-PASSWORD"
             dhcp4: true
 ```
-**Note:** YOUR-SSID-NAME  is the neme of you wifi network. the Quotes are necessary. (mine wouldn't work with the 5G so I had to use the regular one)
+**Notes:** 
+    * YOUR-SSID-NAME  is the name of you wifi network. 
+    * The Quotes around YOUR-SSID-NAME are necessary. 
+    * Mine wouldn't work with the 5G so I had to use the lower speed Wifi.
 * Test start the wireless network using your modifications 
-    **`systemctl start netplan`**
+    **`sudo netplan apply **
     This Should run without errors, if not fix your typos.
 ### Permit root to ssh
 Leaving root allowed to ssh shoudl not be left on - make sure you turn this off at the end of setup. 
