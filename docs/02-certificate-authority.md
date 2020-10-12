@@ -413,8 +413,8 @@ cfssl gencert \
 ##### Move certificate files to the worker nodes:
 
 ```
-scp ca.pem ${NODE1_HOST}-key.pem ${NODE1_HOST}.pem kubeadmin@${NODE1_IP}:~/
-scp ca.pem ${NODE1_HOST}-key.pem ${NODE2_HOST}.pem kubeadmin@${NODE2_IP}:~/
+scp ca.pem ${WORKER1_HOST}-key.pem ${WORKER1_HOST}.pem kubeadmin@${WORKER1_IP}:~/
+scp ca.pem ${WORKER1_HOST}-key.pem ${WORKER2_HOST}.pem kubeadmin@${WORKER2_IP}:~/
 ```
 ##### Move certificate files to the controller nodes:
 
