@@ -51,8 +51,11 @@ network:
     version: 2
     ethernets:
         eth0:
-            optional: true
-            dhcp4: true
+            dhcp4: no
+            addresses:
+                - 172.16.0.##/24
+            gateway4: 172.16.0.10
+                addresses: [8.8.8.8,1.1.1.1]
     # add wifi setup information here ...
     wifis:
         wlan0:
