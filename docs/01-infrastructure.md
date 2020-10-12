@@ -20,14 +20,13 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 |:-----------:|:-------------:|:-------------:|              
 | controller0 | 192.168.1.20  |  172.16.0.20  |          
 | controller1 | 192.168.1.40  |  172.16.0.40  |
-|                                             |
 | worker1     | 192.168.1.21  | 172.16.0.21   |
 | worker2     | 192.168.1.22  | 172.16.0.22   |
-|:-----------:|:-------------:|:-------------:|
 | loadbalancer| 192.168.1.30  | 172.16.0.30   |
 
 
 ## Flashing the SD Micro
+* [pull down the ubuntu image for Raspberry pi] (https://ubuntu.com/download/raspberry-pi) Pick the 64-bit version.
 
 ## Initial login 
 * On first boot you will be presented with the initial login prompt. use **`ubuntu`** for the login name and **`ubuntu`** as the password.
