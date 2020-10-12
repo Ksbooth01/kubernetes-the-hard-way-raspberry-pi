@@ -10,16 +10,8 @@ In this lab you will generate a single set of TLS certificates that can be used 
 
 The steps can be followed on one of the Raspberry Pis, then the certificates can be distributed to the others. I'm using **controller0** for the steps and then I copy the certificates to the rest of the cluster.
 
-After completing this lab you should have the following TLS keys and certificates:
 
-```
-ca-key.pem         (the private key for the CA)
-ca.pem             (the public key for the CA)
-kubernetes-key.pem (the private key )
-kubernetes.pem     (the public key 
-```
-
-## Working Directory
+## Make the Working Directory
 
 ```
 mkdir -p $HOME/kubernetes
@@ -28,7 +20,7 @@ cd $HOME/kubernetes
 
 ## Install CFSSL
 
-This lab requires the `cfssl` and `cfssljson` binaries. Download them from the [cfssl repository](https://pkg.cfssl.org).
+We will require the `cfssl` and `cfssljson` binaries. Download them from the [cfssl repository](https://pkg.cfssl.org).
 
 ```
 wget https://pkg.cfssl.org/R1.2/cfssl_linux-arm
@@ -91,7 +83,7 @@ cfssl gencert -initca ca-csr.json | cfssljson -bare ca
 
 ```
 ca-key.pem   (the Private key for the CA)
-ca.csr
+ca.csr       (the certificate signing request)
 ca.pem       (the Public key for the CA)
 ```
 
@@ -139,17 +131,17 @@ cfssl gencert \
 ```
 Next we'll be creating the Kubelet Client certificates. Be sure to enter YOUR actual cloud server values for all four of the variables at the top:
 ```
-WORKER1_HOST=<hostname of your first worker node>
-WORKER1_IP=<IP of your first worker node>
-WORKER2_HOST=<hostname of your second worker node>
-WORKER2_IP=<IP of your second worker node>
+WORKER1_HOST=<PUBLIC hostname of your first worker node>
+WORKER1_IP=<PRIVATE IP of your first worker node>
+WORKER2_HOST=<PUBLIC hostname of your second worker node>
+WORKER2_IP=<PRIVATE IP of your second worker node>
 ```
 
 ```
 WORKER1_HOST=worker1
-WORKER1_IP=192.168.1.21
+WORKER1_IP=172.16.0.21
 WORKER2_HOST=worker2
-WORKER2_IP=192.168.1.22
+WORKER2_IP=172.16.0.22
 
 
 cat > ${WORKER1_HOST}-csr.json << EOF
