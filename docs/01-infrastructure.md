@@ -16,14 +16,15 @@ The OS for each Raspberry Pi is [Ubuntu 20.04](https://ubuntu.com/download/raspb
 download the image and install it on  
 A total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
 
-| Hostname    | IP address    |             
-|:-----------:|:-------------:|              
-| controller0 | 192.168.1.20  |             
-| controller1 | 192.168.1.40  |
-|             |               |
-| worker1     | 192.168.1.21  |
-| worker2     | 192.168.1.22  |
-| loadbalancer| 192.168.1.30  |
+| Hostname    | IP address-EXT| IP address-INT|            
+|:-----------:|:-------------:|:-------------:|              
+| controller0 | 192.168.1.20  |  172.16.0.20  |          
+| controller1 | 192.168.1.40  |  172.16.0.40  |
+|:-----------:|:-------------:|:-------------:|
+| worker1     | 192.168.1.21  | 172.16.0.21   |
+| worker2     | 192.168.1.22  | 172.16.0.22   |
+|:-----------:|:-------------:|:-------------:|
+| loadbalancer| 192.168.1.30  | 172.16.0.30   |
 
 
 ## Flashing the SD Micro
