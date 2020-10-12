@@ -59,10 +59,16 @@ network:
                     password: "YOUR-NETWORK-PASSWORD"
             dhcp4: true
 ```
-**YOUR-SSID-NAME**  is the neme of you wifi network (mine wouldn't work with the 5G so I had to use the regular one)
-systemctl start netplan
-'s/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
+**Note:** YOUR-SSID-NAME  is the neme of you wifi network. the Quotes are necessary. (mine wouldn't work with the 5G so I had to use the regular one)
+* Test start the wireless network using your modifications 
+    **`systemctl start netplan`**
+    This Should run without errors, if not fix your typos.
+### Permit root to ssh
+Leaving root allowed to ssh shoudl not be left on - make sure you turn this off at the end of setup. 
+**`sudo nano /etc/ssh/sshd_config`**
+* Find the line:
+  `#PermitRootLogin prohibit-password` and change it to 
+  `PermitRootLogin yes` Save the file on exit and **`reboot`** 
 
 ## Changing the default user from "Ubuntu" (Optional) 
 
