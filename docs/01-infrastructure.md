@@ -11,10 +11,7 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 # OS Configuration
 
-The OS for each Raspberry Pi is [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) I went with the 64-bit option and not the 32-bit option.  Though it's possible you can get Kubernetes to run on 32-bit, I couldn't get any of the new editions to really run properly.  Also, it's not officially supported.
-
-download the image and install it on  
-A total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
+Firt, we need to download [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) 64-bit option (not the 32-bit option.) This will get installed on a total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
 
 | Hostname    | IP address-EXT| IP address-INT|            
 |:-----------:|:-------------:|:-------------:|              
@@ -24,9 +21,14 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 | worker2     | 192.168.1.22  | 172.16.0.22   |
 | loadbalancer| 192.168.1.30  | 172.16.0.30   |
 
+Next, you'll need to download imager software to load the SD Micro cards with the image. Raspberry Pi offers a free too for theis [here](https://www.raspberrypi.org/downloads/)
 
 ## Flashing the SD Micro
-* [pull down the ubuntu image for Raspberry pi] (https://ubuntu.com/download/raspberry-pi) Pick the 64-bit version.
+* If you're using the Raspberry Pi Imager pick `Choose OS` then scroll down and choose `Use Custom` 
+* Navigate to the place where you downloaded your ubuntu Pi image  
+* Insert your MicroSD card into you PC and `Choose SD Card`
+* Then pick `Write`
+* When it finisheds transferring to the card, remove it and insert it into your Raspberry Pi, and power it up.
 
 ## Initial login 
 * On first boot you will be presented with the initial login prompt. use **`ubuntu`** for the login name and **`ubuntu`** as the password.
