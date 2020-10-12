@@ -2,7 +2,7 @@
 
 In this lab you will bootstrap an etcd cluster. The following machines will be used:
 
-`controller-0`      `controller-1`
+`controller0`      `controller1`
 
 ## Why
 
@@ -16,7 +16,7 @@ In production environments etcd should be run on a dedicated set of machines for
 
 ## Provision the etcd Cluster
 
-Run the following commands on `controller-0`, `controller-1`:
+Run the following commands on `controller0`, `controller1`:
 
 ### TLS Certificates
 
@@ -29,7 +29,6 @@ sudo mkdir -p /etc/etcd/
 ```
 
 ```
-cd $HOME/kubernetes
 sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
 ```
 
@@ -74,7 +73,7 @@ INTERNAL_IP=$(echo "$(ifconfig eth0 | awk '/\<inet addr\>/ { print substr( $2, 6
  - OR - 
 INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
 
-INITIAL_CLUSTER=controller-0=https://192.168.1.20:2380,controller-1=https://192.168.1.40:2380
+INITIAL_CLUSTER=controller0=https://172.16.0.20:2380,controller1=https://172.16.0.40:2380
 ```
 Make sure the IP addresses in the **--initial-cluster** match your environment.
 
@@ -98,7 +97,7 @@ Description=etcd
 Documentation=https://github.com/coreos
 
 [Service]
-Environment=ETCD_UNSUPPORTED_ARCH=arm
+Environment=ETCD_UNSUPPORTED_ARCH=arm64
 Type=notify
 ExecStart=/usr/local/bin/etcd --name ${ETCD_NAME} \\
   --cert-file=/etc/etcd/kubernetes.pem \\
