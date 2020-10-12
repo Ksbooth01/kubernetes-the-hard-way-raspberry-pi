@@ -31,7 +31,7 @@ A total of 5 Raspberry Pis will be configured. Here are their names and IP addre
 ## Initial login 
 * On first boot you will be presented with the initial login prompt. use **`ubuntu`** for the login name and **`ubuntu`** as the password.
 * You will be asked to change the password on first login. Change it!
-**Setting the root password**
+### Setting the root password
 * Type **`sudo su`**  then type **`passwd`**. Once the password for root has been changed enter **`exit`**
 ### (Optional - Setting up WiFi)
 Hard wired is definately the better option for setting up a Kubernetes cluster, but MY Ethernet is not near my office, and I make enough changes to the physical that hard wired wasn't that great of an option, beside I have 5G it's not really that big a deal.
