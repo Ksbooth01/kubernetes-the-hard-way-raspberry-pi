@@ -84,10 +84,12 @@ Leaving root allowed to ssh shoudl not be left on - make sure you turn this off 
 
 #### Step 1: make the user change
 * SSH in as **`root`** with your root password. You are now alone in the system, and changes to `ubuntu` will not be met with `usermod: user pi is currently used by process 2104.` Check with $ `ps -u ubuntu` to see an empty list.
-* Very carefully, key by key, type **`usermod -l kubeadmin ubuntu`** . This will change your username in the `/etc/passwd` file. To check,type **`tail /etc/passwd`** and verify the last line `kubeadmin:1000:...` The 1000 is the UID and it is now yours.
+* Very carefully, key by key, type **`usermod -l kubeadmin ubuntu`** . This will change your username in the `/etc/passwd` file.
+* To check,type **`tail /etc/passwd`** and verify the last line `kubeadmin:1000:...` The 1000 is the UID and it is now yours.
 * Try **`su kubeadmin`** just to be sure. Do nothing. Just `exit` again to root. It should work. Now you need to adjust the group and a `$HOME` folder.
 #### Step 2: make the group change
-* Type **`groupmod -n kubeadmin ubuntu`** . This will change the pi group name. Check it with $ **`tail /etc/group`** and you will see the last line the new name associated with GID 1000.
+* Type **`groupmod -n kubeadmin ubuntu`** . This will change the pi group name. 
+* Check it with $ **`tail /etc/group`** and you will see the last line the new name associated with GID 1000.
 * Just to clarify, type **`ls -la /home/ubuntu`** and you will see that the ubuntu HOME now belongs to you, kubeadmin.
 #### Step 3: lets adopt the new home.
 * Move to **`cd /home`** to make it easier. Type $ **`ls -la`** and see `ubuntu`, onwer `kubeadmin` group `kubeadmin`
