@@ -68,20 +68,20 @@ systemctl start netplan
 
 #### Assumptions:
 * A brand new raspberry pi
-* You want to change the default username ```ubuntu``` to ```kubeadmin``` (or someother name to your liking)
-* You want to adapt also the main group from ```ubuntu``` to ```kubeadmin```
+* You want to change the default username `ubuntu` to `kubeadmin` (or someother name to your liking)
+* You want to adapt also the main group from `ubuntu` to `kubeadmin`
 * You want other things to work out like sudo and auto-login
  
 #### Step 1: set up root so they can have sole access
-* Escalate to root with `sudo su`
+* Escalate to root with **`sudo su`**
 * Create a new root password with `passwd`. **(DON'T FORGET IT)**
-* Edit $ **`nano //etc/ssh/sshd_config`**
+* Edit $ **`sudo nano //etc/ssh/sshd_config`**
     * Find and *uncomment* (#) the line
         * ` #PermitRootLogin prohibit-password`  and change prohibit-password yo yes
         `PermitRootLogin yes` 
         save the file using ^X Yes
-* Type `reboot`
-you should no be able to SSH into the server with root@<YOUR_IP_ADDRESS>
+* Type **`reboot`**
+you should now be able to SSH into the server with root@<YOUR_IP_ADDRESS>
 
 #### Step 2: make the user change
 * SSH in as **`root`** with your root password. You are now alone in the system, and changes to `ubuntu` will not be met with `usermod: user pi is currently used by process 2104.``` Check with $ `ps -u ubuntu` to see an empty list.
