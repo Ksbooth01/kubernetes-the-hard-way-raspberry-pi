@@ -308,11 +308,11 @@ CERT_HOSTNAME=10.32.0.1,<controller node 1 IP>,<controller node 1 hostname>,<con
 **Some explaination:**
 * 10.32.0.1                  - the default IP address of the Kubernetes API service on the Kubernetes service network 10.32.0.0/24
 * kubernetes.default         - the hostanme for the Kurernetes API service
-* controller node 1 IP       - the IP address of `controller-0`. **Note:** if you have two IP's on your system, this is the one NOT going to the internet
-* controller node 1 hostname - `controller-0`
-* controller node 2 IP       - the IP address of `controller-1`
-* controller node 2 hostname - `controller-0`
-* API load balancer IP       - the IP address for the load balancer
+* controller node 1 IP       - the PRIVATE IP address of `controller0`. **Note:** if you have two IP's on your system, this is the one NOT going to the internet
+* controller node 1 hostname - `controller0 hostane`
+* controller node 2 IP       - the PRIVATE IP address of `controller1`
+* controller node 2 hostname - `controller1 hostname`
+* API load balancer IP       - the PRIVATE IP address for the load balancer
 * API load balancer hostname - the hostname for the load balancer
 * 127.0.0.1                  - the IP address for loopback, local communication
 * localhost                  - the hostname for loopback, local communication
@@ -320,7 +320,7 @@ CERT_HOSTNAME=10.32.0.1,<controller node 1 IP>,<controller node 1 hostname>,<con
 Make sure you include all of the information for all your servers.
 
 ```
-CERT_HOSTNAME=10.32.0.1,192.168.1.20,controller0,192.168.1.40,controller1,192.168.1.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
+CERT_HOSTNAME=10.32.0.1,172.16.0.20,controller0,172.16.0.40,controller1,172.16.0.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
 
 {
 
