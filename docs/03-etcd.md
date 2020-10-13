@@ -1,6 +1,6 @@
 # Bootstrapping a H/A etcd cluster
 
-In this lab you will bootstrap an etcd cluster. The following machines will be used:
+In this section you will bootstrap an etcd cluster. The following machines will be used:
 
 `controller0`      `controller1`
 
