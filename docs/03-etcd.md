@@ -33,23 +33,21 @@ sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
 ```
 
 ### Download and Install the etcd binaries
-
-At the time of this writing etcd for ARM was not supported and downloads were not available, so it was built from the source files on a Raspberry Pi.
-To save you the time and trouble, I'm providing the version I built as part of the repository hosting this tutorial.
-
+As of October, 2020 there are 4 lineages of etcd that include arm64 as part of thier release schedule.  ARM is not officially supported but is released under the experimental flag, which means there's limited support. 
 ```
-wget https://github.com/etcd-io/etcd/releases/download/v3.2.12/etcd-v3.2.12-linux-arm64.tar.gz
+ETCD_VER="v3.2.12"
+wget https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-arm64.tar.gz
 ```
 
 Extract and install the `etcd` server binary and the `etcdctl` command line client: 
 
 ```
-tar -xvf etcd-v3.2.12-linux-arm64.tar.gz
+tar -xvf etcd-${ETCD_VER}-linux-arm64.tar.gz
 ```
 
 ```
-sudo mv etcd-v3.2.12-linux-arm64/etcd* /usr/local/bin/
-rm -rf v3.2.12-linux-arm*
+sudo mv etcd-${ETCD_VER}-linux-arm64/etcd* /usr/local/bin/
+rm -rf etcd-${ETCD_VER}-linux-arm*
 ```
 
 All etcd data is stored under the etcd data directory. In a production cluster the data directory should be backed by a persistent disk. Create the etcd data directory:
@@ -62,8 +60,8 @@ sudo mkdir -p /var/lib/etcd
 First, let's Set up the following environment variables. Be sure you replace all of the <placeholder values> with their corresponding real values:
 ```
 ETCD_NAME=<cloud server hostname>
-INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
-INITIAL_CLUSTER=<controller 1 hostname>=https://<controller 1 private ip>:2380,<controller 2 hostname>=https://<controller 2 private ip>:2380
+INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
+ INITIAL_CLUSTER=<controller 1 hostname>=https://<controller 1 private ip>:2380,<controller 2 hostname>=https://<controller 2 private ip>:2380
 ```
 **Example** 
 ```
@@ -71,7 +69,7 @@ ETCD_NAME=$(hostname)
 
 INTERNAL_IP=$(echo "$(ifconfig eth0 | awk '/\<inet addr\>/ { print substr( $2, 6)}')")
  - OR - 
-INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
+INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
 
 INITIAL_CLUSTER=controller0=https://172.16.0.20:2380,controller1=https://172.16.0.40:2380
 ```
