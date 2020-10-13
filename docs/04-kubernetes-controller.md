@@ -23,7 +23,7 @@ create a tempory directory for the binaries and set the environment variables fo
 mkdir -p $HOME/kubebits
 cd ~/kubebits
 K8S_VER=v1.19.2
-K8S_ARCH=arm
+K8S_ARCH=arm64
 ```
 Download the official Kubernetes release binaries:
 ```
