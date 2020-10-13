@@ -22,72 +22,56 @@ Run the following commands on `controller0`, `controller1`:
 
 The TLS certificates created in the [Setting up a CA and TLS Cert Generation](02-certificate-authority.md) lab will be used to secure communication between the Kubernetes API server and the etcd cluster. The TLS certificates will also be used to limit access to the etcd cluster using TLS client authentication. Only clients with a TLS certificate signed by a trusted CA will be able to access the etcd cluster.
 
-Copy the TLS certificates to the etcd configuration directory:
-
+Maket the **etcd** configuration directory and copy the TLS certificates :
 ```
 sudo mkdir -p /etc/etcd/
-```
-
-```
 sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
 ```
 
 ### Download and Install the etcd binaries
-As of October, 2020 there are 4 lineages of etcd that include arm64 as part of thier release schedule.  ARM is not officially supported but is released under the experimental flag, which means there's limited support. 
+As of October, 2020 there are 3 active lineages of etcd that include arm64 as part of thier release schedule.
+    * v3.4.1 to v3.4.12
+    * v3.3.0 to v3.3.25
+    * v3.2.0 to v3.2.31
+ARM is not officially supported but is released under the experimental flag, which means there's limited support. 
 ```
 ETCD_VER="v3.2.12"
 wget https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-arm64.tar.gz
 ```
 
 Extract and install the `etcd` server binary and the `etcdctl` command line client: 
-
 ```
 tar -xvf etcd-${ETCD_VER}-linux-arm64.tar.gz
-```
-
-```
 sudo mv etcd-${ETCD_VER}-linux-arm64/etcd* /usr/local/bin/
 rm -rf etcd-${ETCD_VER}-linux-arm*
 ```
-
+#### Make the etcd data store directory
 All etcd data is stored under the etcd data directory. In a production cluster the data directory should be backed by a persistent disk. Create the etcd data directory:
-
 ```
 sudo mkdir -p /var/lib/etcd
 ```
-### The etcd server will be started and managed by systemd. Create the etcd systemd unit file:
-
-First, let's Set up the following environment variables. Be sure you replace all of the <placeholder values> with their corresponding real values:
+###  Create the etcd systemd unit file variables:
+The etcd server will be started and managed by systemd.
+* Be sure you replace all of the <placeholder values> with their corresponding real values:
+* Each etcd member must have a unique name within an etcd cluster. Using the hostname is the easiest way of creating a unique etcd name.
+* The internal IP address will be used by etcd to serve client requests and communicate with other etcd peers.
+* The Initial_CLUSTER flag needs to contain all the servers and their IPs in a comma seperated list.
 ```
 ETCD_NAME=<cloud server hostname>
 INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
- INITIAL_CLUSTER=<controller 1 hostname>=https://<controller 1 private ip>:2380,<controller 2 hostname>=https://<controller 2 private ip>:2380
+INITIAL_CLUSTER=<controller 1 hostname>=https://<controller 1 private ip>:2380,<controller 2 hostname>=https://<controller 2 private ip>:2380
 ```
 **Example** 
 ```
 ETCD_NAME=$(hostname)
-
-INTERNAL_IP=$(echo "$(ifconfig eth0 | awk '/\<inet addr\>/ { print substr( $2, 6)}')")
- - OR - 
 INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
-
 INITIAL_CLUSTER=controller0=https://172.16.0.20:2380,controller1=https://172.16.0.40:2380
 ```
 Make sure the IP addresses in the **--initial-cluster** match your environment.
 
-### Set The Internal IP Address
-
-The internal IP address will be used by etcd to serve client requests and communicate with other etcd peers.
-Each etcd member must have a unique name within an etcd cluster. Set the etcd name:
-
-```
-
-
-```
-Notice that I'm using **eth0** or LAN connection to find the IP Address to replace in the Unit file. If you are using a Wi-Fi connection, you will probably need to change this to **wlan0** and use the **SECOND** INTERNAL_IP option
-The following command will display the interfaces with their IP Addresses:
-The ARM architecture is currently not supported, so we need to tell etcd that we want to use an unsupported architecture.
-This is done by providing the environment variable **ETCD_UNSUPPORTED_ARCH=arm**
+### Create the etcd systemd unit file:
+**THE BIG WARNING** The ARM architecture is currently not supported, so you need to tell etcd that we want to use an unsupported architecture.
+This is done by providing the environment variable **ETCD_UNSUPPORTED_ARCH=arm64**. If this line isn't there etcd is not going to work on your Raspberry.
 ```
 cat << EOF | sudo tee /etc/systemd/system/etcd.service
 [Unit]
