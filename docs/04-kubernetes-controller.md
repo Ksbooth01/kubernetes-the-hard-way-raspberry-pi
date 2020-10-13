@@ -1,7 +1,7 @@
 # Bootstrapping an H/A Kubernetes Control Plane
 
 ## Provision the Kubernetes Controller Cluster
-Run the following commands on `controller-0`, `controller-1`:
+Run the following commands on `controller0`, `controller1`:
 
 The Kubernetes components that make up the control plane include the following components:
 
