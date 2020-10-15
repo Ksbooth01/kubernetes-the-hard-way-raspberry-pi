@@ -8,7 +8,7 @@ Next we will generate **kubeconfigs** which will be used by the various services
 ## Install Kubectl client tool
 In this step we will download **kubectl** client version 0.19.2:
 ```
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/arm/kubectl
+wget https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/arm64/kubectl
 
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
