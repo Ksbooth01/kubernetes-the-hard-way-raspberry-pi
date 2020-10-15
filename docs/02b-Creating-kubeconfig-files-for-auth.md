@@ -32,8 +32,8 @@ If you haven't got them set from the last section set the following variables fo
 NODE1_HOST=<worker 1 hostname> 
 NODE2_HOST=<worker 2 hostname>
 
-NODE1_HOST=node1 
-NODE2_HOST=node2
+NODE1_HOST=worker1 
+NODE2_HOST=worker2
 ```
 Now, generate a kubelet kubeconfig for each worker node:
 ```
