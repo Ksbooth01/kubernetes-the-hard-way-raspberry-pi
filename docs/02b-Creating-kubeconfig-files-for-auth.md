@@ -1,12 +1,16 @@
-
-
 ## Creating Kubeconfig files for Authentication. 
 
-Next we will generate **kubeconfigs** which will be used by the various services that will make up the cluster. In this lesson, we will generate these kubeconfigs. Once compoete there will be a set of kubeconfigs which will be used later to configure the Kubernetes cluster.
- 
+Next we will generate **kubeconfigs** which will be used by the various services that will make up the cluster. In this section, we will generate these kubeconfigs. Once complete there will be a set of kubeconfigs which will be used later to configure the Kubernetes cluster. 
+
+##### Files this will generate
+* worker1.kubeconfig
+* worker2.kubeconfig
+* admin.kubeconfig
+* kube-controller-manager.kubeconfig
+* kube-scheduler.kubeconfig
 
 ## Install Kubectl client tool
-In this step we will download **kubectl** client version 0.19.2:
+In this step we will download **kubectl** client version 1.19.2:
 ```
 KUBE_VER="v1.19.2"
 wget https://storage.googleapis.com/kubernetes-release/release/${KUBE_VER}/bin/linux/arm64/kubectl
@@ -15,29 +19,29 @@ chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 kubectl version --client
 ```
-
-
-(OPTIONAL) if you feeling adventuresome you can try the latest version:
-```
-(OPTONAL) curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm/kubectl
-```
+#### Set up Environment variables for this section
 Now, we'll create an environment variable to store the address of the Kubernetes API, and set it to the private IP of your load balancer cloud server:
-```
-KUBERNETES_ADDRESS=<load balancer private ip>
-
-KUBERNETES_ADDRESS=192.168.1.30
-```
 If you haven't got them set from the last section set the following variables for the worker nodes
-```
-NODE1_HOST=<worker 1 hostname> 
-NODE2_HOST=<worker 2 hostname>
 
-NODE1_HOST=worker1 
-NODE2_HOST=worker2
+```
+| Variable                                        | Example                           | 
+|:-----------------------------------------------:|:---------------------------------:|
+| KUBERNETES_ADDRESS=<load balancer private ip>   | KUBERNETES_ADDRESS=192.168.1.30   |
+| WORKER1_HOST=<worker 1 hostname>                | WORKER1_HOST=worker1              |
+| WORKER2_HOST=<worker 2 hostname>                | WORKER2_HOST=worker2              |
+| WORKER1_IP=<worker 1 External IP address>       | WORKER1_IP=192.168.1.21           |
+| WORKER2_IP=<worker 1 External IP address>       | WORKER2_IP=192.168.1.22           |
+```
+```
+KUBERNETES_ADDRESS=192.168.1.30
+WORKER1_HOST=worker1 
+WORKER2_HOST=worker2
+WORKER2_IP=192.168.1.22
+
 ```
 Now, generate a kubelet kubeconfig for each worker node:
 ```
-for instance in ${NODE1_HOST} ${NODE2_HOST}; do
+for instance in ${WORKER1_HOST} ${WORKER2_HOST}; do
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
@@ -132,8 +136,8 @@ Now that we have generated the kubeconfig files that we will need in order to co
 
 Move kubeconfig files to the worker nodes:
 ```
-scp ${NODE1_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${NODE1_IP}:~/
-scp ${NODE2_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${NODE2_IP}:~/
+scp ${WORKER1_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${WORKER1_IP}:~/
+scp ${WORKER2_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${WORKER2_IP}:~/
 ```
 Move kubeconfig files to the controller nodes:
 ```
