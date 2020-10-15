@@ -23,7 +23,7 @@ kubectl version --client
 Now, we'll create an environment variable to store the address of the Kubernetes API, and set it to the private IP of your load balancer cloud server:
 If you haven't got them set from the last section set the following variables for the worker nodes
 
-```
+
 | Variable                                        | Example                           | 
 |:-----------------------------------------------:|:---------------------------------:|
 | KUBERNETES_ADDRESS=<load balancer private ip>   | KUBERNETES_ADDRESS=192.168.1.30   |
@@ -31,7 +31,7 @@ If you haven't got them set from the last section set the following variables fo
 | WORKER2_HOST=<worker 2 hostname>                | WORKER2_HOST=worker2              |
 | WORKER1_IP=<worker 1 External IP address>       | WORKER1_IP=192.168.1.21           |
 | WORKER2_IP=<worker 1 External IP address>       | WORKER2_IP=192.168.1.22           |
-```
+
 ```
 KUBERNETES_ADDRESS=192.168.1.30
 WORKER1_HOST=worker1 
