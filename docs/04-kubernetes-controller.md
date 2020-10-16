@@ -26,7 +26,7 @@ create a tempory directory for the binaries and set the environment variables fo
 ```
 mkdir -p $HOME/kubebits
 cd ~/kubebits
-K8S_VER=v1.19.2
+K8S_VER=v1.18.6
 K8S_ARCH=arm64
 ```
 Download the official Kubernetes release binaries:
@@ -41,10 +41,10 @@ wget -q --show-progress --https-only --timestamping \
 
 Set the binary permissions to allow execute and Install the Kubernetes binaries in the working directory:
 ```
+{
 chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
-```
-```
 sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
+}
 ```
 
 ### Setting up the Kubernetes API Server
