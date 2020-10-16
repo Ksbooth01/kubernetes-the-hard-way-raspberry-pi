@@ -169,7 +169,7 @@ sudo cp kube-scheduler.kubeconfig /var/lib/kubernetes/
 create the kube-scheduler yaml config file.
 ```
 cat << EOF | sudo tee /etc/kubernetes/config/kube-scheduler.yaml
-apiVersion: componentconfig/v1alpha1
+apiVersion: kubescheduler.config.k8s.io/v1alpha1
 kind: KubeSchedulerConfiguration
 clientConnection:
   kubeconfig: "/var/lib/kubernetes/kube-scheduler.kubeconfig"
@@ -203,9 +203,8 @@ sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
 ```
 Make sure all the services are active (running):
 ```
-sudo systemctl status kube-apiserver 
-sudo systemctl status k
-sudo systemctl status ube-controller-manager 
+sudo systemctl status kube-apiserver --no-page -l
+sudo systemctl status kube-controller-manager --no-page -l
 sudo systemctl status kube-scheduler --no-page -l
 ```
 Use kubectl to check componentstatuses:
