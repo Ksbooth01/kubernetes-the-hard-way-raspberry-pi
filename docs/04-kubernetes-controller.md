@@ -148,8 +148,9 @@ EOF
 ```
 
 **explanation** 
-  --cluster-cidr=10.200.0.0/16 \\
-  --service-cluster-ip-range=10.32.0.0/24 \\ - This is the default subnet for the kubernetes api service
+--cluster-cidr=10.200.0.0/16 \\
+--service-cluster-ip-range=10.32.0.0/24 \\ - This is the default subnet for the kubernetes api service
+
 ```
 sudo cp kube-controller-manager.kubeconfig /var/lib/kubernetes/
 ```
