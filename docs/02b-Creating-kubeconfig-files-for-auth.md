@@ -165,7 +165,7 @@ resources:
               secret: ${ENCRYPTION_KEY}
       - identity: {}
 EOF
-
+```
 ```
 scp encryption-config.yaml kubeadmin@${CONTROLLER0_IP}:~/
 scp encryption-config.yaml kubeadmin@${CONTROLLER1_IP}:~/
