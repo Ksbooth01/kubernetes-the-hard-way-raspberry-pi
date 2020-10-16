@@ -18,6 +18,10 @@ Each component is being run on the same machines for the following reasons:
 
 ### Download and install the Kubernetes controller binaries
 
+Create the Kubernetes configuration directory:
+```
+sudo mkdir -p /etc/kubernetes/config
+```
 create a tempory directory for the binaries and set the environment variables for you to download : 
 ```
 mkdir -p $HOME/kubebits
