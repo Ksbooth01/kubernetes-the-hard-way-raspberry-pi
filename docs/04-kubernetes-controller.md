@@ -63,7 +63,7 @@ INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-11 )")
  INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
  CONTROLLER0_IP=172.16.0.20 
  CONTROLLER1_IP=172.16.0.40 
-
+```
   
 ##### Create the kube-apiserver unit file
 ```
