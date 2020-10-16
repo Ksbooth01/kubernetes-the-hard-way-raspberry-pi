@@ -118,7 +118,6 @@ EOF
 ## Setting up the kube-controller-manager-service
 Next, we go through the process of configuring a systemd service for the Kubernetes Controller Manager. Once complete the kubeconfig and systemd unit file set up and ready to run the kube-controller-manager service on both of your control nodes.
 
- ```
 ##### Create the kube-controller-manager systemd unit file:
 ```
 cat << EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
