@@ -61,8 +61,11 @@ Set environment variables needed to create the systemd unit file. **Note:** Make
 **example**
  ``` 
  INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
- CONTROLLER0_IP=192.168.1.20 
- CONTROLLER1_IP=192.168.1.40 
+ CONTROLLER0_IP=<private ip of controller 0>
+ CONTROLLER1_IP=<private ip of controller 1>
+ 
+ CONTROLLER0_IP=172.16.0.20 
+ CONTROLLER1_IP=172.16.0.40 
  ```
 
 ##### Create the kube-apiserver unit file
