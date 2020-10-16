@@ -54,20 +54,17 @@ sudo cp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
  ```
 Set environment variables needed to create the systemd unit file. **Note:** Make sure you replace the placeholders with their actual values:
 ``` 
- INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
- CONTROLLER0_IP=<IP of your second worker node>
- CONTROLLER1_IP=<IP of your second worker node> 
+INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-11 )")
+ CONTROLLER0_IP=<private ip of controller 0>
+ CONTROLLER1_IP=<private ip of controller 1>
  ```
 **example**
  ``` 
- INTERNAL_IP=$(echo "$(ifconfig wlan0 | awk '/inet / {print $2}')")
- CONTROLLER0_IP=<private ip of controller 0>
- CONTROLLER1_IP=<private ip of controller 1>
- 
+ INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
  CONTROLLER0_IP=172.16.0.20 
  CONTROLLER1_IP=172.16.0.40 
- ```
 
+  
 ##### Create the kube-apiserver unit file
 ```
 cat << EOF | sudo tee /etc/systemd/system/kube-apiserver.service
@@ -121,9 +118,7 @@ EOF
 ## Setting up the kube-controller-manager-service
 Next, we go through the process of configuring a systemd service for the Kubernetes Controller Manager. Once complete the kubeconfig and systemd unit file set up and ready to run the kube-controller-manager service on both of your control nodes.
 
-```
-sudo cp kube-controller-manager.kubeconfig /var/lib/kubernetes/
-```
+ ```
 ##### Create the kube-controller-manager systemd unit file:
 ```
 cat << EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
@@ -155,7 +150,11 @@ EOF
 
 **explanation** 
   --cluster-cidr=10.200.0.0/16 \\
-  --service-cluster-ip-range=10.32.0.0/24 \\
+  --service-cluster-ip-range=10.32.0.0/24 \\ - This is the default subnet for the kubernetes api service
+```
+sudo cp kube-controller-manager.kubeconfig /var/lib/kubernetes/
+```
+
 
 ## Setting up the Kubernetes Scheduler
 
