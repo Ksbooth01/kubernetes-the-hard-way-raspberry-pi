@@ -34,7 +34,8 @@ Next, you'll need to download imager software to load the SD Micro cards with th
 * On first boot you will be presented with the initial login prompt. use **`ubuntu`** for the login name and **`ubuntu`** as the password.
 * You will be asked to change the password on first login. Change it!
 ### Setting the root password
-* Type **`sudo su`**  then type **`passwd`**. Once the password for root has been changed enter **`exit`**
+* Type **`sudo`** this will put you at root `#`
+* type **`passwd`**. Once the password for root has been changed enter **`exit`**
 ### (IP address setup - Public and Private)
 The IP address configuration for ubuntu is contained in a file called /etc/netplan/50-cloud-init.yaml.   
 There's a bit of typing required here. The ubuntu image does not have wifi preconfigured so this it what the file needs to look like to get it to work 
@@ -56,33 +57,34 @@ sudoedit /etc/netplan/50-cloud-init.yaml
 # /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
 # network: {config: disabled}
 network:
-    version: 2
-    ethernets:
-        eth0:
-            dhcp4: no
-            addresses:
-                - 172.16.0.##/24
-            gateway4: 172.16.0.10
-            nameservers:
-                addresses: [8.8.8.8,1.1.1.1]
-    # add wifi setup information here ...
-    wifis:
-        wlan0:
-            optional: true
-            access-points:
-                "YOUR-SSID-NAME":
-                    password: "YOUR-NETWORK-PASSWORD"
-            dhcp4: true
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: no
+      addresses:
+        - 172.16.0.##/24
+      gateway4: 172.16.0.10
+      nameservers:
+        addresses: [8.8.8.8,1.1.1.1]
+# add wifi setup information here ...
+  wifis:
+    wlan0:
+      optional: true
+      access-points:
+        "YOUR-SSID-NAME":
+          password: "YOUR-NETWORK-PASSWORD"
+      dhcp4: true
 ```
 **Notes:** 
     * YOUR-SSID-NAME  is the name of you wifi network. 
     * The Quotes around YOUR-SSID-NAME are necessary. 
     * Mine wouldn't work with the 5G so I had to use the lower speed Wifi.
 * Test start the wireless network using your modifications 
-    **`sudo netplan apply **
-    This Should run without errors, if not fix your typos.
-### Permit root to ssh
-Leaving root allowed to ssh shoudl not be left on - make sure you turn this off at the end of setup. 
+    **`sudo netplan generate **
+* This Should run without errors, if not fix your typos.
+### Permit root to ssh (optional)
+* If you want to console in for the remaining part you can do this.
+Leaving root allowed to ssh should not be left on - make sure you turn this off at the end of setup. 
 **`sudo nano /etc/ssh/sshd_config`**
 * Find the line:
   `#PermitRootLogin prohibit-password` and change it to 
