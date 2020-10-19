@@ -60,13 +60,11 @@ sudo add-apt-repository \
    stable"
 ```
 INSTALL DOCKER ENGINE
-Update the apt package index, and install the *latest version* of Docker Engine and containerd,
 
+Update the apt package index, and install the *latest version* of Docker Engine and containerd,
+```
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
-```
-  curl -sSL http://get.docker.com  | sh
-  sudo usermod -aG docker pi
 ```
 Verify that Docker Engine is installed correctly by running the hello-world image.
 ```
