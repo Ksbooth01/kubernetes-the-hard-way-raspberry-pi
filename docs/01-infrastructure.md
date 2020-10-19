@@ -80,8 +80,8 @@ network:
     * The Quotes around YOUR-SSID-NAME are necessary. 
     * Mine wouldn't work with the 5G so I had to use the lower speed Wifi.
 * Test start the wireless network using your modifications 
-    **`sudo netplan generate **
-* This Should run without errors, if not fix your typos.
+    **`sudo netplan generate `**
+* This should run without errors, if not fix your typos.
 ### Permit root to ssh (optional)
 * If you want to console in for the remaining part you can do this.
 Leaving root allowed to ssh should not be left on - make sure you turn this off at the end of setup. 
