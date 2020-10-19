@@ -56,6 +56,7 @@ This tutorial assumes you have access to one of the following:
 * [Creating Kubernetes Configuration Files for Authorization](docs/02b-Creating-the-client-certificates.md)
 * [Bootstrapping an H/A etcd cluster](docs/03-etcd.md)
 * [Bootstrapping an H/A Kubernetes Control Plane](docs/04-kubernetes-controller.md)
+* [Provision a Network Load Balancer](docs/04b-kubernetes-loadbalancer.md)
 * [Bootstrapping Kubernetes Workers](docs/05-kubernetes-worker.md)
 * [Configuring the Kubernetes Client - Remote Access](docs/06-kubectl.md)
 * [Managing the Container Network Routes](docs/07-network.md)
