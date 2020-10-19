@@ -22,11 +22,9 @@ Some people would like to run workers and cluster services anywhere in the clust
 * **socat**      - utility that is a relay for bidirectional data transfers between two independent data channels.
 * **conntrack**  - provides an interface to the connnection tracking system, which you can show, delete and update the existing state entries; and listens to flow events.
 * **ipset**      - allows you to organize a list of networks, IP or MAC addresses, etc. which is very convenient to use for example with IPTables.
-## Provision the Kubernetes Worker Nodes
 
-Run the following commands on `worker1`, and `worker2`:
 
-### Disable Swap
+## Disable Swap
 * By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
 * By default ubuntu 20.04 image does not have the swap file enabled.  To validate this is the case type:
 ```
@@ -36,13 +34,47 @@ If the swap file is disabled there should be no results returned.
 
 #### Docker
 
-Install docker on the Raspberry Pi is so easy, a caveman could do it:
+SET UP THE REPOSITORY
+1. install a few prerequisite packages which let apt use packages over HTTPS:
+```
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+```
+2. Add the GPG key for the official Docker repository to your system:
+```
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
+```
+$ sudo apt-key fingerprint 0EBFCD88
 
+pub   rsa4096 2017-02-22 [SCEA]
+      9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+uid           [ unknown] Docker Release (CE deb) <docker@docker.com>
+sub   rsa4096 2017-02-22 [S]
+```
+3. Use the following command to set up the **stable** repository. 
+```
+sudo add-apt-repository \
+   "deb [arch=arm64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+```
+INSTALL DOCKER ENGINE
+Update the apt package index, and install the *latest version* of Docker Engine and containerd,
+
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
   curl -sSL http://get.docker.com  | sh
   sudo usermod -aG docker pi
 ```
+Verify that Docker Engine is installed correctly by running the hello-world image.
+```
+ sudo docker run hello-world
+ ```
+
 ### Download and install the Kubernetes worker binaries:
+
 Set the version and architectures for the downloads.
 ```
 K8S_VER=v1.18.6
