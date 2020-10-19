@@ -100,6 +100,10 @@ sudo systemctl daemon-reload
 sudo systemctl enable docker   
 sudo systemctl restart docker
 ```
+install containerd 
+```
+sudo apt-get install containerd
+```
 To use Docker as a non-root user, add your user to the “docker” group with something like:
 ```
   sudo usermod -aG docker kubeadmin
@@ -154,59 +158,69 @@ Previously, we copied the TLS certificates to the `$HOME` directory of the worke
 sudo mkdir -p /var/lib/kubernetes
 sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
 ```
+## Configuring Kubelet
+Kubelet is the Kubernetes agent which runs on each worker node. Acting as a middleman between the Kubernetes control plane and the underlying container runtime, it coordinates the running of containers on the worker node
+
+Set a HOSTNAME environment variable that will be used to generate your config files
+```
+HOSTNAME=$(hostname)
+sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
+sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+sudo mv ca.pem /var/lib/kubernetes/
+```
+Create the kubelet config file:
 
 ```
-sudo sh -c 'echo "apiVersion: v1
-kind: Config
-clusters:
-- cluster:
-    certificate-authority: /var/lib/kubernetes/ca.pem
-    server: https://172.16.1.94:6443
-  name: kubernetes
-contexts:
-- context:
-    cluster: kubernetes
-    user: kubelet
-  name: kubelet
-current-context: kubelet
-users:
-- name: kubelet
-  user:
-    token: chAng3m3" > /var/lib/kubelet/kubeconfig'
+cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: "/var/lib/kubernetes/ca.pem"
+authorization:
+  mode: Webhook
+clusterDomain: "cluster.local"
+clusterDNS:
+  - "10.32.0.10"
+podCIDR: "${POD_CIDR}"
+resolvConf: "/run/systemd/resolve/resolv.conf"
+runtimeRequestTimeout: "15m"
+tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
+tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
+EOF
+
 ```
 
 Create the kubelet systemd unit file:
 
 ```
-sudo sh -c 'echo "[Unit]
+cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
+[Unit]
 Description=Kubernetes Kubelet
-Documentation=https://github.com/GoogleCloudPlatform/kubernetes
-After=docker.service
-Requires=docker.service
+Documentation=https://github.com/kubernetes/kubernetes
+After=containerd.service
+Requires=containerd.service
 
 [Service]
-ExecStart=/usr/bin/kubelet \
-  --allow-privileged=true \
-  --api-servers=https://10.0.1.94:6443,https://10.0.1.95:6443,https://10.0.1.96:6443 \
-  --cloud-provider= \
-  --cluster-dns=10.32.0.10 \
-  --cluster-domain=cluster.local \
-  --configure-cbr0=true \
-  --container-runtime=docker \
-  --docker=unix:///var/run/docker.sock \
-  --network-plugin=kubenet \
-  --kubeconfig=/var/lib/kubelet/kubeconfig \
-  --reconcile-cidr=true \
-  --serialize-image-pulls=false \
-  --tls-cert-file=/var/lib/kubernetes/kubernetes.pem \
-  --tls-private-key-file=/var/lib/kubernetes/kubernetes-key.pem \
+ExecStart=/usr/local/bin/kubelet \\
+  --config=/var/lib/kubelet/kubelet-config.yaml \\
+  --container-runtime=remote \\
+  --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
+  --image-pull-progress-deadline=2m \\
+  --kubeconfig=/var/lib/kubelet/kubeconfig \\
+  --network-plugin=cni \\
+  --register-node=true \\
   --v=2
-  
 Restart=on-failure
 RestartSec=5
 
 [Install]
-WantedBy=multi-user.target" > /etc/systemd/system/kubelet.service'
+WantedBy=multi-user.target
+EOF
 ```
 
 ```
