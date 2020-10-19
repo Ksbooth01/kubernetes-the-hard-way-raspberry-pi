@@ -138,7 +138,7 @@ sudo mkdir -p \
   /var/run/kubernetes
 ```
 Install the worker binaries:
-
+```
 {
   mkdir containerd
   tar -xvf crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz
@@ -150,6 +150,7 @@ Install the worker binaries:
   sudo mv containerd/bin/* /bin/
 }
 
+```
 
 #### Move the TLS certificates in place
 Previously, we copied the TLS certificates to the `$HOME` directory of the worker nodes. We will now copy them a kubernetes working directory. 
