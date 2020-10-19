@@ -104,7 +104,7 @@ To use Docker as a non-root user, add your user to the “docker” group with s
 ```
   sudo usermod -aG docker kubeadmin
   ```
-### Download and install the Kubernetes worker binaries:
+## Download and install the Kubernetes worker binaries:
 
 Set the version and architectures for the downloads.
 ```
