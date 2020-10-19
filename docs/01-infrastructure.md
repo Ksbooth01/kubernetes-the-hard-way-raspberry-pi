@@ -51,29 +51,29 @@ sudoedit /etc/netplan/50-cloud-init.yaml
 `**
 
 ```
-# This file is generated from information provided by
-# the datasource.  Changes to it will not persist across an instance.
-# To disable cloud-init's network configuration capabilities, write a file
+# This file is generated from information provided by the datasource.  Changes
+# to it will not persist across an instance reboot.  To disable cloud-init's
+# network configuration capabilities, write a file
 # /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
 # network: {config: disabled}
 network:
   version: 2
-  ethernets:
-    eth0:
-      dhcp4: no
-      addresses:
-        - 172.16.0.##/24
-      gateway4: 172.16.0.10
-      nameservers:
-        addresses: [8.8.8.8,1.1.1.1]
-# add wifi setup information here ...
   wifis:
     wlan0:
       optional: true
       access-points:
         "YOUR-SSID-NAME":
           password: "YOUR-NETWORK-PASSWORD"
-      dhcp4: true
+      dhcp4: true    
+  ethernets:
+    eth0:
+      dhcp4: no
+      addresses:
+        - 172.16.0.##/24
+ #     gateway4: 172.16.0.10
+ #     nameservers:
+ #       addresses: [8.8.8.8,1.1.1.1]
+      optional: true
 ```
 **Notes:** 
     * YOUR-SSID-NAME  is the name of you wifi network. 
