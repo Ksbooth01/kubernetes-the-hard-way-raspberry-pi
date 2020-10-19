@@ -1,9 +1,6 @@
 # Bootstrapping Kubernetes Workers
 
-In this lab you will bootstrap 3 Kubernetes worker nodes. The following virtual machines will be used:
-
-* worker0
-* worker1
+In this lab you will bootstrap the Kubernetes worker nodes. The following virtual machines will be used: `worker1`, and `worker2`
 
 ## Why
 
@@ -19,75 +16,71 @@ Some people would like to run workers and cluster services anywhere in the clust
 
 Run the following commands on `worker0`, and `worker1`:
 
-#### Move the TLS certificates in place
-
+#### Disable Swap
+* By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
+* By default ubuntu 20.04 image does not have the swap file enabled.  To validate this is the case type:
 ```
-cd $HOME/kubernetes
+sudo swapon --show
 ```
-
-```
-sudo mkdir -p /var/lib/kubernetes
-```
-
-```
-sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
-```
+If the swap file is disabled there should be no results returned.
 
 #### Docker
 
-Installing docker on the Raspberry Pi is so easy, a caveman could do it:
+Install docker on the Raspberry Pi is so easy, a caveman could do it:
 
 ```
   curl -sSL http://get.docker.com  | sh
   sudo usermod -aG docker pi
 ```
-
-#### kubelet
-
-The Kubernetes kubelet no longer relies on docker networking for pods! The Kubelet can now use [CNI - the Container Network Interface](https://github.com/containernetworking/cni) to manage machine level networking requirements.
-
-Download and install CNI plugins
-
+### Download and install the Kubernetes worker binaries:
+Set the version and architectures for the downloads.
 ```
-sudo mkdir -p /opt/cni
+K8S_VER=v1.18.6
+CRICTL_VER=v1.18.0
+CNI_VER=v0.8.7
+K8S_ARCH=arm64
 ```
 
 ```
-wget https://raw.githubusercontent.com/robertojrojas/kubernetes-the-hard-way-raspberry-pi/master/cni/cni.tar.gz
+wget -q --show-progress --https-only --timestamping \
+  https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VER}/crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz \
+  https://github.com/opencontainers/runc/releases/download/v1.0.0-rc91/runc.${K8S_ARCH} \
+  https://github.com/containernetworking/plugins/releases/download/${CNI_VER}/cni-plugins-linux-${K8S_ARCH}-${CNI_VER}.tgz \
+  https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubectl \
+  https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kube-proxy \
+  https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubelet
 ```
 
-```
-sudo tar -xvf cni.tar.gz -C /opt/cni
-```
-
-
-Download and install the Kubernetes worker binaries:
+Create the installation directories:
 
 ```
-K8S_VER=v1.4.6
-K8S_ARCH=arm
+sudo mkdir -p \
+  /etc/cni/net.d \
+  /opt/cni/bin \
+  /var/lib/kubelet \
+  /var/lib/kube-proxy \
+  /var/lib/kubernetes \
+  /var/run/kubernetes
 ```
+Install the worker binaries:
 
-```
-wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kubectl
-```
-```
-wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kube-proxy
-```
-```
-wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kubelet
-```
+{
+  mkdir containerd
+  tar -xvf crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz
+  tar -xvf containerd-1.3.6-linux-${K8S_ARCH}.tar.gz -C containerd
+  sudo tar -xvf cni-plugins-linux-${K8S_ARCH}-v0.8.6.tgz -C /opt/cni/bin/
+  sudo mv runc.${K8S_ARCH} runc
+  chmod +x crictl kubectl kube-proxy kubelet runc 
+  sudo mv crictl kubectl kube-proxy kubelet runc /usr/local/bin/
+  sudo mv containerd/bin/* /bin/
+}
 
-```
-chmod +x kubectl kube-proxy kubelet
-```
 
+#### Move the TLS certificates in place
+Previously, we copied the TLS certificates to the `$HOME` directory of the worker nodes. We will now copy them a kubernetes working directory. 
 ```
-sudo mv kubectl kube-proxy kubelet /usr/bin/
-```
-
-```
-sudo mkdir -p /var/lib/kubelet/
+sudo mkdir -p /var/lib/kubernetes
+sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
 ```
 
 ```
@@ -96,7 +89,7 @@ kind: Config
 clusters:
 - cluster:
     certificate-authority: /var/lib/kubernetes/ca.pem
-    server: https://10.0.1.94:6443
+    server: https://172.16.1.94:6443
   name: kubernetes
 contexts:
 - context:
