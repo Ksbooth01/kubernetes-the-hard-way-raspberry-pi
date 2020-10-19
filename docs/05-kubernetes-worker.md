@@ -140,12 +140,10 @@ Install the worker binaries:
 {
   mkdir containerd
   tar -xvf crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz
-  tar -xvf containerd-1.3.6-linux-${K8S_ARCH}.tar.gz -C containerd
-  sudo tar -xvf cni-plugins-linux-${K8S_ARCH}-v0.8.6.tgz -C /opt/cni/bin/
+  sudo tar -xvf cni-plugins-linux-${K8S_ARCH}-${CNI_VER}.tgz -C /opt/cni/bin/
   sudo mv runc.${K8S_ARCH} runc
   chmod +x crictl kubectl kube-proxy kubelet runc 
   sudo mv crictl kubectl kube-proxy kubelet runc /usr/local/bin/
-  sudo mv containerd/bin/* /bin/
 }
 
 ```
