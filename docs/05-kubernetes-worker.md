@@ -102,7 +102,10 @@ sudo systemctl daemon-reload
 sudo systemctl enable docker   
 sudo systemctl restart docker
 ```
-
+To use Docker as a non-root user, add your user to the “docker” group with something like:
+```
+  sudo usermod -aG docker kubeadmin
+  ```
 ### Download and install the Kubernetes worker binaries:
 
 Set the version and architectures for the downloads.
