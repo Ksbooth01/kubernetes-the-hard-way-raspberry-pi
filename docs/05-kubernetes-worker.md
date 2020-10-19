@@ -2,7 +2,7 @@
 
 In this lab you will bootstrap the Kubernetes worker nodes. The following virtual machines will be used: `worker1`, and `worker2`
 
-## Why
+### Why
 
 Kubernetes worker nodes are responsible for running your containers. All Kubernetes clusters need one or more worker nodes. We are running the worker nodes on dedicated machines for the following reasons:
 
@@ -11,7 +11,7 @@ Kubernetes worker nodes are responsible for running your containers. All Kuberne
 
 Some people would like to run workers and cluster services anywhere in the cluster. This is totally possible, and you'll have to decide what's best for your environment.
 
-## Install the OS dependencies:
+### Install the OS dependencies:
 ```
 {
   sudo apt-get update
@@ -24,7 +24,7 @@ Some people would like to run workers and cluster services anywhere in the clust
 * **ipset**      - allows you to organize a list of networks, IP or MAC addresses, etc. which is very convenient to use for example with IPTables.
 
 
-## Disable Swap
+### Disable Swap
 * By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
 * By default ubuntu 20.04 image does not have the swap file enabled.  To validate this is the case type:
 ```
@@ -32,7 +32,7 @@ sudo swapon --show
 ```
 If the swap file is disabled there should be no results returned.
 
-#### Docker
+## Install Docker
 
 SET UP THE REPOSITORY
 1. install a few prerequisite packages which let apt use packages over HTTPS:
@@ -71,7 +71,37 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 Verify that Docker Engine is installed correctly by running the hello-world image.
 ```
  sudo docker run hello-world
- ```
+```
+Set Docker to use *systemd* for Kubernetes compatibility
+```
+sudo mkdir -p /etc/systemd/system/docker.service.d
+```
+Escalate priviledges to root	
+```
+Sudo su
+```
+
+```
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+  "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+  "overlay2.override_kernel_check=true"
+  ]
+}
+EOF
+```
+Restart Docker and make sure it stays running even after reboot
+```
+sudo systemctl daemon-reload
+sudo systemctl enable docker   
+sudo systemctl restart docker
+```
 
 ### Download and install the Kubernetes worker binaries:
 
