@@ -32,7 +32,7 @@ sudo swapon --show
 ```
 If the swap file is disabled there should be no results returned.
 
-### install containerd 
+## install containerd 
 
 ```
 sudo apt-get install containerd
@@ -50,7 +50,7 @@ cat << EOF | sudo tee /etc/containerd/config.toml
     snapshotter = "overlayfs"
     [plugins.cri.containerd.default_runtime]
       runtime_type = "io.containerd.runtime.v1.linux"
-      runtime_engine = "/usr/local/bin/runc"
+      runtime_engine = "/usr/sbin/runc"
       runtime_root = ""
 EOF
 ```
@@ -126,23 +126,19 @@ Install the worker binaries:
 
 ```
 
-#### Move the TLS certificates in place
-Previously, we copied the TLS certificates to the `$HOME` directory of the worker nodes. We will now copy them a kubernetes working directory. 
-```
-sudo mkdir -p /var/lib/kubernetes
-sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
-```
 ## Configuring Kubelet
 Kubelet is the Kubernetes agent which runs on each worker node. Acting as a middleman between the Kubernetes control plane and the underlying container runtime, it coordinates the running of containers on the worker node
 
 Set a HOSTNAME environment variable that will be used to generate your config files
 ```
 HOSTNAME=$(hostname)
-sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-sudo mv ca.pem /var/lib/kubernetes/
+sudo mkdir -p /var/lib/kubernetes
+sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
+sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+sudo cp ca.pem /var/lib/kubernetes/
+# sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
 ```
-Create the kubelet config file:
+Create the `kubelet-config` file:
 
 ```
 cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
@@ -160,7 +156,7 @@ authorization:
 clusterDomain: "cluster.local"
 clusterDNS:
   - "10.32.0.10"
-podCIDR: "${POD_CIDR}"
+podCIDR: "10.244.0.0/16"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
 tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
@@ -168,6 +164,7 @@ tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
 
 ```
+set this to the known default of 10.244.0.0./16 podCIDR: "${POD_CIDR}"
 
 Create the kubelet systemd unit file:
 
@@ -197,37 +194,38 @@ WantedBy=multi-user.target
 EOF
 ```
 
+### Configure the Kubernetes Proxy
+Put hte kube proxy kubecongiruation file in the appropriate directory
 ```
-sudo systemctl daemon-reload
-sudo systemctl enable kubelet
-sudo systemctl start kubelet
+sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
 ```
-
+Create the kube-proxy-config.yaml configuration file:
 ```
-sudo systemctl status kubelet --no-pager
+cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml
+kind: KubeProxyConfiguration
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+clientConnection:
+  kubeconfig: "/var/lib/kube-proxy/kubeconfig"
+mode: "iptables"
+clusterCIDR: "10.200.0.0/16"
+EOF
 ```
-
-
-#### kube-proxy
-
-
+Create the `kube-proxy.service` systemd unit file:
 ```
-sudo sh -c 'echo "[Unit]
+cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service
+[Unit]
 Description=Kubernetes Kube Proxy
-Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
-ExecStart=/usr/bin/kube-proxy \
-  --master=https://10.0.1.94:6443 \
-  --kubeconfig=/var/lib/kubelet/kubeconfig \
-  --proxy-mode=iptables \
-  --v=2
-  
+ExecStart=/usr/local/bin/kube-proxy \\
+  --config=/var/lib/kube-proxy/kube-proxy-config.yaml
 Restart=on-failure
 RestartSec=5
 
 [Install]
-WantedBy=multi-user.target" > /etc/systemd/system/kube-proxy.service'
+WantedBy=multi-user.target
+EOF
 ```
 
 ```
@@ -240,4 +238,4 @@ sudo systemctl start kube-proxy
 sudo systemctl status kube-proxy --no-pager
 ```
 
-> Remember to run these steps on `worker0`, and `worker1`
+> Remember to run these steps on `worker1`, and `worker2`
