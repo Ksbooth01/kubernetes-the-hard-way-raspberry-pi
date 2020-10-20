@@ -102,9 +102,10 @@ wget -q --show-progress --https-only --timestamping \
 * **CRIctl**  - Container Runtime Interface (CRI) CLI. crictl provides a CLI for CRI-compatible container runtimes. This allows the CRI runtime developers to debug their runtime without needing to set up Kubernetes components
 Create the installation directories:
 * **CNI** -  Container Networking Interface
-* **kubectl** - 
-* **kube-proxy** - 
-* **kubelet**  -
+* **kubectl** - allows you to run commands against Kubernetes clusters.
+* **kube-proxy** -  A network proxy that runs on each node in your cluster. It maintains network rules on the nodes which allow network communication to your Pods from network sessions inside or outside of your cluster.
+* **kubelet**  - The primary "node agent" that runs on each node and works in terms of a PodSpec. A PodSpec is a YAML or JSON object that describes a pod. The kubelet takes a set of PodSpecs that are provided and ensures that the containers described in those PodSpecs are running and healthy. 
+
 
 ```
 sudo mkdir -p \
@@ -125,7 +126,43 @@ Install the worker binaries:
 }
 
 ```
+## Configure CNI Networking
+POD_CIDR="10.200.0.0/16"
 
+Create the `bridge` network configuration file:
+
+```
+cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "bridge",
+    "type": "bridge",
+    "bridge": "cnio0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{"subnet": "${POD_CIDR}"}]
+        ],
+        "routes": [{"dst": "0.0.0.0/0"}]
+    }
+}
+EOF
+
+```
+Create the loopback network configuration file:
+
+```
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "lo",
+    "type": "loopback"
+}
+EOF
+
+```
 ## Configuring Kubelet
 Kubelet is the Kubernetes agent which runs on each worker node. Acting as a middleman between the Kubernetes control plane and the underlying container runtime, it coordinates the running of containers on the worker node
 
