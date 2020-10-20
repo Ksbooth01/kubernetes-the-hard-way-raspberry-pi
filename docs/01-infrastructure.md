@@ -4,7 +4,7 @@ Kubernetes can be installed just about anywhere Linux runs on. It could be eithe
 
 This lab will walk you through provisioning the Raspberry Pi software required for running a H/A Kubernetes cluster. 
 
-# DISCLAIMER
+## DISCLAIMER
 The steps in this tutorial are "AS IS" without any warranties and support.
 I am not responsible for any misconfiguration or damages to the Raspberry Pi equipment involved on this tutorial.
 
