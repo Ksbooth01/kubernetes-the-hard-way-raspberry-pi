@@ -10,9 +10,9 @@ Next we will generate **kubeconfigs** which will be used by the various services
 * kube-scheduler.kubeconfig
 
 ## Install Kubectl client tool
-In this step we will download **kubectl** client version 1.19.2:
+In this step we will download **kubectl** client version 1.18.6:
 ```
-KUBE_VER="v1.19.2"
+KUBE_VER="v1.18.6"
 wget https://storage.googleapis.com/kubernetes-release/release/${KUBE_VER}/bin/linux/arm64/kubectl
 
 chmod +x kubectl
@@ -24,18 +24,18 @@ Now, we'll create an environment variable to store the address of the Kubernetes
 If you haven't got them set from the last section set the following variables for the worker nodes
 
 
-| Variable                                        | Example                           | 
-|:-----------------------------------------------:|:---------------------------------:|
-| KUBERNETES_ADDRESS=<load balancer private ip>   | KUBERNETES_ADDRESS=192.168.1.30   |
-| WORKER1_HOST=<worker 1 hostname>                | WORKER1_HOST=worker1              |
-| WORKER2_HOST=<worker 2 hostname>                | WORKER2_HOST=worker2              |
-| WORKER1_IP=<worker 1 External IP address>       | WORKER1_IP=192.168.1.21           |
-| WORKER2_IP=<worker 1 External IP address>       | WORKER2_IP=192.168.1.22           |
-
+| Variable                                        |
+|:-----------------------------------------------:|
+| KUBERNETES_ADDRESS=<load balancer private ip>   |
+| WORKER1_HOST=<worker 1 hostname>                |
+| WORKER2_HOST=<worker 2 hostname>                |
+| WORKER1_IP=<worker 1 External IP address>       |
+| WORKER2_IP=<worker 1 External IP address>       |
 ```
-KUBERNETES_ADDRESS=192.168.1.30
+KUBERNETES_ADDRESS=172.16.0.30
 WORKER1_HOST=worker1 
 WORKER2_HOST=worker2
+WORKER1_IP=192.168.1.21
 WORKER2_IP=192.168.1.22
 
 ```
