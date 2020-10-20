@@ -82,7 +82,7 @@ network:
       optional: true
 ```
 **Notes:** 
-    * YOUR-SSID-NAME  is the name of you wifi network. 
+    * YOUR-SSID-NAME  is the name of your wifi network. 
     * The Quotes around YOUR-SSID-NAME are necessary. 
     * Mine wouldn't work with the 5G so I had to use the lower speed Wifi.
 * Test start the wireless network using your modifications 
@@ -94,7 +94,11 @@ Leaving root allowed to ssh should not be left on - make sure you turn this off 
 **`sudo nano /etc/ssh/sshd_config`**
 * Find the line:
   `#PermitRootLogin prohibit-password` and change it to 
-  `PermitRootLogin yes` Save the file on exit and **`reboot`** 
+  `PermitRootLogin yes` Save the file
+  ### Patching
+  **`sudo apt-get update -y`**
+  **`sudo apt-get upgrade -y`**
+  on completion **`reboot`** 
 
 ## Changing the default user from "Ubuntu" (Optional) 
 
