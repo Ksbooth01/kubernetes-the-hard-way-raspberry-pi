@@ -1,6 +1,6 @@
 # Bootstrapping Kubernetes Workers
 
-In this lab you will bootstrap the Kubernetes worker nodes. The following virtual machines will be used: `worker1`, and `worker2`
+The following virtual machines will be usedin theis section: `worker1`, and `worker2`
 
 ### Why
 
