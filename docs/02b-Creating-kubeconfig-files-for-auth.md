@@ -31,6 +31,7 @@ If you haven't got them set from the last section set the following variables fo
 | WORKER2_HOST=<worker 2 hostname>                |
 | WORKER1_IP=<worker 1 External IP address>       |
 | WORKER2_IP=<worker 1 External IP address>       |
+
 ```
 KUBERNETES_ADDRESS=172.16.0.30
 WORKER1_HOST=worker1 
