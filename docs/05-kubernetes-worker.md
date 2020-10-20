@@ -15,7 +15,7 @@ Some people would like to run workers and cluster services anywhere in the clust
 ```
 {
   sudo apt-get update
-  sudo apt-get -y install socat conntrack ipset
+  sudo apt-get -y install socat conntrack ipset 
 }
 ```
 #### Brief Explanation
@@ -24,7 +24,7 @@ Some people would like to run workers and cluster services anywhere in the clust
 * **ipset**      - allows you to organize a list of networks, IP or MAC addresses, etc. which is very convenient to use for example with IPTables.
 
 
-### Disable Swap
+### Confirm Swap is Disabled
 * By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
 * By default ubuntu 20.04 image does not have the swap file enabled.  To validate this is the case type:
 ```
@@ -32,82 +32,11 @@ sudo swapon --show
 ```
 If the swap file is disabled there should be no results returned.
 
-## Install Docker
-
-SET UP THE REPOSITORY
-1. install a few prerequisite packages which let apt use packages over HTTPS:
-```
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-```
-2. Add the GPG key for the official Docker repository to your system:
-```
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-```
-Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
-```
-$ sudo apt-key fingerprint 0EBFCD88
-
-pub   rsa4096 2017-02-22 [SCEA]
-      9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
-uid           [ unknown] Docker Release (CE deb) <docker@docker.com>
-sub   rsa4096 2017-02-22 [S]
-```
-3. Use the following command to set up the **stable** repository. 
-```
-sudo add-apt-repository \
-   "deb [arch=arm64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-```
-INSTALL DOCKER ENGINE
-
-Update the apt package index, and install the *latest version* of Docker Engine and containerd,
-```
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-```
-Verify that Docker Engine is installed correctly by running the hello-world image.
-```
- sudo docker run hello-world
-```
-Set Docker to use *systemd* for Kubernetes compatibility
-```
-sudo mkdir -p /etc/systemd/system/docker.service.d
-```
-Escalate priviledges to root	
-```
-Sudo su
-```
-
-```
-cat > /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-  "max-size": "100m"
-  },
-  "storage-driver": "overlay2",
-  "storage-opts": [
-  "overlay2.override_kernel_check=true"
-  ]
-}
-EOF
-```
-Restart Docker and make sure it stays running even after reboot
-```
-sudo systemctl daemon-reload
-sudo systemctl enable docker   
-sudo systemctl restart docker
 ```
 install containerd 
 ```
 sudo apt-get install containerd
 ```
-To use Docker as a non-root user, add your user to the “docker” group with something like:
-```
-  sudo usermod -aG docker kubeadmin
-  ```
 ## Download and install the Kubernetes worker binaries:
 
 Set the version and architectures for the downloads.
