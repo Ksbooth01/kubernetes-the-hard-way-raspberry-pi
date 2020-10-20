@@ -40,7 +40,7 @@ To change the default server name of ubuntu use the following command.
 
 
 ### Setting the root password
-* Type **`sudo su** this will put you at root `#`
+* Type **`sudo su`** this will put you at root `#`
 * type **`passwd`**. Once the password for root has been changed enter **`exit`**
 ### (IP address setup - Public and Private)
 The IP address configuration for ubuntu is contained in a file called /etc/netplan/50-cloud-init.yaml.   
