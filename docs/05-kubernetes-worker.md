@@ -32,10 +32,53 @@ sudo swapon --show
 ```
 If the swap file is disabled there should be no results returned.
 
-```
-install containerd 
+### install containerd 
+
 ```
 sudo apt-get install containerd
+```
+Configure containerd
+Create the containerd configuration file:
+```
+sudo mkdir -p /etc/containerd/
+```
+
+```
+cat << EOF | sudo tee /etc/containerd/config.toml
+[plugins]
+  [plugins.cri.containerd]
+    snapshotter = "overlayfs"
+    [plugins.cri.containerd.default_runtime]
+      runtime_type = "io.containerd.runtime.v1.linux"
+      runtime_engine = "/usr/local/bin/runc"
+      runtime_root = ""
+EOF
+```
+Create the containerd.service systemd unit file:
+
+```
+cat <<EOF | sudo tee /etc/systemd/system/containerd.service
+[Unit]
+Description=containerd container runtime
+Documentation=https://containerd.io
+After=network.target
+
+[Service]
+ExecStartPre=/usr/sbin/modprobe overlay
+ExecStart=/usr/bin/containerd
+Restart=always
+RestartSec=5
+Delegate=yes
+KillMode=process
+OOMScoreAdjust=-999
+LimitNOFILE=1048576
+LimitNPROC=infinity
+LimitCORE=infinity
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 ```
 ## Download and install the Kubernetes worker binaries:
 
@@ -50,14 +93,18 @@ K8S_ARCH=arm64
 ```
 wget -q --show-progress --https-only --timestamping \
   https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VER}/crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz \
-  https://github.com/opencontainers/runc/releases/download/v1.0.0-rc91/runc.${K8S_ARCH} \
   https://github.com/containernetworking/plugins/releases/download/${CNI_VER}/cni-plugins-linux-${K8S_ARCH}-${CNI_VER}.tgz \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubectl \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kube-proxy \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubelet
 ```
-
+**What you installing**
+* **CRIctl**  - Container Runtime Interface (CRI) CLI. crictl provides a CLI for CRI-compatible container runtimes. This allows the CRI runtime developers to debug their runtime without needing to set up Kubernetes components
 Create the installation directories:
+* **CNI** -  Container Networking Interface
+* **kubectl** - 
+* **kube-proxy** - 
+* **kubelet**  -
 
 ```
 sudo mkdir -p \
@@ -71,12 +118,10 @@ sudo mkdir -p \
 Install the worker binaries:
 ```
 {
-  mkdir containerd
   tar -xvf crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz
   sudo tar -xvf cni-plugins-linux-${K8S_ARCH}-${CNI_VER}.tgz -C /opt/cni/bin/
-  sudo mv runc.${K8S_ARCH} runc
-  chmod +x crictl kubectl kube-proxy kubelet runc 
-  sudo mv crictl kubectl kube-proxy kubelet runc /usr/local/bin/
+  chmod +x crictl kubectl kube-proxy kubelet  
+  sudo mv crictl kubectl kube-proxy kubelet /usr/local/bin/
 }
 
 ```
