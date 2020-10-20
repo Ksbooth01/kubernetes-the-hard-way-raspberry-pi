@@ -3,8 +3,8 @@
 ## Download and Install kubectl
 
 ```
-K8S_VER=v1.4.6
-K8S_ARCH=arm
+K8S_VER=v1.18.6
+K8S_ARCH=arm64
 ```
 
 ```
