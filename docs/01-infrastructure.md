@@ -11,8 +11,22 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 # OS Configuration
 
-Firt, we need to download [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) 64-bit option (not the 32-bit option.) This will get installed on a total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
+* First, we need to download [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) 64-bit option (not the 32-bit option.) This will get installed on a total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
+* Next, you'll need to download imager software to load the SD Micro cards with the image. Raspberry Pi offers a free too for this [here](https://www.raspberrypi.org/downloads/)
 
+## Flashing the SD Micro
+* If you're using the Raspberry Pi Imager pick `Choose OS` then scroll down and choose `Use Custom` 
+* Navigate to the place where you downloaded your ubuntu Pi image  
+* Insert your MicroSD card into you PC and `Choose SD Card`
+* Then pick `Write`
+* When its finished transferring to the card, remove it and insert it into your Raspberry Pi, and power it up.
+
+## Initial login 
+* On first boot you will be presented with the initial login prompt. use **`ubuntu`** for the login name and **`ubuntu`** as the password.
+* You will be asked to change the password on first login. Change it!
+
+### Change the name of the computer
+In the table is the names and IP addresses of the servers configured in this setup.  These will be referenced throughout.
 | Hostname    | IP address-EXT| IP address-INT|            
 |:-----------:|:-------------:|:-------------:|              
 | controller0 | 192.168.1.20  |  172.16.0.20  |          
@@ -21,20 +35,12 @@ Firt, we need to download [Ubuntu 20.04](https://ubuntu.com/download/raspberry-p
 | worker2     | 192.168.1.22  | 172.16.0.22   |
 | loadbalancer| 192.168.1.30  | 172.16.0.30   |
 
-Next, you'll need to download imager software to load the SD Micro cards with the image. Raspberry Pi offers a free too for theis [here](https://www.raspberrypi.org/downloads/)
+To change the default server name of ubuntu use the following command.
+**`sudoedit /etc/hostname`**
 
-## Flashing the SD Micro
-* If you're using the Raspberry Pi Imager pick `Choose OS` then scroll down and choose `Use Custom` 
-* Navigate to the place where you downloaded your ubuntu Pi image  
-* Insert your MicroSD card into you PC and `Choose SD Card`
-* Then pick `Write`
-* When it finisheds transferring to the card, remove it and insert it into your Raspberry Pi, and power it up.
 
-## Initial login 
-* On first boot you will be presented with the initial login prompt. use **`ubuntu`** for the login name and **`ubuntu`** as the password.
-* You will be asked to change the password on first login. Change it!
 ### Setting the root password
-* Type **`sudo`** this will put you at root `#`
+* Type **`sudo su** this will put you at root `#`
 * type **`passwd`**. Once the password for root has been changed enter **`exit`**
 ### (IP address setup - Public and Private)
 The IP address configuration for ubuntu is contained in a file called /etc/netplan/50-cloud-init.yaml.   
