@@ -127,8 +127,10 @@ Install the worker binaries:
 ```
 ## Configure CNI Networking
 cluster-cidr=10.200.0.0/16 was set in the kube-controller-manager. each node will get a POD_CIDR which is a portion of this. 
-POD_CIDR="10.200.1.0/24" set as this on `worker1` 
-POD_CIDR="10.200.2.0/24" set as this on `worker2` 
+
+**`POD_CIDR="10.200.1.0/24"`** set as this on **`worker1`** 
+
+**`POD_CIDR="10.200.2.0/24"`** set as this on **`worker2`** 
 
 Create the `bridge` network configuration file:
 
