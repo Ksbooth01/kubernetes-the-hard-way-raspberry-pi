@@ -39,3 +39,5 @@ NAME                           READY     STATUS    RESTARTS   AGE
 kube-dns-v19-965658604-c8g5d   3/3       Running   0          49s
 kube-dns-v19-965658604-zwl3g   3/3       Running   0          49s
 ```
+
+Next: [Smoke Test](13-smoke-test.md)
