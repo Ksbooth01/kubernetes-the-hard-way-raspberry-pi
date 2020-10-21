@@ -121,22 +121,26 @@ sudo systemctl status etcd --no-pager -l
 
 > Remember to run these steps on `control0`, `control1`
 
+
 ## Verification
 
-Once both etcd nodes have been bootstrapped verify the etcd cluster is healthy:
-
-* On one of the controller nodes run the following command:
+List the etcd cluster members:
 
 ```
-etcdctl --ca-file=/etc/etcd/ca.pem cluster-health
+sudo ETCDCTL_API=3 etcdctl member list \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/etcd/ca.pem \
+  --cert=/etc/etcd/kubernetes.pem \
+  --key=/etc/etcd/kubernetes-key.pem
 ```
-*warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated*  Need to see if there's a way to clean this up.
 
-At first all cluster members were reporting unhealthy for some reason. It took a while (10+ minutes) for them to become healthy.
-In any event, I was able to continue with the installation of Kubernetes just fine.
-
+> output
 ```
 member 68326dea8aa5233d is healthy: got healthy result from https://192.168.1.40:2379
 member db49ef42428b90ee is healthy: got healthy result from https://192.168.1.20:2379
 cluster is healthy
 ```
+
+
+Next: [Bootstrapping the Kubernetes Control Plane](08-bootstrapping-kubernetes-controllers.md)
+
