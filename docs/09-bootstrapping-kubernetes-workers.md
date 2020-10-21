@@ -293,4 +293,5 @@ kubectl get nodes --kubeconfig admin.kubeconfig"
 NAME       STATUS   ROLES    AGE   VERSION
 worker1    Ready    <none>   24s   v1.18.6
 worker2    Ready    <none>   24s   v1.18.6
+```
 Next: [Configuring kubectl for Remote Access](10-configuring-kubectl.md)
