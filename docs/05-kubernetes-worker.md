@@ -32,7 +32,7 @@ sudo swapon --show
 ```
 If the swap file is disabled there should be no results returned.
 
-## install containerd 
+## Install containerd 
 
 ```
 sudo apt-get install containerd
@@ -105,7 +105,6 @@ Create the installation directories:
 * **kubectl** - allows you to run commands against Kubernetes clusters.
 * **kube-proxy** -  A network proxy that runs on each node in your cluster. It maintains network rules on the nodes which allow network communication to your Pods from network sessions inside or outside of your cluster.
 * **kubelet**  - The primary "node agent" that runs on each node and works in terms of a PodSpec. A PodSpec is a YAML or JSON object that describes a pod. The kubelet takes a set of PodSpecs that are provided and ensures that the containers described in those PodSpecs are running and healthy. 
-
 
 ```
 sudo mkdir -p \
@@ -265,15 +264,15 @@ WantedBy=multi-user.target
 EOF
 ```
 ```
-udo systemctl daemon-reload
+sudo systemctl daemon-reload
 sudo systemctl enable containerd kubelet kube-proxy
 sudo systemctl start containerd kubelet kube-proxy
 ```
 
 ```
-sudo systemctl status containerd --no-pager
-sudo systemctl status kubelet --no-pager
-sudo systemctl status kube-proxy --no-pager
+sudo systemctl status containerd --no-pager -l
+sudo systemctl status kubelet --no-pager -l
+sudo systemctl status kube-proxy --no-pager -l
 
 ```
 
