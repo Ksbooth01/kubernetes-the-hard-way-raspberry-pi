@@ -1,76 +1,83 @@
 # Configuring the Kubernetes Client - Remote Access
 
-## Download and Install kubectl
+**Note:** The original Kubernetes-the-hard-way (Kelseykightower) installs this on a remote node. I find it helpful to install this on `worker1` and `worker2`.  That way you can run kubectl commands on them as well.
+On the location that you created you CA certs:
+```
+cd &HOME/kubernetes
+
+for instance in worker1 worker2; do
+  scp admin.pem admin-key.pem kubeadmin@${instance}:~/
+done
+```
+on 
+# Configuring kubectl for Remote Access
+
+In this lab you will generate a kubeconfig file for the `kubectl` command line utility based on the `admin` user credentials.
+
+> Run the commands in this lab from the same directory used to generate the admin client certificates.
+
+## The Admin Kubernetes Configuration File
+
+Each kubeconfig requires a Kubernetes API Server to connect to. To support high availability the IP address assigned to the external load balancer fronting the Kubernetes API Servers will be used.
+
+Generate a kubeconfig file suitable for authenticating as the `admin` user:
 
 ```
-K8S_VER=v1.18.6
-K8S_ARCH=arm64
+{
+  KUBERNETES_LB_ADDRESS=172.16.0.30
+
+  kubectl config set-cluster kubernetes-the-hard-way \
+    --certificate-authority=/var/lib/kubernetes/ca.pem \
+    --embed-certs=true \
+    --server=https://${KUBERNETES_LB_ADDRESS}:6443
+
+  kubectl config set-credentials admin \
+    --client-certificate=admin.pem \
+    --client-key=admin-key.pem
+
+  kubectl config set-context kubernetes-the-hard-way \
+    --cluster=kubernetes-the-hard-way \
+    --user=admin
+
+  kubectl config use-context kubernetes-the-hard-way
+}
+
+Reference doc for kubectl config [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
 ```
 
-```
-wget https://storage.googleapis.com/kubernetes-release/release/$K8S_VER/bin/linux/$K8S_ARCH/kubectl
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin
-```
+## Verification
 
-## Configure Kubectl
-
-In this section you will configure the kubectl client to point to the [Kubernetes API Server Frontend Load Balancer](04-kubernetes-controller.md#setup-kubernetes-api-server-frontend-load-balancer).
-
-Recall the token we setup for the admin user:
-
-```
-# /var/lib/kubernetes/token.csv on the controller nodes
-chAng3m3,admin,admin
-```
-
-Also be sure to locate the CA certificate [created earlier](02-certificate-authority.md). Since we are using self-signed TLS certs we need to trust the CA certificate so we can verify the remote API Servers.
-
-### Build up the kubeconfig entry
-
-The following commands will build up the default kubeconfig file used by kubectl.
-
-```
-kubectl config set-cluster kubernetes-the-hard-way \
-  --certificate-authority=ca.pem \
-  --embed-certs=true \
-  --server=https://10.0.1.94:6443
-```
-
-```
-kubectl config set-credentials admin --token chAng3m3
-```
-
-```
-kubectl config set-context default-context \
-  --cluster=kubernetes-the-hard-way \
-  --user=admin
-```
-
-```
-kubectl config use-context default-context
-```
-
-At this point you should be able to connect securly to the remote API server:
+Check the health of the remote Kubernetes cluster:
 
 ```
 kubectl get componentstatuses
 ```
+
+> output
+
 ```
-NAME                 STATUS    MESSAGE              ERROR
-controller-manager   Healthy   ok                   
-scheduler            Healthy   ok                   
-etcd-2               Healthy   {"health": "true"}   
-etcd-0               Healthy   {"health": "true"}   
-etcd-1               Healthy   {"health": "true"}  
+NAME                 STATUS    MESSAGE             ERROR
+controller-manager   Healthy   ok
+scheduler            Healthy   ok
+etcd-1               Healthy   {"health":"true"}
+etcd-0               Healthy   {"health":"true"}
 ```
 
+List the nodes in the remote Kubernetes cluster:
 
 ```
 kubectl get nodes
 ```
+
+> output
+
 ```
-NAME      STATUS    AGE
-worker0   Ready     7m
-worker1   Ready     5m
+NAME       STATUS   ROLES    AGE    VERSION
+worker-1   NotReady    <none>   118s   v1.13.0
+worker-2   NotReady    <none>   118s   v1.13.0
 ```
+
+Note: It is OK for the worker node to be in a `NotReady` state. Worker nodes will come into `Ready` state once networking is configured.
+
+Next: [Deploy Pod Networking](12-configure-pod-networking.md)
+
