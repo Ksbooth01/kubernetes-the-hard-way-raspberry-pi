@@ -273,7 +273,24 @@ sudo systemctl start containerd kubelet kube-proxy
 sudo systemctl status containerd --no-pager -l
 sudo systemctl status kubelet --no-pager -l
 sudo systemctl status kube-proxy --no-pager -l
+```
+> Remember to run these steps on `worker1`, and `worker2`
 
+
+## Verification
+
+> The compute instances created in this tutorial will not have permission to complete this section. Run the following commands from the same machine used to create the compute instances `controller0`.
+
+List the registered Kubernetes nodes:
+
+``` 
+kubectl get nodes --kubeconfig admin.kubeconfig"
 ```
 
-> Remember to run these steps on `worker1`, and `worker2`
+> output
+
+```
+NAME       STATUS   ROLES    AGE   VERSION
+worker1    Ready    <none>   24s   v1.18.6
+worker2    Ready    <none>   24s   v1.18.6
+Next: [Configuring kubectl for Remote Access](10-configuring-kubectl.md)
