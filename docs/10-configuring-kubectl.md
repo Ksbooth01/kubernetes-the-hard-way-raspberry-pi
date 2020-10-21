@@ -9,7 +9,11 @@ for instance in worker1 worker2; do
   scp admin.pem admin-key.pem kubeadmin@${instance}:~/
 done
 ```
-on 
+on each work node: `worker1  and  worker2` 
+```
+sudo co admin* /var/lib/lubernetes
+```
+
 # Configuring kubectl for Remote Access
 
 In this lab you will generate a kubeconfig file for the `kubectl` command line utility based on the `admin` user credentials.
