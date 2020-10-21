@@ -1,7 +1,12 @@
-## Creating Kubeconfig files for Authentication. 
+## Generating Kubernetes Configuration files for Authentication. 
 
-Next we will generate **kubeconfigs** which will be used by the various services that will make up the cluster. In this section, we will generate these kubeconfigs. Once complete there will be a set of kubeconfigs which will be used later to configure the Kubernetes cluster. 
 
+In this section you will generate [Kubernetes configuration files](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/), also known as kubeconfigs, which enable Kubernetes clients to locate and authenticate to the Kubernetes API Servers.
+
+## Client Authentication Configs
+
+In this section you will generate kubeconfig files for the `controller manager`, `kubelet`, `kube-proxy`, and `scheduler` clients and the `admin` user.
+ 
 ##### Files this will generate
 * worker1.kubeconfig
 * worker2.kubeconfig
@@ -26,7 +31,7 @@ If you haven't got them set from the last section set the following variables fo
 
 | Variable                                        |
 |:-----------------------------------------------:|
-| KUBERNETES_ADDRESS=<load balancer private ip>   |
+| KUBERNETES_ADDRESS=<load balancer private ip>   | NOTE: kelsey hightower is using the external address here
 | WORKER1_HOST=<worker 1 hostname>                |
 | WORKER2_HOST=<worker 2 hostname>                |
 | WORKER1_IP=<worker 1 External IP address>       |
@@ -40,9 +45,16 @@ WORKER1_IP=192.168.1.21
 WORKER2_IP=192.168.1.22
 
 ```
-Now, generate a kubelet kubeconfig for each worker node:
+
+### The kubelet Kubernetes Configuration File
+
+When generating kubeconfig files for Kubelets the client certificate matching the Kubelet's node name must be used. This will ensure Kubelets are properly authorized by the Kubernetes [Node Authorizer](https://kubernetes.io/docs/admin/authorization/node/).
+
+> The following commands must be run in the same directory used to generate the SSL certificates during the [Generating TLS Certificates](04-certificate-authority.md) lab.
+
+Generate a kubeconfig file for each worker node:
 ```
-for instance in ${WORKER1_HOST} ${WORKER2_HOST}; do
+for instance in WORKER1_HOST WORKER2_HOST; do
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
@@ -63,7 +75,47 @@ for instance in ${WORKER1_HOST} ${WORKER2_HOST}; do
   kubectl config use-context default --kubeconfig=${instance}.kubeconfig
 done
 ```
-Then we'll generate the kube-controller-manager kubeconfig file:
+Results:
+
+```
+worker1.kubeconfig
+worker2.kubeconfig
+```
+### The kube-proxy Kubernetes Configuration File
+
+Generate a kubeconfig file for the `kube-proxy` service:
+
+```
+{
+  kubectl config set-cluster kubernetes-the-hard-way \
+    --certificate-authority=ca.pem \
+    --embed-certs=true \
+    --server=https://${KUBERNETES_ADDRESS}:6443 \
+    --kubeconfig=kube-proxy.kubeconfig
+
+  kubectl config set-credentials system:kube-proxy \
+    --client-certificate=kube-proxy.pem \
+    --client-key=kube-proxy-key.pem \
+    --embed-certs=true \
+    --kubeconfig=kube-proxy.kubeconfig
+
+  kubectl config set-context default \
+    --cluster=kubernetes-the-hard-way \
+    --user=system:kube-proxy \
+    --kubeconfig=kube-proxy.kubeconfig
+
+  kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+}
+```
+
+Results:
+
+```
+kube-proxy.kubeconfig
+```
+### The kube-controller-manager Kubernetes Configuration File
+Generate a kubeconfig file for the `kube-controller-manager` service:
+
 ```
 {
   kubectl config set-cluster kubernetes-the-hard-way \
@@ -86,7 +138,17 @@ Then we'll generate the kube-controller-manager kubeconfig file:
   kubectl config use-context default --kubeconfig=kube-controller-manager.kubeconfig
 }
 ```
-Then we'll generate the kube-scheduler kubeconfig file:
+
+Results:
+
+```
+kube-controller-manager.kubeconfig
+```
+
+### The kube-scheduler Kubernetes Configuration File
+
+Generate a kubeconfig file for the `kube-scheduler` service:
+
 ```
 {
   kubectl config set-cluster kubernetes-the-hard-way \
@@ -109,7 +171,13 @@ Then we'll generate the kube-scheduler kubeconfig file:
   kubectl config use-context default --kubeconfig=kube-scheduler.kubeconfig
 }
 ```
-Generate an admin kubeconfig:
+```
+kube-scheduler.kubeconfig
+```
+
+### The admin Kubernetes Configuration File
+
+Generate a kubeconfig file for the `admin` user:
 ```
 {
   kubectl config set-cluster kubernetes-the-hard-way \
@@ -132,42 +200,28 @@ Generate an admin kubeconfig:
   kubectl config use-context default --kubeconfig=admin.kubeconfig
 }
 ```
+
+Results:
+
+```
+admin.kubeconfig
+```
+
+
 ## Distributing the kubeconfig files to the appropriate servers
 Now that we have generated the kubeconfig files that we will need in order to configure our Kubernetes cluster, we need to make sure that each cloud server has a copy of the kubeconfig files that it will need.
 
-Move kubeconfig files to the worker nodes:
+Copy  the appropriate `kubelet` and `kube-proxy` kubeconfig files to each worker node instance:
 ```
 scp ${WORKER1_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${WORKER1_IP}:~/
 scp ${WORKER2_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${WORKER2_IP}:~/
 ```
-Move kubeconfig files to the controller nodes:
+Copy the appropriate `kube-controller-manager` and `kube-scheduler` kubeconfig files to each controller instance:
 ```
 scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig kubeadmin@${CONTROLLER0_IP}:~/
 scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig kubeadmin@${CONTROLLER1_IP}:~/
 ```
 
-## Generate the Data Encryption Confie file
-In order to make use of Kubernetes' ability to encrypt sensitive data at rest, you need to provide Kubernetes with an encrpytion key using a data encryption config file.
-What we do next is create an encryption key, storing it in the necessary file, and then copy that file to your Kubernetes controllers
-Generate the Kubernetes Data encrpytion config file containing the encrpytion key
-```
-ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
+Next: [Generating the Data Encryption Config and Key](06-data-encryption-keys.md)
 
-cat > encryption-config.yaml << EOF
-kind: EncryptionConfig
-apiVersion: v1
-resources:
-  - resources:
-      - secrets
-    providers:
-      - aescbc:
-          keys:
-            - name: key1
-              secret: ${ENCRYPTION_KEY}
-      - identity: {}
-EOF
-```
-```
-scp encryption-config.yaml kubeadmin@${CONTROLLER0_IP}:~/
-scp encryption-config.yaml kubeadmin@${CONTROLLER1_IP}:~/
-```
+
