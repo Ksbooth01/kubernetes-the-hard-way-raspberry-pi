@@ -193,7 +193,7 @@ authorization:
 clusterDomain: "cluster.local"
 clusterDNS:
   - "10.32.0.10"
-podCIDR: "10.244.0.0/16"
+podCIDR: "10.200.0.0/16"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
 tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
@@ -201,7 +201,7 @@ tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
 
 ```
-set this to the known default of 10.244.0.0./16 podCIDR: "${POD_CIDR}"
+set this to the known default of 10.200.0.0./16 podCIDR: "${POD_CIDR}"
 
 Create the kubelet systemd unit file:
 
