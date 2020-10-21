@@ -50,18 +50,19 @@ This tutorial assumes you have access to one of the following:
 * 2020-08-20-raspbian-buster or newer
 
 ## Labs
-
+* Prerequisites
+* Installing Client tools
 * [Infrastructure Provisioning](docs/01-infrastructure.md)
-* []
-* [Setting up a CA and TLS Cert Generation](docs/04-certificate-authority.md)
-* [Creating Kubernetes Configuration Files for Authorization](docs/05-kubernetes-configuration-files.md)
-* [](docs/06-data-encryption-keys.md)
+* 
+* [Provisioning the CA Generating TLS Certificates](docs/04-certificate-authority.md)
+* [Generating Kubernetes Configuration Files for Authorization](docs/05-kubernetes-configuration-files.md)
+* [Generating the Data Encryption Config and Key](docs/06-data-encryption-keys.md)
 * [Bootstrapping an H/A etcd cluster](docs/07-bootstrapping-etcd.md)
-* [Bootstrapping an H/A Kubernetes Control Plane](docs/04-kubernetes-controller.md)
-* [Provision a Network Load Balancer](docs/04b-kubernetes-loadbalancer.md)
-* [Bootstrapping Kubernetes Workers](docs/05-kubernetes-worker.md)
-* [Configuring the Kubernetes Client - Remote Access](docs/06-kubectl.md)
-* [Managing the Container Network Routes](docs/07-network.md)
-* [Deploying the Cluster DNS Add-on](docs/08-dns-addon.md)
-* [Smoke Test](docs/09-smoke-test.md)
-* [Cleaning Up](docs/10-cleanup.md)
+* [Bootstrapping the Kubernetes Control Plane](docs/08-bootstrapping-kubernetes-controllers.md)
+* [Provision a Network Load Balancer](docs/08b-kubernetes-loadbalancer.md)
+* [Bootstrapping the Kubernetes Worker Nodes](docs/09-bootstrapping-kubernetes-workers.md)
+* [Configuring kubectl for Remote Access](docs/10-configuring-kubectl.md)
+* [Provisioning Pod Network Routes](docs/11-pod-network-routes.md)
+* [Deploying the Cluster DNS Add-on](docs/12-dns-addon.md)
+* [Smoke Test](docs/13-smoke-test.md)
+* [Cleaning Up](docs/14-cleanup.md)
