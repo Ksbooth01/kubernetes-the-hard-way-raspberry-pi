@@ -264,15 +264,17 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+```
+udo systemctl daemon-reload
+sudo systemctl enable containerd kubelet kube-proxy
+sudo systemctl start containerd kubelet kube-proxy
+```
 
 ```
-sudo systemctl daemon-reload
-sudo systemctl enable kube-proxy
-sudo systemctl start kube-proxy
-```
-
-```
+sudo systemctl status containerd --no-pager
+sudo systemctl status kubelet --no-pager
 sudo systemctl status kube-proxy --no-pager
+
 ```
 
 > Remember to run these steps on `worker1`, and `worker2`
