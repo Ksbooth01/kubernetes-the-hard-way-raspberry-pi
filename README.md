@@ -52,9 +52,11 @@ This tutorial assumes you have access to one of the following:
 ## Labs
 
 * [Infrastructure Provisioning](docs/01-infrastructure.md)
-* [Setting up a CA and TLS Cert Generation](docs/02-certificate-authority.md)
-* [Creating Kubernetes Configuration Files for Authorization](docs/02b-Creating-the-client-certificates.md)
-* [Bootstrapping an H/A etcd cluster](docs/03-etcd.md)
+* []
+* [Setting up a CA and TLS Cert Generation](docs/04-certificate-authority.md)
+* [Creating Kubernetes Configuration Files for Authorization](docs/05-kubernetes-configuration-files.md)
+* [](docs/06-data-encryption-keys.md)
+* [Bootstrapping an H/A etcd cluster](docs/07-bootstrapping-etcd.md)
 * [Bootstrapping an H/A Kubernetes Control Plane](docs/04-kubernetes-controller.md)
 * [Provision a Network Load Balancer](docs/04b-kubernetes-loadbalancer.md)
 * [Bootstrapping Kubernetes Workers](docs/05-kubernetes-worker.md)
