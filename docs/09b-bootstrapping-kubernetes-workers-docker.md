@@ -126,7 +126,7 @@ Install the worker binaries:
 
 ```
 ## Configure CNI Networking
-cluster-cidr=10.200.0.0/16 was set in the kube-controller-manager. each node will get a POD_CIDR which is a portion of this. 
+cluster-cidr=10.200.0.0/16 was set in the kube-controller-manager in the previous section. Each node will get portion of this range using the POD_CIDR value. 
 
 **`POD_CIDR="10.200.1.0/24"`** set as this on **`worker1`** 
 
