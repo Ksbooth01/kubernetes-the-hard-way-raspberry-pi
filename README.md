@@ -31,6 +31,7 @@ The target audience for this is someone who wants to get some hands on skills wi
 * [Docker Container Runtime](https://github.com/containerd/containerd) 19.1.13 (ARM64)
 * [etcd](https://github.com/coreos/etcd) v3.2.12 (ARM64)
 * [CNI Container networking](https://github.com/containernetworking/cni) 0.7.5
+* [Weave Networking] (https://www.weave.works/docs/net/latest/kubernetes/kube-addon/)
 * [coredns](https://github.com/coredns/coredns) v
 
 
