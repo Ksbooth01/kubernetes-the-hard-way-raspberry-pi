@@ -78,7 +78,7 @@ Kubelet is the Kubernetes agent which runs on each worker node. Acting as a midd
 Set a HOSTNAME environment variable that will be used to generate your config files
 ```
 HOSTNAME=$(hostname)
-sudo mkdir -p /var/lib/kubernetes
+
 sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
 sudo cp ca.pem /var/lib/kubernetes/
@@ -131,8 +131,8 @@ ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
   --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
-  --tlsCertFile=/var/lib/kubelet/${HOSTNAME}.pem \\
-  --tlsPrivateKeyFile=/var/lib/kubelet/${HOSTNAME}-key.pem \\
+  --tls-cert-file=/var/lib/kubelet/${HOSTNAME}.pem \\
+  --tls-private-key-file=/var/lib/kubelet/${HOSTNAME}-key.pem \\
   --network-plugin=cni \\
   --register-node=true \\
   --v=2
@@ -191,7 +191,7 @@ sudo systemctl start kubelet kube-proxy
 ```
 
 ```
-sudo systemctl status containerd --no-pager -l
+
 sudo systemctl status kubelet --no-pager -l
 sudo systemctl status kube-proxy --no-pager -l
 ```
