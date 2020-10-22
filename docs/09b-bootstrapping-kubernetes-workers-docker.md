@@ -11,19 +11,6 @@ Kubernetes worker nodes are responsible for running your containers. All Kuberne
 
 Some people would like to run workers and cluster services anywhere in the cluster. This is totally possible, and you'll have to decide what's best for your environment.
 
-### Install the OS dependencies:
-```
-{
-  sudo apt-get update
-  sudo apt-get -y install socat conntrack ipset 
-}
-```
-#### Brief Explanation
-* **socat**      - utility that is a relay for bidirectional data transfers between two independent data channels.
-* **conntrack**  - provides an interface to the connnection tracking system, which you can show, delete and update the existing state entries; and listens to flow events.
-* **ipset**      - allows you to organize a list of networks, IP or MAC addresses, etc. which is very convenient to use for example with IPTables.
-
-
 ### Confirm Swap is Disabled
 * By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
 * By default ubuntu 20.04 image does not have the swap file enabled.  To validate this is the case type:
@@ -32,68 +19,29 @@ sudo swapon --show
 ```
 If the swap file is disabled there should be no results returned.
 
-## Install containerd 
+## Install Docker
+```
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
 
+<output truncated>
 ```
-sudo apt-get install containerd
+If you would like to use Docker as a non-root user, you should now consider adding your user to the “docker” group with something like:
 ```
-Configure containerd
-Create the containerd configuration file:
-```
-sudo mkdir -p /etc/containerd/
+  sudo usermod -aG docker kubeadmin
 ```
 
-```
-cat << EOF | sudo tee /etc/containerd/config.toml
-[plugins]
-  [plugins.cri.containerd]
-    snapshotter = "overlayfs"
-    [plugins.cri.containerd.default_runtime]
-      runtime_type = "io.containerd.runtime.v1.linux"
-      runtime_engine = "/usr/sbin/runc"
-      runtime_root = ""
-EOF
-```
-Create the containerd.service systemd unit file:
 
-```
-cat <<EOF | sudo tee /etc/systemd/system/containerd.service
-[Unit]
-Description=containerd container runtime
-Documentation=https://containerd.io
-After=network.target
-
-[Service]
-ExecStartPre=/usr/sbin/modprobe overlay
-ExecStart=/usr/bin/containerd
-Restart=always
-RestartSec=5
-Delegate=yes
-KillMode=process
-OOMScoreAdjust=-999
-LimitNOFILE=1048576
-LimitNPROC=infinity
-LimitCORE=infinity
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-```
 ## Download and install the Kubernetes worker binaries:
 
 Set the version and architectures for the downloads.
 ```
 K8S_VER=v1.18.6
-CRICTL_VER=v1.18.0
-CNI_VER=v0.8.7
 K8S_ARCH=arm64
 ```
 
 ```
 wget -q --show-progress --https-only --timestamping \
-  https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VER}/crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz \
-  https://github.com/containernetworking/plugins/releases/download/${CNI_VER}/cni-plugins-linux-${K8S_ARCH}-${CNI_VER}.tgz \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubectl \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kube-proxy \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubelet
@@ -118,52 +66,10 @@ sudo mkdir -p \
 Install the worker binaries:
 ```
 {
-  tar -xvf crictl-${CRICTL_VER}-linux-${K8S_ARCH}.tar.gz
-  sudo tar -xvf cni-plugins-linux-${K8S_ARCH}-${CNI_VER}.tgz -C /opt/cni/bin/
-  chmod +x crictl kubectl kube-proxy kubelet  
-  sudo mv crictl kubectl kube-proxy kubelet /usr/local/bin/
+  chmod +x kubectl kube-proxy kubelet  
+  sudo mv kubectl kube-proxy kubelet /usr/local/bin/
 }
 
-```
-## Configure CNI Networking
-cluster-cidr=10.200.0.0/16 was set in the kube-controller-manager in the previous section. Each node will get portion of this range using the POD_CIDR value. 
-
-**`POD_CIDR="10.200.1.0/24"`** set as this on **`worker1`** 
-
-**`POD_CIDR="10.200.2.0/24"`** set as this on **`worker2`** 
-
-Create the `bridge` network configuration file:
-
-```
-cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
-{
-    "cniVersion": "0.3.1",
-    "name": "bridge",
-    "type": "bridge",
-    "bridge": "cnio0",
-    "isGateway": true,
-    "ipMasq": true,
-    "ipam": {
-        "type": "host-local",
-        "ranges": [
-          [{"subnet": "${POD_CIDR}"}]
-        ],
-        "routes": [{"dst": "0.0.0.0/0"}]
-    }
-}
-EOF
-
-```
-Create the loopback network configuration file:
-
-```
-cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
-{
-    "cniVersion": "0.3.1",
-    "name": "lo",
-    "type": "loopback"
-}
-EOF
 
 ```
 ## Configuring Kubelet
@@ -199,13 +105,17 @@ clusterDNS:
 podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
-tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
-tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
+
 EOF
 
 ```
 set this to the known default of 10.200.0.0./16 podCIDR: "${POD_CIDR}"
 
+**Testing** - Moved the following from the bottom of kubelet-config.yaml configuration file and put then in kubelet.service file : (mmumshad - edition)
+```
+tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
+tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
+```
 Create the kubelet systemd unit file:
 
 ```
@@ -219,10 +129,10 @@ Requires=docker.service
 [Service]
 ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
-  --container-runtime=remote \\
-  --container-runtime-endpoint=unix:///var/run/docker.sock \\
   --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
+  --tlsCertFile=/var/lib/kubelet/${HOSTNAME}.pem \\
+  --tlsPrivateKeyFile=/var/lib/kubelet/${HOSTNAME}-key.pem \\
   --network-plugin=cni \\
   --register-node=true \\
   --v=2
@@ -234,8 +144,15 @@ WantedBy=multi-user.target
 EOF
 ```
 
+ *removed from after -- kubeconfig*
+ --container-runtime=remote \\
+  --container-runtime-endpoint=unix:///var/run/containerd.sock \\
+*if it were for docker **should be** *
+  --container-runtime=docker \\
+  --container-runtime-endpoint=unix:///var/run/dockershim.sock \\
+ 
 ### Configure the Kubernetes Proxy
-Put hte kube proxy kubecongiruation file in the appropriate directory
+Put the kube proxy kube configuration file in the appropriate directory
 ```
 sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
 ```
@@ -269,8 +186,8 @@ EOF
 ```
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable containerd kubelet kube-proxy
-sudo systemctl start containerd kubelet kube-proxy
+sudo systemctl enable kubelet kube-proxy
+sudo systemctl start kubelet kube-proxy
 ```
 
 ```
