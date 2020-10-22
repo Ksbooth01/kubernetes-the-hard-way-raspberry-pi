@@ -79,14 +79,15 @@ Kubelet is the Kubernetes agent which runs on each worker node. Acting as a midd
 Set a HOSTNAME environment variable that will be used to generate your config files
 ```
 HOSTNAME=$(hostname)
-
-sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-sudo cp ca.pem /var/lib/kubernetes/
-# sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
 ```
-Create the `kubelet-config` file:
+Copy the certs and the kube config file to thier working directories:
+```
+sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
+sudo cp ca.pem /var/lib/kubernetes/
+sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+```
 
+Create the **`kubelet-config`** file:
 ```
 cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
 kind: KubeletConfiguration
@@ -103,7 +104,6 @@ authorization:
 clusterDomain: "cluster.local"
 clusterDNS:
   - "10.32.0.10"
-podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
 
