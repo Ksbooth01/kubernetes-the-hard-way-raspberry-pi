@@ -11,7 +11,7 @@ done
 ```
 on each work node: `worker1  and  worker2` 
 ```
-sudo co admin* /var/lib/lubernetes
+sudo cp admin* /var/lib/kubernetes
 ```
 
 # Configuring kubectl for Remote Access
