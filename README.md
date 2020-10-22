@@ -27,11 +27,11 @@ The target audience for this is someone who wants to get some hands on skills wi
 
 ## Cluster Details
 
-* Kubernetes 1.18.6 (ARM64)
-* Docker 1.18.3 (ARM64)
-* etcd v3.2.12 (ARM64)
-* [CNI Based Networking](https://github.com/containernetworking/cni)
-* Secure communication between all components (etcd, control plane, workers)
+* [kubernetes](https://github.com/kubernetes/kubernetes) 1.18.6 (ARM64)
+* [Docker Container Runtime](https://github.com/containerd/containerd) 19.1.13 (ARM64)
+* [etcd](https://github.com/coreos/etcd) v3.2.12 (ARM64)
+* [CNI Container networking](https://github.com/containernetworking/cni) 0.7.5
+* [coredns](https://github.com/coredns/coredns) v
 
 
 
