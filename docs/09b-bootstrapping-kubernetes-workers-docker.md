@@ -20,13 +20,14 @@ sudo swapon --show
 If the swap file is disabled there should be no results returned.
 
 ## Install Docker
+This fetches and installs the latest stable version of Docker installs it on the system:
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 
 <output truncated>
 ```
-If you would like to use Docker as a non-root user, you should now consider adding your user to the “docker” group with something like:
+To use Docker as a non-root user, you need to add your user to the “docker” group:
 ```
   sudo usermod -aG docker kubeadmin
 ```
