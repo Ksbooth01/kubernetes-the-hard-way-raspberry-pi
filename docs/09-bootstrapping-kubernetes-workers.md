@@ -174,7 +174,7 @@ sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
 sudo cp ca.pem /var/lib/kubernetes/
 # sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/
 ```
-Create the `kubelet-config` file:
+Create the **`kubelet-config`** file:
 
 ```
 cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
@@ -202,32 +202,32 @@ EOF
 ```
 set this to the known default of 10.200.0.0./16 podCIDR: "${POD_CIDR}"
 
-Create the kubelet systemd unit file:
+Create the **kubelet.service** systemd unit file:
 
 ```
-cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
-After=containerd.service
-Requires=containerd.service
+After=docker.service
+Requires=docker.service
 
 [Service]
-ExecStart=/usr/local/bin/kubelet \\
-  --config=/var/lib/kubelet/kubelet-config.yaml \\
-  --container-runtime=remote \\
-  --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
-  --image-pull-progress-deadline=2m \\
-  --kubeconfig=/var/lib/kubelet/kubeconfig \\
-  --network-plugin=cni \\
-  --register-node=true \\
+ExecStart=/usr/local/bin/kubelet \
+  --config=/var/lib/kubelet/kubelet-config.yaml \
+  --image-pull-progress-deadline=2m \
+  --kubeconfig=/var/lib/kubelet/kubeconfig \
+  --container-runtime=docker \
+  --network-plugin=cni \
+  --cni-bin-dir=/opt/cni/bin \
+  --cni-conf-dir=/etc/cni/net.d \
+  --register-node=true \
+  --node-ip=172.16.0.22 \
   --v=2
 Restart=on-failure
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
-EOF
 ```
 
 ### Configure the Kubernetes Proxy
