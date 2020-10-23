@@ -11,17 +11,17 @@ Kubernetes worker nodes are responsible for running your containers. All Kuberne
 
 Some people would like to run workers and cluster services anywhere in the cluster. This is totally possible, and you'll have to decide what's best for your environment.
 
-### Install the OS dependencies:
-```
-{
-  sudo apt-get update
-  sudo apt-get -y install socat conntrack ipset 
-}
-```
-#### Brief Explanation
-* **socat**      - utility that is a relay for bidirectional data transfers between two independent data channels.
-* **conntrack**  - provides an interface to the connnection tracking system, which you can show, delete and update the existing state entries; and listens to flow events.
-* **ipset**      - allows you to organize a list of networks, IP or MAC addresses, etc. which is very convenient to use for example with IPTables.
+### Pre-flight check:
+the following files shoud be in the home directory of your worker nodes prior to starting this section:
+for instance in  worker1 worker2 ; do
+|       worker1         |       worker2         |
+|:---------------------:|:---------------------:|
+| admin.pem             | admin.pem             |
+| admin-key.pem         | admin-key.pem         |
+| worker1.pem           | worker2.pem           |
+| worker1-key.pem       | worker2-key.pem       |
+| worker1.kubeconfig    | worker2.kubeconfig    |
+| kube-proxy.kubeconfig | kube-proxy.kubeconfig |
 
 ### Confirm Swap is Disabled
 * By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
@@ -80,8 +80,6 @@ Install the worker binaries:
   chmod +x kubectl kube-proxy kubelet  
   sudo mv kubectl kube-proxy kubelet /usr/local/bin/
 }
-
-
 ```
 ## Configuring Kubelet
 Kubelet is the Kubernetes agent which runs on each worker node. Acting as a middleman between the Kubernetes control plane and the underlying container runtime, it coordinates the running of containers on the worker node
@@ -98,6 +96,7 @@ sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 sudo cp ca.pem /var/lib/kubernetes/
 sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
 ```
+confirm: `ls -la /var/lib/kubelet/`
 
 Create the **`kubelet-config`** file:
 ```
@@ -124,6 +123,7 @@ tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
 
 ```
+confirm: `cat /var/lib/kubelet/kubelet-config.yaml`
 Create the **`kubelet.service`** systemd unit file:
 
 ```
