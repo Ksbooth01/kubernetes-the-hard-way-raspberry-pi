@@ -14,14 +14,12 @@ Some people would like to run workers and cluster services anywhere in the clust
 ### Pre-flight check:
 the following files shoud be in the home directory of your worker nodes prior to starting this section:
 for instance in  worker1 worker2 ; do
-|      **worker1**         |       **worker2**         |
-|:---------------------:|:---------------------:|
-| admin.pem             | admin.pem             |
-| admin-key.pem         | admin-key.pem         |
-| worker1.pem           | worker2.pem           |
-| worker1-key.pem       | worker2-key.pem       |
-| worker1.kubeconfig    | worker2.kubeconfig    |
-| kube-proxy.kubeconfig | kube-proxy.kubeconfig |
+**|**                   **worker1**                     **|**                    **worker2**                     **|**
+**|**:----------------------------------------------:**|**:---------------------------------------------------:|
+**|** admin.pem             | worker1.pem            **|** admin.pem             | worker2.pem          **|**
+**|** admin-key.pem         | worker1-key.pem        **|** admin-key.pem         | worker2-key.pem      **|**
+**|** worker1.kubeconfig    | kube-proxy.kubeconfig  **|** worker2.kubeconfig    | kube-proxy.kubeconfig **|**
+
 
 ### Confirm Swap is Disabled
 * By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
