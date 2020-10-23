@@ -79,6 +79,7 @@ Kubelet is the Kubernetes agent which runs on each worker node. Acting as a midd
 Set a HOSTNAME environment variable that will be used to generate your config files
 ```
 HOSTNAME=$(hostname)
+INTERNAL_IP=<INSERT HERE>
 ```
 Copy the certs and the kube config file to thier working directories:
 ```
@@ -106,21 +107,15 @@ clusterDNS:
   - "10.32.0.10"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
+tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
+tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 
 EOF
 
 ```
-set this to the known default of 10.200.0.0./16 podCIDR: "${POD_CIDR}"
-
-**Testing** - Moved the following from the bottom of kubelet-config.yaml configuration file and put then in kubelet.service file : (mmumshad - edition)
-```
-tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
-tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
-```
-Create the kubelet systemd unit file:
+Create the **`kubelet.service`** systemd unit file:
 
 ```
-cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
@@ -128,22 +123,22 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStart=/usr/local/bin/kubelet \\
-  --config=/var/lib/kubelet/kubelet-config.yaml \\
-  --image-pull-progress-deadline=2m \\
-  --kubeconfig=/var/lib/kubelet/kubeconfig \\
-  --tls-cert-file=/var/lib/kubelet/${HOSTNAME}.pem \\
-  --tls-private-key-file=/var/lib/kubelet/${HOSTNAME}-key.pem \\
-  --network-plugin=cni \\
-  --register-node=true \\
+ExecStart=/usr/local/bin/kubelet \
+  --config=/var/lib/kubelet/kubelet-config.yaml \
+  --image-pull-progress-deadline=2m \
+  --kubeconfig=/var/lib/kubelet/kubeconfig \
+  --container-runtime=docker \
+  --network-plugin=cni \
+  --cni-bin-dir=/opt/cni/bin \
+  --cni-conf-dir=/etc/cni/net.d \
+  --register-node=true \
+  --node-ip=${INTERNAL_IP} \
   --v=2
 Restart=on-failure
 RestartSec=5
 
 [Install]
-WantedBy=multi-user.target
-EOF
-```
+WantedBy=multi-user.target```
 
  *removed from after -- kubeconfig*
  --container-runtime=remote \\
