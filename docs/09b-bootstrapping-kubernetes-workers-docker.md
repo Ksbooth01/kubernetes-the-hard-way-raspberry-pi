@@ -93,9 +93,7 @@ sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 sudo cp ca.pem /var/lib/kubernetes/
 sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
 ```
-confirm: `ls -la /var/lib/kubelet/`
-
-
+confirm: ```ls -la /var/lib/kubelet/```
  Create the **`kubelet-config`** file:
 
 ```
@@ -149,14 +147,8 @@ Restart=on-failure
 RestartSec=5
 
 [Install]
-WantedBy=multi-user.target```
-
- *removed from after -- kubeconfig*
- --container-runtime=remote \\
-  --container-runtime-endpoint=unix:///var/run/containerd.sock \\
-*if it were for docker **should be** *
-  --container-runtime=docker \\
-  --container-runtime-endpoint=unix:///var/run/dockershim.sock \\
+WantedBy=multi-user.target
+```
  
 ## Configure the Kubernetes Proxy
 Put the kube proxy kube configuration file in the appropriate directory
