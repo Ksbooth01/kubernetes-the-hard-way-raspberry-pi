@@ -11,6 +11,18 @@ Kubernetes worker nodes are responsible for running your containers. All Kuberne
 
 Some people would like to run workers and cluster services anywhere in the cluster. This is totally possible, and you'll have to decide what's best for your environment.
 
+### Install the OS dependencies:
+```
+{
+  sudo apt-get update
+  sudo apt-get -y install socat conntrack ipset 
+}
+```
+#### Brief Explanation
+* **socat**      - utility that is a relay for bidirectional data transfers between two independent data channels.
+* **conntrack**  - provides an interface to the connnection tracking system, which you can show, delete and update the existing state entries; and listens to flow events.
+* **ipset**      - allows you to organize a list of networks, IP or MAC addresses, etc. which is very convenient to use for example with IPTables.
+
 ### Confirm Swap is Disabled
 * By default the kubelet will fail to start if swap is enabled. It is recommended that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
 * By default ubuntu 20.04 image does not have the swap file enabled.  To validate this is the case type:
