@@ -14,7 +14,8 @@ Some people would like to run workers and cluster services anywhere in the clust
 ### Pre-flight check:
 Te following files shoud be in the home directory of your worker nodes prior to starting this section:
 
-|     **worker1**          |          ...            |       **worker2**        |         ...             |
+
+|     worker1          |          ...            |       worker2        |         ...             |
 |:----------------------------------------------:|:----------------------------------------------:|
 |  admin.pem           |  worker1.pem            |  admin.pem           |  worker2.pem            |
 |  admin-key.pem       |  worker1-key.pem        |  admin-key.pem       |  worker2-key.pem        |
