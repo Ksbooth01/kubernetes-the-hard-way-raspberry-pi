@@ -128,7 +128,7 @@ Leaving root allowed to ssh should not be left on - make sure you turn this off 
 In my experience, whether you use a direct connection versus Wi-Fi really depends on connection speed. The one thing that **IS CRITICAL** is that you assign IP Addresses to each server. for my machines is set up DHCP reservations.  (Yes. even home WI-FI routers allow you to set up DHCP reservations in their configuration) 
 
 ```
-sudo sh -c "cat >>/etc/hosts <<EOF
+sudo sh -c cat >> /etc/hosts << EOF
 192.168.1.20       controller0
 192.168.1.40       controller1
 192.168.1.21       worker1
