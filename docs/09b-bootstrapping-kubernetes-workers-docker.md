@@ -121,7 +121,8 @@ EOF
 
 ```
 confirm: ```cat /var/lib/kubelet/kubelet-config.yaml```
-Create the **`kubelet.service`** systemd unit file:
+
+ Create the **`kubelet.service`** systemd unit file:
 
 ```
 cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
@@ -132,24 +133,29 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStart=/usr/local/bin/kubelet \
-  --config=/var/lib/kubelet/kubelet-config.yaml \
+ExecStart=/usr/local/bin/kubelet \\
+  --config=/var/lib/kubelet/kubelet-config.yaml \\
   --image-pull-progress-deadline=2m \
-  --kubeconfig=/var/lib/kubelet/kubeconfig \
-  --container-runtime=docker \
-  --network-plugin=cni \
-  --cni-bin-dir=/opt/cni/bin \
-  --cni-conf-dir=/etc/cni/net.d \
-  --register-node=true \
-  --node-ip=${INTERNAL_IP} \
+  --kubeconfig=/var/lib/kubelet/kubeconfig \\
+  --container-runtime=docker \\
+  --network-plugin=cni \\
+  --cni-bin-dir=/opt/cni/bin \\
+  --cni-conf-dir=/etc/cni/net.d \\
+  --register-node=true \\
+  --node-ip=${INTERNAL_IP} \\
   --v=2
 Restart=on-failure
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+EOF
 ```
- 
+validate: 
+
+```cat /etc/systemd/system/kubelet.service````
+
+
 ## Configure the Kubernetes Proxy
 Put the kube proxy kube configuration file in the appropriate directory
 ```
