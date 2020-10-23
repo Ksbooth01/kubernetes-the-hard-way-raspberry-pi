@@ -23,7 +23,7 @@ The `podCIDR` will be allocated from the cluster cidr range as configured on the
 sudo sysctl net.ipv4.conf.all.forwarding=1
 echo "net.ipv4.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf
 
-sudo net.bridge.bridge-nf-call-iptables=1
+sudo sysctl net.bridge.bridge-nf-call-iptables=1
 echo "net.bridge.bridge-nf-call-iptables=1 |  sudo tee -a /etc/sysctl.conf
 ```Based on the above configuration each node will receive a `/24` subnet. For example:
 
