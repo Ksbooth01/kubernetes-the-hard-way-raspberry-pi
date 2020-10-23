@@ -52,7 +52,7 @@ Set the version and architectures for the downloads.
 K8S_VER=v1.18.6
 K8S_ARCH=arm64
 ```
-
+Download the kubernetes files
 ```
 wget -q --show-progress --https-only --timestamping \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubectl \
@@ -60,17 +60,15 @@ wget -q --show-progress --https-only --timestamping \
   https://storage.googleapis.com/kubernetes-release/release/${K8S_VER}/bin/linux/${K8S_ARCH}/kubelet
 ```
 **What you installing**
-* **CRIctl**  - Container Runtime Interface (CRI) CLI. crictl provides a CLI for CRI-compatible container runtimes. This allows the CRI runtime developers to debug their runtime without needing to set up Kubernetes components
-Create the installation directories:
-* **CNI** -  Container Networking Interface
+
 * **kubectl** - allows you to run commands against Kubernetes clusters.
 * **kube-proxy** -  A network proxy that runs on each node in your cluster. It maintains network rules on the nodes which allow network communication to your Pods from network sessions inside or outside of your cluster.
 * **kubelet**  - The primary "node agent" that runs on each node and works in terms of a PodSpec. A PodSpec is a YAML or JSON object that describes a pod. The kubelet takes a set of PodSpecs that are provided and ensures that the containers described in those PodSpecs are running and healthy. 
 
+#### Make the Kubernetes working directories
 ```
 sudo mkdir -p \
-  /etc/cni/net.d \
-  /opt/cni/bin \
+
   /var/lib/kubelet \
   /var/lib/kube-proxy \
   /var/lib/kubernetes \
@@ -95,6 +93,7 @@ INTERNAL_IP=<INSERT HERE>
 ```
 Copy the certs and the kube config file to thier working directories:
 ```
+mkdir -p /var/lib/kubelet/
 sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 sudo cp ca.pem /var/lib/kubernetes/
 sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
@@ -159,7 +158,7 @@ WantedBy=multi-user.target```
   --container-runtime=docker \\
   --container-runtime-endpoint=unix:///var/run/dockershim.sock \\
  
-### Configure the Kubernetes Proxy
+## Configure the Kubernetes Proxy
 Put the kube proxy kube configuration file in the appropriate directory
 ```
 sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
@@ -223,4 +222,12 @@ NAME       STATUS   ROLES    AGE   VERSION
 worker1    Ready    <none>   24s   v1.18.6
 worker2    Ready    <none>   24s   v1.18.6
 ```
+
+* **CRIctl**  - Container Runtime Interface (CRI) CLI. crictl provides a CLI for CRI-compatible container runtimes. This allows the CRI runtime developers to debug their runtime without needing to set up Kubernetes components
+Create the installation directories:
+* **CNI** -  Container Networking Interface  
+  /etc/cni/net.d \
+  /opt/cni/bin \
+  
+  
 Next: [Configuring kubectl for Remote Access](10-configuring-kubectl.md)
