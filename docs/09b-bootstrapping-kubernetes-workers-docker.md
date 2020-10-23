@@ -122,10 +122,11 @@ tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
 
 ```
-confirm: `cat /var/lib/kubelet/kubelet-config.yaml`
+confirm: ```cat /var/lib/kubelet/kubelet-config.yaml```
 Create the **`kubelet.service`** systemd unit file:
 
 ```
+cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
