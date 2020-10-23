@@ -28,7 +28,7 @@ sudo swapon --show
 ```
 If the swap file is disabled there should be no results returned.
 
-## Install Docker
+## 1 Install Docker
 This fetches and installs the latest stable version of Docker installs it on the system:
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -42,7 +42,7 @@ To use Docker as a non-root user, you need to add your user to the “docker” 
 ```
 
 
-## Download and install the Kubernetes worker binaries:
+## 2 Download and install the Kubernetes worker binaries:
 
 Set the version and architectures for the downloads.
 ```
@@ -78,7 +78,7 @@ Install the worker binaries:
   sudo mv kubectl kube-proxy kubelet /usr/local/bin/
 }
 ```
-## Configuring Kubelet
+## 3 Configuring Kubelet
 Kubelet is the Kubernetes agent which runs on each worker node. Acting as a middleman between the Kubernetes control plane and the underlying container runtime, it coordinates the running of containers on the worker node
 
 Set a HOSTNAME environment variable that will be used to generate your config files
@@ -120,7 +120,7 @@ tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
 
 ```
-confirm: ```cat /var/lib/kubelet/kubelet-config.yaml```
+**Validation:** ```cat /var/lib/kubelet/kubelet-config.yaml```
 
  Create the **`kubelet.service`** systemd unit file:
 
@@ -151,15 +151,13 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
-validate: 
-
-```cat /etc/systemd/system/kubelet.service````
+**Validation:** ```cat /etc/systemd/system/kubelet.service```
 
 
-## Configure the Kubernetes Proxy
+## 4 Configure the Kubernetes Proxy
 Put the kube proxy kube configuration file in the appropriate directory
 ```
-sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
+sudo cp kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
 ```
 Create the kube-proxy-config.yaml configuration file:
 ```
@@ -171,8 +169,11 @@ clientConnection:
 mode: "iptables"
 clusterCIDR: "10.200.0.0/16"
 EOF
+
 ```
-Create the `kube-proxy.service` systemd unit file:
+**Validation:** ```cat /var/lib/kube-proxy/kubeconfig```
+
+Create the **`kube-proxy.service`** systemd unit file:
 ```
 cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service
 [Unit]
@@ -188,7 +189,12 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
+
 ```
+**Validation:** ```cat etc/systemd/system/kube-proxy.service```
+
+
+Start Kubelet and Kube-proxy
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable kubelet kube-proxy
@@ -196,10 +202,64 @@ sudo systemctl start kubelet kube-proxy
 ```
 
 ```
-
 sudo systemctl status kubelet --no-pager -l
 sudo systemctl status kube-proxy --no-pager -l
 ```
+
+## 5 Configure CNI
+
+Download the CNI Binaries
+
+```
+wget -q --show-progress --https-only --timestamping \
+  https://github.com/containernetworking/plugins/releases/download/v0.8.6/cni-plugins-linux-arm64-v0.8.6.tgz
+```
+-latest-
+ https://github.com/containernetworking/plugins/releases/download/v0.8.7/cni-plugins-linux-arm-v0.8.7.tgz 
+```
+sudo mkdir -p \
+  /etc/cni/net.d \
+  /opt/cni/bin 
+```
+Install the CNI worker binaries:
+```
+sudo tar -xvf cni-plugins-linux-arm64-v0.8.6.tgz -C /opt/cni/bin/
+```
+***from CNI repository***
+**Note:** These subnets need to be unique, non-overlapping and subs to the Cluster_CIDR set up in the Control Plane. Can be any CiRD but we're using 10.22.0.0/16 to stay consistent.
+WORKER1_SUBNET="10.200.21.0/24"
+WORKER2_SUBNET="10.200.22.0/24"
+```
+### Configure CNI Networking
+cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "bridge",
+    "type": "bridge",
+    "bridge": "cnio0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{"subnet": "10.200.21.0/24"}]
+        ],
+        "routes": [{"dst": "0.0.0.0/0"}]
+    }
+}
+EOF
+```
+```
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "lo",
+    "type": "loopback"
+}
+EOF
+```
+**Verification**
+
 > Remember to run these steps on `worker1`, and `worker2`
 
 
