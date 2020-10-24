@@ -27,13 +27,13 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 ### Change the name of the computer
 In the table is the names and IP addresses of the servers configured in this setup.  These will be referenced throughout.
-| Hostname    | IP address-EXT| IP address-INT|            
+|  Hostname    | IP address-EXT| IP address-INT|            
 |:-----------:|:-------------:|:-------------:|              
-| controller0 | 192.168.1.20  |  172.16.0.20  |          
-| controller1 | 192.168.1.40  |  172.16.0.40  |
-| worker1     | 192.168.1.21  | 172.16.0.21   |
-| worker2     | 192.168.1.22  | 172.16.0.22   |
-| loadbalancer| 192.168.1.30  | 172.16.0.30   |
+| controller-0 | 192.168.1.20  |  172.16.0.20  |          
+| controller-1 | 192.168.1.40  |  172.16.0.40  |
+| worker-1     | 192.168.1.21  | 172.16.0.21   |
+| worker-2     | 192.168.1.22  | 172.16.0.22   |
+| loadbalancer | 192.168.1.30  | 172.16.0.30   |
 
 To change the default server name of ubuntu use the following command.
 **`sudoedit /etc/hostname`**
@@ -129,10 +129,10 @@ In my experience, whether you use a direct connection versus Wi-Fi really depend
 
 ```
 sudo sh -c cat >> /etc/hosts << EOF
-192.168.1.20       controller0
-192.168.1.40       controller1
-192.168.1.21       worker1
-192.168.1.22       worker2
+192.168.1.20       controller-0
+192.168.1.40       controller-1
+192.168.1.21       worker-1
+192.168.1.22       worker-2
 
 192.168.1.30       loadbalancer
 
