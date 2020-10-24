@@ -140,4 +140,4 @@ EOF
 
 ```
 
-> Remember to run these steps on `controller0`, `controller1`, `worker1`, `worker2`, and `loadbalancer`
+> Remember to run these steps on `controller-0`, `controller-1`, `worker-1`, `worker-2`, and `loadbalancer`
