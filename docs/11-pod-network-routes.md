@@ -28,10 +28,9 @@ echo "net.bridge.bridge-nf-call-iptables=1 |  sudo tee -a /etc/sysctl.conf
 ```Based on the above configuration each node will receive a `/24` subnet. For example:
 
 ```
-10.200.0.0/24
-10.200.1.0/24
-10.200.2.0/24
-...
+Install Weave Net like this:
+```
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE=10.200.0.0/16"
 ``` 
 
 ## Get the Routing Table
