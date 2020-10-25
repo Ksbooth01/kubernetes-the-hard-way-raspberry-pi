@@ -8,7 +8,7 @@ In this lab you will generate a single set of TLS certificates that can be used 
 * Kubernetes API Server
 * Kubernetes Kubelet
 
-The steps can be followed on one of the Raspberry Pis, then the certificates can be distributed to the others. I'm using **controller0** for the steps and then I copy the certificates to the rest of the cluster.
+The steps can be followed on one of the Raspberry Pis, then the certificates can be distributed to the others. I'm using **loadbalancer** for the steps and then I copy the certificates to the rest of the cluster.
 
 
 ## Make the Working Directory
@@ -138,9 +138,9 @@ WORKER2_IP=<PRIVATE IP of your second worker node>
 ```
 
 ```
-WORKER1_HOST=worker1
+WORKER1_HOST=worker-1
 WORKER1_IP=172.16.0.21
-WORKER2_HOST=worker2
+WORKER2_HOST=worker-2
 WORKER2_IP=172.16.0.22
 
 
@@ -320,7 +320,7 @@ CERT_HOSTNAME=10.32.0.1,<controller node 1 IP>,<controller node 1 hostname>,<con
 Make sure you include all of the information for all your servers.
 
 ```
-CERT_HOSTNAME=10.32.0.1,172.16.0.20,controller0,172.16.0.40,controller1,172.16.0.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
+CERT_HOSTNAME=10.32.0.1,172.16.0.20,controller-0,172.16.0.40,controller-1,172.16.0.30,loadbalancer,127.0.0.1,localhost,kubernetes.default
 
 {
 
