@@ -15,9 +15,9 @@ In this section you will generate kubeconfig files for the `controller manager`,
 * kube-scheduler.kubeconfig
 
 ## Install Kubectl client tool
-In this step we will download **kubectl** client version 1.18.6:
+In this step we will download **kubectl** client version 1.19.2:
 ```
-KUBE_VER="v1.18.6"
+KUBE_VER="v1.19.2"
 wget https://storage.googleapis.com/kubernetes-release/release/${KUBE_VER}/bin/linux/arm64/kubectl
 
 chmod +x kubectl
