@@ -420,6 +420,6 @@ CONTROLLER1_IP=192.168.1.40
 scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@${CONTROLLER0_IP}:~/
 scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem kubeadmin@${CONTROLLER1_IP}:~/
 Set the list of Kubernetes hosts where the certs should be copied to:
-
+```
 
 Next: [Kubernetes configuration files](05-kubernetes-configuration-files.md)
