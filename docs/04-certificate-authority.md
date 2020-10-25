@@ -422,4 +422,4 @@ scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem 
 Set the list of Kubernetes hosts where the certs should be copied to:
 ```
 
-Next: [Kubernetes configuration files](05-kubernetes-configuration-files.md)
+Next: [Generating Kubernetes Configuration files for Authentication](05-kubernetes-configuration-files.md)
