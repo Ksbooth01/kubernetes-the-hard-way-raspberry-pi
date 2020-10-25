@@ -16,7 +16,7 @@ In production environments etcd should be run on a dedicated set of machines for
 
 ## Provision the etcd Cluster
 
-Run the following commands on `controller0`, `controller1`:
+Run the following commands on `controller-0`, `controller-1`:
 
 ### TLS Certificates
 
@@ -119,8 +119,6 @@ sudo systemctl start etcd
 sudo systemctl status etcd --no-pager -l
 ```
 
-> Remember to run these steps on `control0`, `control1`
-
 
 ## Verification
 
@@ -141,6 +139,7 @@ member db49ef42428b90ee is healthy: got healthy result from https://192.168.1.20
 cluster is healthy
 ```
 
+> Remember to run these steps on `controller-0`, `controller-1`
 
 Next: [Bootstrapping the Kubernetes Control Plane](08-bootstrapping-kubernetes-controllers.md)
 
