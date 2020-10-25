@@ -34,15 +34,15 @@ If you haven't got them set from the last section set the following variables fo
 | KUBERNETES_ADDRESS=<load balancer private ip>   | NOTE: kelsey hightower is using the external address here
 | WORKER1_HOST=<worker 1 hostname>                |
 | WORKER2_HOST=<worker 2 hostname>                |
-| WORKER1_IP=<worker 1 External IP address>       |
-| WORKER2_IP=<worker 1 External IP address>       |
+| WORKER1_IP=<worker-1 Internal IP address>       |
+| WORKER2_IP=<worker-2 Internal IP address>       |
 
 ```
 KUBERNETES_ADDRESS=172.16.0.30
 WORKER1_HOST=worker-1 
 WORKER2_HOST=worker-2
-WORKER1_IP=192.168.1.21
-WORKER2_IP=192.168.1.22
+WORKER1_IP=172.16.0.21
+WORKER2_IP=172.16.0.22
 
 ```
 
