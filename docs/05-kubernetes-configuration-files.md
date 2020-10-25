@@ -8,8 +8,8 @@ In this section you will generate [Kubernetes configuration files](https://kuber
 In this section you will generate kubeconfig files for the `controller manager`, `kubelet`, `kube-proxy`, and `scheduler` clients and the `admin` user.
  
 ##### Files this will generate
-* worker1.kubeconfig
-* worker2.kubeconfig
+* worker-1.kubeconfig
+* worker-2.kubeconfig
 * admin.kubeconfig
 * kube-controller-manager.kubeconfig
 * kube-scheduler.kubeconfig
@@ -39,8 +39,8 @@ If you haven't got them set from the last section set the following variables fo
 
 ```
 KUBERNETES_ADDRESS=172.16.0.30
-WORKER1_HOST=worker1 
-WORKER2_HOST=worker2
+WORKER1_HOST=worker-1 
+WORKER2_HOST=worker-2
 WORKER1_IP=192.168.1.21
 WORKER2_IP=192.168.1.22
 
@@ -78,8 +78,8 @@ done
 Results:
 
 ```
-worker1.kubeconfig
-worker2.kubeconfig
+worker-1.kubeconfig
+worker-2.kubeconfig
 ```
 ### The kube-proxy Kubernetes Configuration File
 
@@ -218,6 +218,8 @@ scp ${WORKER2_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${WORKER2_IP}:~/
 ```
 Copy the appropriate `kube-controller-manager` and `kube-scheduler` kubeconfig files to each controller instance:
 ```
+CONTROLLER1_IP=172.16.0.20
+CONTROLLER1_IP=172.16.0.40
 scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig kubeadmin@${CONTROLLER0_IP}:~/
 scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig kubeadmin@${CONTROLLER1_IP}:~/
 ```
