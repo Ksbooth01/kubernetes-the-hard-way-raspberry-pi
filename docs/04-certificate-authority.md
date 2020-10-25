@@ -405,8 +405,8 @@ cfssl gencert \
 ##### Move certificate files to the worker nodes:
 
 ```
-scp ca.pem ${WORKER1_HOST}-key.pem ${WORKER1_HOST}.pem kubeadmin@${WORKER1_IP}:~/
-scp ca.pem ${WORKER1_HOST}-key.pem ${WORKER2_HOST}.pem kubeadmin@${WORKER2_IP}:~/
+scp ca.pem admin.pem admin-key.pem ${WORKER1_HOST}-key.pem ${WORKER1_HOST}.pem kubeadmin@${WORKER1_IP}:~/
+scp ca.pem admin.pem admin-key.pem ${WORKER1_HOST}-key.pem ${WORKER2_HOST}.pem kubeadmin@${WORKER2_IP}:~/
 ```
 ##### Move certificate files to the controller nodes:
 
@@ -422,3 +422,4 @@ scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem 
 Set the list of Kubernetes hosts where the certs should be copied to:
 
 
+Next: [Kubernetes configuration files](05-kubernetes-configuration-files.md)
