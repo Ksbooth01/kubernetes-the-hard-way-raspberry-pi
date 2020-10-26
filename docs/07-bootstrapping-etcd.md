@@ -24,7 +24,7 @@ The TLS certificates created in the [Setting up a CA and TLS Cert Generation](02
 
 Maket the **etcd** configuration directory and copy the TLS certificates :
 ```
-sudo mkdir -p /etc/etcd/
+sudo mkdir -p /etc/etcd/ 
 sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
 ```
 
@@ -38,6 +38,8 @@ ARM64 is not officially supported but is released under the experimental flag, w
 ```
 ETCD_VER="v3.3.12"
 wget https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-arm64.tar.gz
+
+sudo mkdir -p /usr/local/bin/
 ```
 
 Extract and install the `etcd` server binary and the `etcdctl` command line client: 
