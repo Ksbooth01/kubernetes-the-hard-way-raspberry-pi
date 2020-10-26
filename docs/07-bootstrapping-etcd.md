@@ -67,7 +67,8 @@ echo ${INTERNAL_IP}
 ```
 ETCD_NAME=$(hostname)
 INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-11 )")
-INITIAL_CLUSTER=controller0=https://172.16.0.20:2380,controller1=https://172.16.0.40:2380
+INITIAL_CLUSTER=controller-0=https://172.16.0.20:2380,controller-1=https://172.16.0.40:2380
+ echo ${ETCD_NAME}, ${INTERNAL_IP}, ${INITIAL_CLUSTER}
 ```
 Make sure the IP addresses in the **--initial-cluster** match your environment.
 
