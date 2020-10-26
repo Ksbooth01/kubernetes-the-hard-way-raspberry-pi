@@ -1,0 +1,6 @@
+
+ssh.service Failure
+Failed to start OpenBSD Secure shell server.
+```
+/usr/bin/ssh-keygen -A
+```
