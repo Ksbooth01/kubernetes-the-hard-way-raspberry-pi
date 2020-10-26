@@ -123,6 +123,14 @@ Leaving root allowed to ssh should not be left on - make sure you turn this off 
 * Carefully type $ **`mv ubuntu kubeadmin`**. You now need to associate this change with your new user.
 * Carefully type $ **`usermod -d /home/kubeadmin kubeadmin`**. This will change your home directory. To confirm **`tail /etc/passwd`** and look at the sixth field (separated by `:`).
 
+#### ..Just the commands
+```
+usermod -l kubeadmin ubuntu
+groupmod -n kubeadmin ubuntu
+cd /home
+mv ubuntu kubeadmin
+usermod -d /home/kubeadmin kubeadmin
+```
 ## Enter Hostnames & IP Addresses to the hosts file
 
 In my experience, whether you use a direct connection versus Wi-Fi really depends on connection speed. The one thing that **IS CRITICAL** is that you assign IP Addresses to each server. for my machines is set up DHCP reservations.  (Yes. even home WI-FI routers allow you to set up DHCP reservations in their configuration) 
