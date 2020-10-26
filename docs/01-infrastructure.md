@@ -143,4 +143,4 @@ EOF
 > Remember to run these steps on `controller-0`, `controller-1`, `worker-1`, `worker-2`, and `loadbalancer`
 
 
-[Next Setting up a Certificate Authority](04-certificate-authority.md)
+Next [Setting up a Certificate Authority](04-certificate-authority.md)
