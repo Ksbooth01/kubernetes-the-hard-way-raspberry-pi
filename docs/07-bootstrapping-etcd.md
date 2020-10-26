@@ -2,7 +2,7 @@
 
 In this section you will bootstrap an etcd cluster. The following machines will be used:
 
-`controller0`      `controller1`
+`controller-0`      `controller-1`
 
 ## Why
 
@@ -36,7 +36,7 @@ As of October, 2020 there are 3 active lineages of etcd that include arm64 as pa
 
 ARM is not officially supported but is released under the experimental flag, which means there's limited support. 
 ```
-ETCD_VER="v3.2.12"
+ETCD_VER="v3.4.12"
 wget https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-arm64.tar.gz
 ```
 
@@ -59,13 +59,14 @@ The etcd server will be started and managed by systemd.
 * The Initial_CLUSTER flag needs to contain all the servers and their IPs in a comma seperated list.
 ```
 ETCD_NAME=<cloud server hostname>
-INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
+INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-11 )")
 INITIAL_CLUSTER=<controller 1 hostname>=https://<controller 1 private ip>:2380,<controller 2 hostname>=https://<controller 2 private ip>:2380
+echo ${INTERNAL_IP}
 ```
 **Example** 
 ```
 ETCD_NAME=$(hostname)
-INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-12 )")
+INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-11 )")
 INITIAL_CLUSTER=controller0=https://172.16.0.20:2380,controller1=https://172.16.0.40:2380
 ```
 Make sure the IP addresses in the **--initial-cluster** match your environment.
@@ -134,8 +135,8 @@ sudo ETCDCTL_API=3 etcdctl member list \
 
 > output
 ```
-member 68326dea8aa5233d is healthy: got healthy result from https://192.168.1.40:2379
-member db49ef42428b90ee is healthy: got healthy result from https://192.168.1.20:2379
+member 68326dea8aa5233d is healthy: got healthy result from https://172.16.0.40:2379
+member db49ef42428b90ee is healthy: got healthy result from https://172.16.0.20:2379
 cluster is healthy
 ```
 
