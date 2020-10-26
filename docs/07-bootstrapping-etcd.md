@@ -129,17 +129,13 @@ sudo systemctl status etcd --no-pager -l
 List the etcd cluster members:
 
 ```
-sudo ETCDCTL_API=3 etcdctl member list \
-  --endpoints=https://127.0.0.1:2379 \
-  --cacert=/etc/etcd/ca.pem \
-  --cert=/etc/etcd/kubernetes.pem \
-  --key=/etc/etcd/kubernetes-key.pem
+etcdctl --ca-file=/etc/etcd/ca.pem cluster-health
 ```
 
 > output
 ```
-member 68326dea8aa5233d is healthy: got healthy result from https://172.16.0.40:2379
-member db49ef42428b90ee is healthy: got healthy result from https://172.16.0.20:2379
+member 5a524ab582f81f94 is healthy: got healthy result from https://172.16.0.40:2379
+member 7483f8753bec4139 is healthy: got healthy result from https://172.16.0.20:2379
 cluster is healthy
 ```
 
