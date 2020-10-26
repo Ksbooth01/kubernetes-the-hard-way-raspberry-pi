@@ -98,7 +98,6 @@ openssl x509 -in ca.pem -text -noout
 Creating the Admin Client certificate:
 ```
 {
-
 cat > admin-csr.json << EOF
 {
   "CN": "admin",
@@ -117,7 +116,6 @@ cat > admin-csr.json << EOF
   ]
 } 
 EOF
-
 
 cfssl gencert \
   -ca=ca.pem \
