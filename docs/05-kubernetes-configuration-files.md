@@ -218,7 +218,7 @@ scp ${WORKER2_HOST}.kubeconfig kube-proxy.kubeconfig kubeadmin@${WORKER2_IP}:~/
 ```
 Copy the appropriate `kube-controller-manager` and `kube-scheduler` kubeconfig files to each controller instance:
 ```
-CONTROLLER1_IP=172.16.0.20
+CONTROLLER0_IP=172.16.0.20
 CONTROLLER1_IP=172.16.0.40
 scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig kubeadmin@${CONTROLLER0_IP}:~/
 scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig kubeadmin@${CONTROLLER1_IP}:~/
