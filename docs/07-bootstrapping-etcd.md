@@ -30,13 +30,13 @@ sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
 
 ### Download and Install the etcd binaries
 As of October, 2020 there are 3 active lineages of etcd that include arm64 as part of thier release schedule.
-* v3.4.1 to v3.4.12
+* v3.4.1 to v3.4.12 (v3.4.9)
 * v3.3.0 to v3.3.25
-* v3.2.0 to v3.2.31
+* v3.2.0 to v3.2.31 (v3.2.12)
 
 ARM64 is not officially supported but is released under the experimental flag, which means there's limited support. 
 ```
-ETCD_VER="v3.3.12"
+ETCD_VER="v3.2.12"
 wget https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-arm64.tar.gz
 
 sudo mkdir -p /usr/local/bin/
