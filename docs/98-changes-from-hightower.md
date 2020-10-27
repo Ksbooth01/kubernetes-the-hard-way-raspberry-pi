@@ -12,3 +12,10 @@ kind: ClusterRole
 
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
+## 10-worker Node
+for the systemd Unit service file  /etc/systemd/system/kubelet.service
+added
+  **--node-ip=${INTERNAL_IP} \\**
+  
+  to ensure kubelet traffic stays on the private IP address network
+  
