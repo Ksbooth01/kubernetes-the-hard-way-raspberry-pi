@@ -280,3 +280,5 @@ subjects:
     name: kubernetes
 EOF
 ```
+
+Next: [Setting up the Frontend Load Balancer](08b-kubernetes-loadbalancer.md)
