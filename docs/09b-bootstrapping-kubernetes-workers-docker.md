@@ -46,8 +46,8 @@ To use Docker as a non-root user, you need to add your user to the “docker” 
 
 Set the version and architectures for the downloads.
 ```
-K8S_VER=v1.18.6
 K8S_ARCH=arm64
+K8S_VER=v1.19.2
 ```
 Download the kubernetes files
 ```
