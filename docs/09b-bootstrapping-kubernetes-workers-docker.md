@@ -1,6 +1,6 @@
 # Bootstrapping Kubernetes Workers (Docker Edition)
 
-The following virtual machines will be usedin theis section: `worker1`, and `worker2`
+The following virtual machines will be usedin theis section: `worker-1`, and `worker-2`
 
 ### Why
 
@@ -260,12 +260,12 @@ EOF
 ```
 **Verification**
 
-> Remember to run these steps on `worker1`, and `worker2`
+> Remember to run these steps on `worker-1`, and `worker-2`
 
 
 ## Verification
 
-> The compute instances created in this tutorial will not have permission to complete this section. Run the following commands from the same machine used to create the compute instances `controller0`.
+> The compute instances created in this tutorial will not have permission to complete this section. Run the following commands from the same machine used to create the compute instances `controller-0`.
 
 List the registered Kubernetes nodes:
 
@@ -277,8 +277,8 @@ kubectl get nodes --kubeconfig admin.kubeconfig"
 
 ```
 NAME       STATUS   ROLES    AGE   VERSION
-worker1    Ready    <none>   24s   v1.18.6
-worker2    Ready    <none>   24s   v1.18.6
+worker-1    Ready    <none>   24s   v1.19.2
+worker-2    Ready    <none>   24s   v1.19.2
 ```
 
 * **CRIctl**  - Container Runtime Interface (CRI) CLI. crictl provides a CLI for CRI-compatible container runtimes. This allows the CRI runtime developers to debug their runtime without needing to set up Kubernetes components
