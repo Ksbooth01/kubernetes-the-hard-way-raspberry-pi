@@ -1,6 +1,6 @@
 ## Setting up the Kubernetes Frontend Load Balancer
 
-These steps are performed on the `loadbalancer server`
+These steps are performed on the `loadbalancer` server
 
 You will need to load balance usage of the Kubernetes API across multiple control nodes. In this section , we create a simple nginx server to perform this balancing. Once complete, we will be able to interact with both
 control nodes of your kubernetes cluster using the nginx load balancer.
