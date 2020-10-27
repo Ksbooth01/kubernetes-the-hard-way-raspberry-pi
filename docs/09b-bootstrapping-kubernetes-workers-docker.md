@@ -66,7 +66,14 @@ wget -q --show-progress --https-only --timestamping \
 #### Make the Kubernetes working directories
 ```
 sudo mkdir -p \
-
+  /var/lib/kubelet \
+  /var/lib/kube-proxy \
+  /var/lib/kubernetes \
+  /var/run/kubernetes
+```
+#### Validate
+```
+sudo ls -l \
   /var/lib/kubelet \
   /var/lib/kube-proxy \
   /var/lib/kubernetes \
