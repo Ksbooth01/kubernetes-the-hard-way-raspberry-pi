@@ -92,7 +92,9 @@ Kubelet is the Kubernetes agent which runs on each worker node. Acting as a midd
 Set a HOSTNAME environment variable that will be used to generate your config files
 ```
 HOSTNAME=$(hostname)
-INTERNAL_IP=<INSERT HERE>
+INTERNAL_IP=$(echo "$(ip a show eth0 | awk '/inet / {print $2}'| cut -b 1-11 )")
+
+echo ${HOSTNAME}   ${INTERNAL_IP}
 ```
 Copy the certs and the kube config file to thier working directories:
 ```
