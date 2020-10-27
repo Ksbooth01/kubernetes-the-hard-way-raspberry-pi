@@ -1,7 +1,7 @@
 # Bootstrapping an H/A Kubernetes Control Plane
 
 ## Provision the Kubernetes Controller Cluster
-Run the following commands on `controller0`, `controller1`:
+Run the following commands on `controller-0`, `controller-1`:
 
 The Kubernetes components that make up the control plane include the following components:
 
@@ -26,8 +26,8 @@ create a tempory directory for the binaries and set the environment variables fo
 ```
 mkdir -p $HOME/kubebits
 cd ~/kubebits
-K8S_VER=v1.18.6
 K8S_ARCH=arm64
+K8S_VER=v1.18.6
 ```
 Download the official Kubernetes release binaries:
 ```
