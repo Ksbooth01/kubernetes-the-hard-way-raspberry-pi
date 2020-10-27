@@ -40,4 +40,3 @@ scp encryption-config.yaml kubeadmin@${CONTROLLER1_IP}:~/
 ```
 
 Next: [Bootstrapping the etcd Cluster](07-bootstrapping-etcd.md)
-```
