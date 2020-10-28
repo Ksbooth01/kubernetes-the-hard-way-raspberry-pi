@@ -145,7 +145,7 @@ Requires=docker.service
 [Service]
 ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
-  --image-pull-progress-deadline=2m \
+  --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --container-runtime=docker \\
   --network-plugin=cni \\
