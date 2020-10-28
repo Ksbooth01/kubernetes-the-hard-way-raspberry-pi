@@ -221,11 +221,15 @@ sudo systemctl status kube-proxy --no-pager -l
 Download the CNI Binaries
 
 ```
+
+CNI_ARCH="arm64"
+CNI_VER="v0.8.7"
 wget -q --show-progress --https-only --timestamping \
-  https://github.com/containernetworking/plugins/releases/download/v0.8.6/cni-plugins-linux-arm64-v0.8.6.tgz
+ https://github.com/containernetworking/plugins/releases/download/v0.8.7/cni-plugins-linux-${CNI_ARCH}-${CNI_VER}.tgz 
+
 ```
 -latest-
- https://github.com/containernetworking/plugins/releases/download/v0.8.7/cni-plugins-linux-arm-v0.8.7.tgz 
+ https://github.com/containernetworking/plugins/releases/download/v0.8.7/cni-plugins-linux-arm64-v0.8.7.tgz 
 ```
 sudo mkdir -p \
   /etc/cni/net.d \
@@ -233,7 +237,7 @@ sudo mkdir -p \
 ```
 Install the CNI worker binaries:
 ```
-sudo tar -xvf cni-plugins-linux-arm64-v0.8.6.tgz -C /opt/cni/bin/
+sudo tar -xvf cni-plugins-linux-${CNI_ARCH}-${CNI_VER}.tgz -C /opt/cni/bin/
 ```
 ***from CNI repository***
 **Note:** These subnets need to be unique, non-overlapping and subs to the Cluster_CIDR set up in the Control Plane. Can be any CiRD but we're using 10.22.0.0/16 to stay consistent.
@@ -252,7 +256,7 @@ cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
     "ipam": {
         "type": "host-local",
         "ranges": [
-          [{"subnet": "10.200.21.0/24"}]
+          [{"subnet": "10.200.22.0/24"}]
         ],
         "routes": [{"dst": "0.0.0.0/0"}]
     }
@@ -280,7 +284,7 @@ EOF
 List the registered Kubernetes nodes:
 
 ``` 
-kubectl get nodes --kubeconfig admin.kubeconfig"
+kubectl get nodes --kubeconfig admin.kubeconfig
 ```
 
 > output
