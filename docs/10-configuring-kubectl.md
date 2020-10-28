@@ -5,11 +5,11 @@ On the location that you created you CA certs:
 ```
 cd &HOME/kubernetes
 
-for instance in worker1 worker2; do
+for instance in worker-1 worker-2; do
   scp admin.pem admin-key.pem kubeadmin@${instance}:~/
 done
 ```
-on each work node: `worker1  and  worker2` 
+on each work node: `worker-1  and  worker-2` 
 ```
 sudo cp admin* /var/lib/kubernetes
 ```
@@ -60,6 +60,7 @@ kubectl get componentstatuses
 > output
 
 ```
+Warning: v1 ComponentStatus is deprecated in v1.19+
 NAME                 STATUS    MESSAGE             ERROR
 controller-manager   Healthy   ok
 scheduler            Healthy   ok
@@ -77,8 +78,8 @@ kubectl get nodes
 
 ```
 NAME       STATUS   ROLES    AGE    VERSION
-worker-1   NotReady    <none>   118s   v1.13.0
-worker-2   NotReady    <none>   118s   v1.13.0
+worker-1   NotReady    <none>   118s   v1.19.2
+worker-2   NotReady    <none>   118s   v1.19.2
 ```
 
 Note: It is OK for the worker node to be in a `NotReady` state. Worker nodes will come into `Ready` state once networking is configured.
