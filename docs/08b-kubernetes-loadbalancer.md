@@ -5,49 +5,29 @@ These steps are performed on the `loadbalancer` server
 You will need to load balance usage of the Kubernetes API across multiple control nodes. In this section , we create a simple nginx server to perform this balancing. Once complete, we will be able to interact with both
 control nodes of your kubernetes cluster using the nginx load balancer.
 
-Load nginx on the server
+Install `HAProxy` on the server
 ```
-sudo apt-get install -y nginx
-sudo systemctl enable nginx
-sudo mkdir -p /etc/nginx/tcpconf.d
-sudoedit /etc/nginx/nginx.conf
-```
-Add the following to the end of nginx.conf:
-```
-include /etc/nginx/tcpconf.d/*;
-```
-Set up some environment variables for the lead balancer config file:
-
-```
-CONTROLLER0_IP=<controller 0 private ip>
-CONTROLLER1_IP=<controller 1 private ip>
-```
-**Example**
-```
-CONTROLLER0_IP=171.16.0.20
-CONTROLLER1_IP=171.16.0.40
+sudo apt-get update && sudo apt-get install -y haproxy
 ```
 
-Create the load balancer nginx config file:
-```
-cat << EOF | sudo tee /etc/nginx/tcpconf.d/kubernetes.conf
-stream {
-    upstream kubernetes {
-        server $CONTROLLER0_IP:6443;
-        server $CONTROLLER1_IP:6443;
-    }
+loadbalancer# cat <<EOF | sudo tee /etc/haproxy/haproxy.cfg 
+frontend kubernetes
+    bind 172.16.0.30:6443
+    option tcplog
+    mode tcp
+    default_backend kubernetes-master-nodes
 
-    server {
-        listen 6443;
-        listen 443;
-        proxy_pass kubernetes;
-    }
-}
+backend kubernetes-master-nodes
+    mode tcp
+    balance roundrobin
+    option tcp-check
+    server controller-0 172.16.0.20:6443 check fall 3 rise 2
+    server controller-1 172.16.0.40:6443 check fall 3 rise 2
 EOF
 ```
 Now that we have the new configuration in place, reload nginx  with the new configuration
 ```
-sudo nginx -s reload
+sudo service haproxy restart
 ```
 ##### Verification
 ```
@@ -57,13 +37,13 @@ output
 ```
 {
   "major": "1",
-  "minor": "18",
-  "gitVersion": "v1.18.6",
-  "gitCommit": "dff82dc0de47299ab66c83c626e08b245ab19037",
+  "minor": "19",
+  "gitVersion": "v1.19.2",
+  "gitCommit": "f5743093fd1c663cb0cbc89748f730662345d44d",
   "gitTreeState": "clean",
-  "buildDate": "2020-07-15T16:51:04Z",
-  "goVersion": "go1.13.9",
+  "buildDate": "2020-09-16T13:32:58Z",
+  "goVersion": "go1.15",
   "compiler": "gc",
   "platform": "linux/arm64"
-}
+ )
 ```
