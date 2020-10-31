@@ -147,6 +147,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
   --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
+  --eviction-hard="memory.available<100Mi,nodefs.available<1Gi,imagefs.available<1Gi"
   --container-runtime=docker \\
   --network-plugin=cni \\
   --cni-bin-dir=/opt/cni/bin \\
