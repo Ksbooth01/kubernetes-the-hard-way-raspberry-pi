@@ -27,13 +27,14 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 ### Change the name of the computer
 In the table is the names and IP addresses of the servers configured in this setup.  These will be referenced throughout.
+
 |  Hostname    | IP address-EXT IP address-INT|            
-|:-----------:|:-------------:|:-------------:|              
+|:------------:|:-------------:|:------------:|              
 | master-1     | 192.168.1.20  | 172.16.0.20  |          
 | master-2     | 192.168.1.30  | 172.16.0.30  |
-| worker-1     | 192.168.1.31  | 172.16.0.31   |
-| worker-2     | 192.168.1.32  | 172.16.0.32   |
-| loadbalancer | 192.168.1.40  | 172.16.0.40   |
+| node-1       | 192.168.1.31  | 172.16.0.31  |
+| node-2       | 192.168.1.32  | 172.16.0.32  |
+| loadbalancer | 192.168.1.40  | 172.16.0.40  |
 
 To change the default server name of ubuntu use the following command.
 **`sudoedit /etc/hostname`**
