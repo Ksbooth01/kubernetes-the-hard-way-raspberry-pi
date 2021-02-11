@@ -55,8 +55,8 @@ This guide assumes you have access to one of the following:
 ## Labs
 * Prerequisites
 * Installing Client tools
-* [Infrastructure Provisioning](docs/01-infrastructure.md)
-* 
+* [Infrastructure Provisioning - UBUNTU](docs/01-infrastructure.md)
+* [Infrastructure Provisioning - Raspian](docs/01-infrastructure-pi.md)
 * [Provisioning the CA Generating TLS Certificates](docs/04-certificate-authority.md)
 * [Generating Kubernetes Configuration Files for Authorization](docs/05-kubernetes-configuration-files.md)
 * [Generating the Data Encryption Config and Key](docs/06-data-encryption-keys.md)
