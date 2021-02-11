@@ -1,6 +1,6 @@
-# 01 - Infrastructure Provisioning
+# 01 - Infrastructure Provisioning-RASPIAN
 
-Kubernetes can be installed just about anywhere Linux runs on. It could be either physical or virtual machines. In this lab we are going to focus on [Ubuntu on Raspberry Pi](https://ubuntu.com/download/raspberry-pi).
+Kubernetes can be installed just about anywhere Linux runs on. It could be either physical or virtual machines. In this lab we are going to focus on [Raspian(Buster) on Raspberry Pi](https://www.raspberrypi.org).
 
 This lab will walk you through provisioning the Raspberry Pi software required for running a H/A Kubernetes cluster. 
 
@@ -11,7 +11,7 @@ I am not responsible for any misconfiguration or damages to the Raspberry Pi equ
 
 # OS Configuration
 
-* First, we need to download [Ubuntu 20.04](https://ubuntu.com/download/raspberry-pi) 64-bit option (not the 32-bit option.) This will get installed on a total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
+* First, we need to download (https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit) they 32-bit option.) This will get installed on a total of 5 Raspberry Pis will be configured. Here are their names and IP addresses:
 * Next, you'll need to download imager software to load the SD Micro cards with the image. Raspberry Pi offers a free too for this [here](https://www.raspberrypi.org/downloads/)
 
 ## Flashing the SD Micro
