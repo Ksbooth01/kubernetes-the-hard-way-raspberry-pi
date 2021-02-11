@@ -15,7 +15,7 @@ This tutorial is a modified version of the original developed by Kelsey Hightowe
 
 # DISCLAIMER
 The steps in this tutorial are "AS IS" without any warranties and support.
-I'm not responsible for any misconfiguration or damages of the Raspberry Pi equipment involved on this tutorial.
+I'm not responsible for any misconfiguration or damages of the Raspberry Pi equipment (or anything else) involved on this tutorial. 
 
 
 
